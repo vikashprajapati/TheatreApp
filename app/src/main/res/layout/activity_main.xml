@@ -14,29 +14,40 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Hello World!"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginVertical="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/media_player_fragment_container"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/media_player_fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="@color/black"
+            app:layout_constraintBottom_toTopOf="@id/message_editText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/connection_status_textview" />
 
         <EditText
             android:id="@+id/message_editText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="Enter your message here"
             android:layout_marginVertical="16dp"
+            android:hint="Enter video source url"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/connection_status_textview" />
+            app:layout_constraintBottom_toTopOf="@id/play_button"
+            app:layout_constraintTop_toBottomOf="@+id/media_player_fragment_container" />
 
         <Button
-            android:id="@+id/send_button"
+            android:id="@+id/play_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Send"
-            app:layout_constraintTop_toBottomOf="@id/message_editText"
+            android:text="play"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/message_editText" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
