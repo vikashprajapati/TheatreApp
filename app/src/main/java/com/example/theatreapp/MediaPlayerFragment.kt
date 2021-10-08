@@ -1,7 +1,8 @@
 package com.example.theatreapp
 
-import android.nfc.Tag
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -22,10 +23,11 @@ private const val ARG_PARAM2 = "param2"
  * Use the [MediaPlayerFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class MediaPlayerFragment : Fragment() {
+class MediaPlayerFragment : Fragment(), PlaybackListener {
     private lateinit var binding: FragmentMediaPlayerBinding
     private lateinit var libvlc: LibVLC
     private lateinit var mediaPlayer : MediaPlayer
+    private lateinit var parentActivityListener: MediaPlayerFragmentListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +50,10 @@ class MediaPlayerFragment : Fragment() {
         setupVlcMediaPlayer()
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+    }
+
     override fun onStart() {
         super.onStart()
         mediaPlayer.attachViews(binding.videoPlayerLayout, null, false, false)
@@ -56,7 +62,19 @@ class MediaPlayerFragment : Fragment() {
         mediaPlayer.media = media
         media.release()
 
+        parentActivityListener.onVideoPlayed()
         mediaPlayer.play()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        parentActivityListener.onVideoPaused()
+        mediaPlayer.pause()
+        mediaPlayer.detachViews()
+    }
+
+    fun addMediaPlayerFragmentListener(mediaPlayerFragmentListener : MediaPlayerFragmentListener){
+        parentActivityListener = mediaPlayerFragmentListener
     }
 
     private fun setupVlcMediaPlayer() {
@@ -68,16 +86,49 @@ class MediaPlayerFragment : Fragment() {
 
         // setup video controller
         val videoController = MediaController(context)
-        videoController.setMediaPlayer(PlayerController(requireContext(), mediaPlayer))
+        videoController.setMediaPlayer(PlayerController(requireContext(), mediaPlayer, this))
         videoController.setAnchorView(binding.videoPlayerLayout)
         binding.videoPlayerLayout.setOnClickListener{
             videoController.show(5000)
         }
+
+        videoController.setPrevNextListeners({
+            // next is pressed
+            mediaPlayer.position = 0F
+            parentActivityListener.onNextVideo()
+        }, {
+            // prev is pressed
+            mediaPlayer.position = 0F
+            mediaPlayer.pause()
+            parentActivityListener.onPrevVideo()
+        })
+
+    }
+
+    fun play(){
+        mediaPlayer.play()
+    }
+
+    fun pause(){
+        mediaPlayer.pause()
+    }
+
+    fun previousVideo() {
+        //        mediaPlayer.stop()
+        mediaPlayer.position = 0F
+        mediaPlayer.pause()
+    }
+
+    override fun onVideoPlayed() {
+        parentActivityListener.onVideoPlayed()
+    }
+
+    override fun onVideoPaused() {
+        parentActivityListener.onVideoPaused()
     }
 
     companion object {
         val TAG : String = MediaPlayerFragment.javaClass.canonicalName
-
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.

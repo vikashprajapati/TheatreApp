@@ -1,20 +1,25 @@
 package com.example.theatreapp
 
 import android.content.Context
-import android.media.MediaPlayer
 import android.widget.MediaController
-import org.videolan.libvlc.LibVLC
 
 class PlayerController(
     var context: Context,
-    var mediaPlayer: org.videolan.libvlc.MediaPlayer
+    var mediaPlayer: org.videolan.libvlc.MediaPlayer,
+    var playbackListener: PlaybackListener
 ) : MediaController.MediaPlayerControl {
     override fun start() {
-        if(mediaPlayer.hasMedia() && !mediaPlayer.isPlaying) mediaPlayer.play()
+        if(mediaPlayer.hasMedia() && !mediaPlayer.isPlaying){
+            mediaPlayer.play()
+            playbackListener.onVideoPlayed()
+        }
     }
 
     override fun pause() {
-        if(mediaPlayer.hasMedia() && mediaPlayer.isPlaying) mediaPlayer.pause()
+        if(mediaPlayer.hasMedia() && mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+            playbackListener.onVideoPaused()
+        }
     }
 
     override fun getDuration(): Int = mediaPlayer.length.toInt()

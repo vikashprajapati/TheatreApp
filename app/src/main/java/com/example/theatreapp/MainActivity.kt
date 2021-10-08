@@ -21,13 +21,17 @@ import org.videolan.libvlc.Media
 import org.videolan.libvlc.MediaPlayer
 import java.net.URI
 
-class MainActivity : AppCompatActivity() {
+class MainActivity :
+    AppCompatActivity(),
+    MediaPlayerFragmentListener
+{
     private lateinit var binding : ActivityMainBinding
     private val TAG : String = "MainActivity"
 
-    private lateinit var libvlc: LibVLC
-    private lateinit var mediaPlayer : MediaPlayer
     private lateinit var socket : Socket
+    private lateinit var mediaPlayerFragment : MediaPlayerFragment
+    private val SOCKET_ENDPOINT : String = "http://192.168.43.133:5000"
+    private val THEATER_ROOM : String = "Theater 1"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -39,7 +43,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText( this@MainActivity, "Enter Message", Toast.LENGTH_SHORT).show()
 
             if(socket.connected())
-                socket.emit("onMessage", "Theater 1", binding.messageEditText.text.toString())
+                socket.emit("onMessage", THEATER_ROOM, binding.messageEditText.text.toString())
         }
     }
 
@@ -49,22 +53,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addMediaPlayerFragment(){
+        mediaPlayerFragment = MediaPlayerFragment.newInstance()
         var fragmentTransaction : FragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.media_player_fragment_container, MediaPlayerFragment.newInstance(), MediaPlayerFragment.TAG)
+        fragmentTransaction.add(R.id.media_player_fragment_container, mediaPlayerFragment, MediaPlayerFragment.TAG)
         fragmentTransaction.commit()
+        mediaPlayerFragment.addMediaPlayerFragmentListener(this)
     }
 
     override fun onStop() {
         super.onStop()
-        mediaPlayer.stop()
-        mediaPlayer.detachViews()
     }
 
     private fun setupSocket(){
 // socket connection
-        var uri : URI = URI.create("http://192.168.43.133:5000")
-
-        socket = IO.socket(uri)
+        socket = IO.socket(URI.create(SOCKET_ENDPOINT))
 
         socket.on(Socket.EVENT_CONNECT) {
 //            binding.connectionStatusTextview.text = "connected"
@@ -87,6 +89,18 @@ class MainActivity : AppCompatActivity() {
             runOnUiThread{
                 Toast.makeText(this, "Theater Joined", Toast.LENGTH_SHORT).show()
             }
+        }.on("played"){
+            runOnUiThread{
+                mediaPlayerFragment.play()
+            }
+        }.on("paused"){
+            runOnUiThread{
+                mediaPlayerFragment.pause()
+            }
+        }.on("previousVideo"){
+            runOnUiThread {
+                mediaPlayerFragment.previousVideo()
+            }
         }
 
         socket.connect()
@@ -100,5 +114,21 @@ class MainActivity : AppCompatActivity() {
                 "error", "disconnected" -> binding.connectionStatusTextview.setTextColor(getColor(R.color.purple_700))
             }
         })
+    }
+
+    override fun onVideoPlayed() {
+        socket.emit("played", THEATER_ROOM)
+    }
+
+    override fun onVideoPaused() {
+        socket.emit("paused", THEATER_ROOM)
+    }
+
+    override fun onPrevVideo() {
+        socket.emit("previousVideo", THEATER_ROOM)
+    }
+
+    override fun onNextVideo() {
+        socket.emit("nextVideo", THEATER_ROOM)
     }
 }
