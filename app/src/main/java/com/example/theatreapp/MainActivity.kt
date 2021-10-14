@@ -23,27 +23,25 @@ import java.net.URI
 
 class MainActivity :
     AppCompatActivity(),
-    MediaPlayerFragmentListener
+    MediaPlayerFragmentListener,
+        com.example.theatreapp.Socket.SocketEventListener
 {
     private lateinit var binding : ActivityMainBinding
     private val TAG : String = "MainActivity"
 
-    private lateinit var socket : Socket
     private lateinit var mediaPlayerFragment : MediaPlayerFragment
-    private val SOCKET_ENDPOINT : String = "http://192.168.43.133:5000"
     private val THEATER_ROOM : String = "Theater 1"
+    private lateinit var socket: com.example.theatreapp.Socket
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-
-        setupSocket()
-
+        socket = Socket()
         binding.playButton.setOnClickListener {
             if(binding.messageEditText.text.isEmpty())
                 Toast.makeText( this@MainActivity, "Enter Message", Toast.LENGTH_SHORT).show()
 
-            if(socket.connected())
-                socket.emit("onMessage", THEATER_ROOM, binding.messageEditText.text.toString())
+            if(socket.getInstance().connected())
+                socket.getInstance().emit("onMessage", THEATER_ROOM, binding.messageEditText.text.toString())
         }
     }
 
@@ -64,48 +62,6 @@ class MainActivity :
         super.onStop()
     }
 
-    private fun setupSocket(){
-// socket connection
-        socket = IO.socket(URI.create(SOCKET_ENDPOINT))
-
-        socket.on(Socket.EVENT_CONNECT) {
-//            binding.connectionStatusTextview.text = "connected"
-            Log.i(TAG, "onCreate: connected")
-            updateConnectionStatus("connected")
-        }.on(Socket.EVENT_CONNECT_ERROR) { itr ->
-//            binding.connectionStatusTextview.text = "error"
-            Log.i(TAG, "onCreate: error")
-            updateConnectionStatus("error")
-        }.on(Socket.EVENT_DISCONNECT) {
-//            binding.connectionStatusTextview.text = "disconnected"
-            Log.i(TAG, "onCreate: disconnected")
-            updateConnectionStatus("disconnected")
-        }.on("onMessage"){
-            Log.i(TAG, "onCreate: onMessage")
-            runOnUiThread {
-                Toast.makeText(this, "you got a new message ${it[0].toString()}", Toast.LENGTH_SHORT).show()
-            }
-        }.on("Theater Joined"){
-            runOnUiThread{
-                Toast.makeText(this, "Theater Joined", Toast.LENGTH_SHORT).show()
-            }
-        }.on("played"){
-            runOnUiThread{
-                mediaPlayerFragment.play()
-            }
-        }.on("paused"){
-            runOnUiThread{
-                mediaPlayerFragment.pause()
-            }
-        }.on("previousVideo"){
-            runOnUiThread {
-                mediaPlayerFragment.previousVideo()
-            }
-        }
-
-        socket.connect()
-    }
-
     private fun updateConnectionStatus(status : String) {
         runOnUiThread(Runnable {
             binding.connectionStatusTextview.text = status
@@ -117,18 +73,58 @@ class MainActivity :
     }
 
     override fun onVideoPlayed() {
-        socket.emit("played", THEATER_ROOM)
+        socket.getInstance().emit("played", THEATER_ROOM)
     }
 
     override fun onVideoPaused() {
-        socket.emit("paused", THEATER_ROOM)
+        socket.getInstance().emit("paused", THEATER_ROOM)
     }
 
     override fun onPrevVideo() {
-        socket.emit("previousVideo", THEATER_ROOM)
+        socket.getInstance().emit("previousVideo", THEATER_ROOM)
     }
 
     override fun onNextVideo() {
-        socket.emit("nextVideo", THEATER_ROOM)
+        socket.getInstance().emit("nextVideo", THEATER_ROOM)
+    }
+
+    override fun connectionSuccess() {
+        TODO("Not yet implemented")
+    }
+
+    override fun connectionFailed() {
+        TODO("Not yet implemented")
+    }
+
+    override fun connectionError() {
+        TODO("Not yet implemented")
+    }
+
+    override fun playEvent() {
+        TODO("Not yet implemented")
+    }
+
+    override fun pauseEvent() {
+        TODO("Not yet implemented")
+    }
+
+    override fun previousVideoEvent() {
+        TODO("Not yet implemented")
+    }
+
+    override fun nextVideoEvent() {
+        TODO("Not yet implemented")
+    }
+
+    override fun syncVideoEvent() {
+        TODO("Not yet implemented")
+    }
+
+    override fun roomJoinedEvent() {
+        TODO("Not yet implemented")
+    }
+
+    override fun newParticipantJoinedEvent() {
+        TODO("Not yet implemented")
     }
 }
