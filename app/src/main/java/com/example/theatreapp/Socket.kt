@@ -8,13 +8,9 @@ import java.net.URI
 
 class Socket {
  private val SOCKET_ENDPOINT = "http://192.168.43.133:5000"
- private lateinit var socket : Socket
+ private var socket : Socket = IO.socket(URI.create(SOCKET_ENDPOINT))
  private lateinit var listener: SocketEventListener
- init {
-  socket = IO.socket(URI.create(SOCKET_ENDPOINT))
- }
-
- public fun getInstance() : Socket = socket
+ val instance = socket
 
  fun setSocketListener(socketEventListener: SocketEventListener){
   listener = socketEventListener
@@ -22,11 +18,11 @@ class Socket {
 
  fun initializeSocketEvents(){
   socket.on(Socket.EVENT_CONNECT) {
-   listener.connectionSuccess()
+   listener.connectionStatus(Socket.EVENT_CONNECT)
   }.on(Socket.EVENT_CONNECT_ERROR) {
-   listener.connectionError()
+   listener.connectionStatus(Socket.EVENT_CONNECT_ERROR)
   }.on(Socket.EVENT_DISCONNECT) {
-   listener.connectionFailed()
+   listener.connectionStatus(Socket.EVENT_DISCONNECT)
   }.on("Theater Joined"){
    listener.roomJoinedEvent()
   }.on("played"){
@@ -40,9 +36,6 @@ class Socket {
  }
 
  interface SocketEventListener{
-  fun connectionSuccess()
-  fun connectionFailed()
-  fun connectionError()
   fun playEvent()
   fun pauseEvent()
   fun previousVideoEvent()
@@ -50,5 +43,6 @@ class Socket {
   fun syncVideoEvent()
   fun roomJoinedEvent()
   fun newParticipantJoinedEvent()
+  fun connectionStatus(eventConnect: String)
  }
 }
