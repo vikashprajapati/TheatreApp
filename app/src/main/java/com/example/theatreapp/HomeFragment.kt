@@ -68,24 +68,6 @@ class HomeFragment :
         mediaPlayerFragment.addMediaPlayerFragmentListener(this)
     }
 
-    /*private fun updateConnectionStatus(status : String) {
-        runOnUiThread(Runnable {
-            binding.connectionStatusTextview.text = status
-            when(status){
-                "connected" -> context?.getColor(R.color.teal_200)?.let {
-                    binding.connectionStatusTextview.setTextColor(
-                        it
-                    )
-                }
-                "error", "disconnected" -> context?.getColor(R.color.purple_700)?.let {
-                    binding.connectionStatusTextview.setTextColor(
-                        it
-                    )
-                }
-            }
-        })
-    }*/
-
     override fun onVideoPlayed() {
         socket.instance.emit("played", ROOM)
     }
