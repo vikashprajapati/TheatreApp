@@ -10,5 +10,14 @@
         android:id="@+id/homeFragment"
         android:name="com.example.theatreapp.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_roomFrament"
+            app:destination="@id/roomFrament" />
+    </fragment>
+    <fragment
+        android:id="@+id/roomFrament"
+        android:name="com.example.theatreapp.RoomFrament"
+        android:label="fragment_room_frament"
+        tools:layout="@layout/fragment_streaming_room" />
 </navigation>
