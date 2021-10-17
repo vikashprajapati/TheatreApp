@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.FragmentTransaction
+import com.example.theatreapp.adapters.RoomsListAdapter
 import com.example.theatreapp.databinding.FragmentHomeBinding
+import com.example.theatreapp.viewmodel.HomeFragmentViewModel
 
 /**
  * A simple [Fragment] subclass.
@@ -23,6 +25,7 @@ class HomeFragment :
     private lateinit var mediaPlayerFragment : MediaPlayerFragment
     private val TAG = HomeFragment.javaClass.canonicalName
     private val ROOM = "Testing Room"
+    private val viewModel = HomeFragmentViewModel()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +46,12 @@ class HomeFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
+
+        var roomListAdapter = context?.let { RoomsListAdapter(it, viewModel.getRoomsList().value) }
+        binding.roomsRecyclerView.adapter = roomListAdapter
+
         binding.playButton.setOnClickListener {
             if(binding.messageEditText.text.isEmpty())
                 Toast.makeText( context, "Enter Message", Toast.LENGTH_SHORT ).show()
