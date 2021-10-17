@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="app_toolbar_height">80dp</dimen>
+    <dimen name="app_toolbar_height">60dp</dimen>
+    <dimen name="app_screen_padding">10dp</dimen>
     <dimen name="app_toolbar_icons_width">48dp</dimen>
+    <dimen name="app_toolbar_text_size">12sp</dimen>
 </resources>

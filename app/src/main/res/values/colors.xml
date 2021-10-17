@@ -11,4 +11,8 @@
 
     // user defined color preferences
     <color name="pull_to_refresh_header_text_color">#bbbbbb</color>
+    <color name="primary_color">#2fa9f0</color>
+    <color name="dark_gray">#666666</color>
+    <color name="medium_gray">#999999</color>
+    <color name="light_gray">#bbbbbb</color>
 </resources>
