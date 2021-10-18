@@ -51,13 +51,13 @@ class RoomFrament :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.playButton.setOnClickListener {
-            if(binding.messageEditText.text.isEmpty())
-                Toast.makeText( context, "Enter Message", Toast.LENGTH_SHORT ).show()
-
-            if(socket.instance.connected())
-                socket.instance.emit("onMessage", ROOM, binding.messageEditText.text.toString())
-        }
+//        binding.playButton.setOnClickListener {
+//            if(binding.messageEditText.text.isEmpty())
+//                Toast.makeText( context, "Enter Message", Toast.LENGTH_SHORT ).show()
+//
+//            if(socket.instance.connected())
+//                socket.instance.emit("onMessage", ROOM, binding.messageEditText.text.toString())
+//        }
 
         socket.setSocketListener(this)
         socket.initializeSocketEvents()
@@ -68,9 +68,14 @@ class RoomFrament :
         addMediaPlayerFragment()
     }
 
+    override fun onPause() {
+        super.onPause()
+        socket.instance.disconnect()
+    }
+
     override fun onStop() {
         super.onStop()
-
+        mediaPlayerFragment.onStop()
     }
 
     private fun addMediaPlayerFragment(){
@@ -98,23 +103,23 @@ class RoomFrament :
     }
 
     override fun connectionStatus(eventConnect: String) {
-        activity?.runOnUiThread {
-            binding.connectionStatusTextview.text = eventConnect
-            when(eventConnect) {
-                io.socket.client.Socket.EVENT_CONNECT -> context?.getColor(R.color.teal_200)?.let {
-                    binding.connectionStatusTextview.setTextColor(
-                        it
-                    )
-                }
-                io.socket.client.Socket.EVENT_CONNECT_ERROR,
-                io.socket.client.Socket.EVENT_DISCONNECT -> context?.getColor(R.color.purple_700)?.let {
-                    binding.connectionStatusTextview.setTextColor(
-                        it
-                    )
-
-                }
-            }
-        }
+//        activity?.runOnUiThread {
+//            binding.connectionStatusTextview.text = eventConnect
+//            when(eventConnect) {
+//                io.socket.client.Socket.EVENT_CONNECT -> context?.getColor(R.color.teal_200)?.let {
+//                    binding.connectionStatusTextview.setTextColor(
+//                        it
+//                    )
+//                }
+//                io.socket.client.Socket.EVENT_CONNECT_ERROR,
+//                io.socket.client.Socket.EVENT_DISCONNECT -> context?.getColor(R.color.purple_700)?.let {
+//                    binding.connectionStatusTextview.setTextColor(
+//                        it
+//                    )
+//
+//                }
+//            }
+//        }
     }
 
     override fun playEvent() {
@@ -139,6 +144,10 @@ class RoomFrament :
 
     override fun roomJoinedEvent() {
         TODO("Not yet implemented")
+    }
+
+    override fun sendRoomInfo() {
+        socket.instance.emit("roomJoinInfo", ROOM)
     }
 
     override fun newParticipantJoinedEvent() {

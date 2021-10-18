@@ -23,6 +23,8 @@ class Socket {
    listener.connectionStatus(Socket.EVENT_CONNECT_ERROR)
   }.on(Socket.EVENT_DISCONNECT) {
    listener.connectionStatus(Socket.EVENT_DISCONNECT)
+  }.on("joinRoomInfo"){
+   listener.sendRoomInfo()
   }.on("Theater Joined"){
    listener.roomJoinedEvent()
   }.on("played"){
@@ -42,6 +44,7 @@ class Socket {
   fun nextVideoEvent()
   fun syncVideoEvent()
   fun roomJoinedEvent()
+  fun sendRoomInfo()
   fun newParticipantJoinedEvent()
   fun connectionStatus(eventConnect: String)
  }
