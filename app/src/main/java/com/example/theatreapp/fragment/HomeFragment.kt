@@ -1,14 +1,13 @@
-package com.example.theatreapp
+package com.example.theatreapp.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
-import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.fragment.findNavController
+import com.example.theatreapp.R
 import com.example.theatreapp.adapters.RoomsListAdapter
 import com.example.theatreapp.databinding.FragmentHomeBinding
 import com.example.theatreapp.listeners.HomeFragmentListener

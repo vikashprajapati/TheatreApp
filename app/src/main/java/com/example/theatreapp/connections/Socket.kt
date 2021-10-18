@@ -1,7 +1,5 @@
-package com.example.theatreapp
+package com.example.theatreapp.connections
 
-import android.util.Log
-import android.widget.Toast
 import io.socket.client.IO
 import io.socket.client.Socket
 import java.net.URI

@@ -1,14 +1,15 @@
-package com.example.theatreapp
+package com.example.theatreapp.fragment
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.MediaController
+import com.example.theatreapp.listeners.MediaPlayerFragmentListener
+import com.example.theatreapp.listeners.PlaybackListener
+import com.example.theatreapp.uiutils.PlayerController
 import com.example.theatreapp.databinding.FragmentMediaPlayerBinding
 import org.videolan.libvlc.LibVLC
 import org.videolan.libvlc.Media

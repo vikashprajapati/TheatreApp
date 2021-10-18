@@ -1,12 +1,14 @@
-package com.example.theatreapp
+package com.example.theatreapp.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.FragmentTransaction
+import com.example.theatreapp.listeners.MediaPlayerFragmentListener
+import com.example.theatreapp.R
+import com.example.theatreapp.connections.Socket
 import com.example.theatreapp.databinding.FragmentStreamingRoomBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -19,7 +21,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [RoomFrament.newInstance] factory method to
  * create an instance of this fragment.
  */
-class RoomFrament :
+class StreamingRoomFragment :
     Fragment(),
     MediaPlayerFragmentListener,
     Socket.SocketEventListener {
@@ -166,7 +168,7 @@ class RoomFrament :
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            RoomFrament().apply {
+            StreamingRoomFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

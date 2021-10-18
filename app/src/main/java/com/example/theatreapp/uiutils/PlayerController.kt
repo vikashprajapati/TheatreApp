@@ -1,7 +1,8 @@
-package com.example.theatreapp
+package com.example.theatreapp.uiutils
 
 import android.content.Context
 import android.widget.MediaController
+import com.example.theatreapp.listeners.PlaybackListener
 
 class PlayerController(
     var context: Context,
