@@ -43,9 +43,14 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.viewpager.widget.ViewPager
-            
+            android:id="@+id/viewpager"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </androidx.viewpager.widget.ViewPager>
 
         <!--        <EditText-->
         <!--            android:id="@+id/message_editText"-->

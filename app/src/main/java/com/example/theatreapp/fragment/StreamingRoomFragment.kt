@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentTransaction
 import com.example.theatreapp.listeners.MediaPlayerFragmentListener
 import com.example.theatreapp.R
+import com.example.theatreapp.adapters.StreamingViewPagerAdapter
 import com.example.theatreapp.connections.Socket
 import com.example.theatreapp.databinding.FragmentStreamingRoomBinding
 
@@ -31,6 +32,7 @@ class StreamingRoomFragment :
     private lateinit var socket: Socket
     private lateinit var binding : FragmentStreamingRoomBinding
     private lateinit var mediaPlayerFragment : MediaPlayerFragment
+    private lateinit var viewPagerAdapter : StreamingViewPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +61,7 @@ class StreamingRoomFragment :
 //            if(socket.instance.connected())
 //                socket.instance.emit("onMessage", ROOM, binding.messageEditText.text.toString())
 //        }
-
+        setupViewPager()
         socket.setSocketListener(this)
         socket.initializeSocketEvents()
     }
@@ -77,6 +79,16 @@ class StreamingRoomFragment :
     override fun onStop() {
         super.onStop()
         mediaPlayerFragment.onStop()
+    }
+
+    private fun setupViewPager() {
+        viewPagerAdapter = StreamingViewPagerAdapter(
+            parentFragmentManager,
+            listOf(ChatFragment.newInstance("", ""),
+                ParticipantsFragment.newInstance(1)))
+
+        binding.viewpager.adapter = viewPagerAdapter
+        binding.tabLayout.setupWithViewPager(binding.viewpager)
     }
 
     private fun addMediaPlayerFragment(){
