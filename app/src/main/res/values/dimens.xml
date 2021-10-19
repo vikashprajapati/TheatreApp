@@ -4,4 +4,5 @@
     <dimen name="app_screen_padding">10dp</dimen>
     <dimen name="app_toolbar_icons_width">48dp</dimen>
     <dimen name="app_toolbar_text_size">12sp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 </resources>

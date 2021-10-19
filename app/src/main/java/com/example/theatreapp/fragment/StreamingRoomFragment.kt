@@ -13,8 +13,8 @@ import com.example.theatreapp.databinding.FragmentStreamingRoomBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+public const val ROOM = "Room"
+public const val USER = "User"
 
 /**
  * A simple [Fragment] subclass.
@@ -26,18 +26,17 @@ class StreamingRoomFragment :
     MediaPlayerFragmentListener,
     Socket.SocketEventListener {
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var room: String? = null
+    private var user: String? = null
     private lateinit var socket: Socket
     private lateinit var binding : FragmentStreamingRoomBinding
     private lateinit var mediaPlayerFragment : MediaPlayerFragment
-    private val ROOM = "Testing Room"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            room = it.getString(ROOM)
+            user = it.getString(USER)
         }
         socket = Socket()
     }
@@ -167,11 +166,11 @@ class StreamingRoomFragment :
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(room : String, name : String = "Ghost Rider") =
             StreamingRoomFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putString(ROOM, room)
+                    putString(USER, name)
                 }
             }
     }

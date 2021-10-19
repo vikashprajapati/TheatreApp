@@ -71,7 +71,7 @@ class HomeFragment :
 
     override fun onRoomItemClick(position: Int) {
         var room = viewModel.getRoomsList().value?.get(position)
-        var roomBundle = bundleOf("room" to "room")
+        var roomBundle = bundleOf(ROOM to (room?.name ?: "Test"), USER to "Ghost Rider")
         findNavController().navigate(R.id.action_homeFragment_to_roomFrament, roomBundle)
     }
 }
