@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentTransaction
+import androidx.navigation.fragment.findNavController
 import com.example.theatreapp.listeners.MediaPlayerFragmentListener
 import com.example.theatreapp.R
 import com.example.theatreapp.adapters.StreamingViewPagerAdapter
@@ -64,11 +65,16 @@ class StreamingRoomFragment :
         setupViewPager()
         socket.setSocketListener(this)
         socket.initializeSocketEvents()
+
+        binding.searchChat.setOnClickListener {
+            findNavController().navigate(R.id.action_roomFrament_to_youtubePlayerFragment)
+        }
     }
 
     override fun onStart() {
         super.onStart()
-        addMediaPlayerFragment()
+//        addMediaPlayerFragment()
+        addYoutubePlayerFragment()
     }
 
     override fun onPause() {
@@ -97,6 +103,16 @@ class StreamingRoomFragment :
         fragmentTransaction.add(R.id.media_player_fragment_container, mediaPlayerFragment, MediaPlayerFragment.TAG)
         fragmentTransaction.commit()
         mediaPlayerFragment.addMediaPlayerFragmentListener(this)
+    }
+
+    private fun addYoutubePlayerFragment(){
+        var youtubePlayerFragment = YoutubePlayerFragment.newInstance("", "")
+        parentFragmentManager.beginTransaction()
+            .add(
+                R.id.media_player_fragment_container,
+                youtubePlayerFragment,
+                youtubePlayerFragment.tag)
+            .commit()
     }
 
     override fun onVideoPlayed() {
