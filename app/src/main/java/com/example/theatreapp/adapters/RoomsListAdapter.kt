@@ -2,21 +2,17 @@ package com.example.theatreapp.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.annotation.NonNull
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.theatreapp.R
 import com.example.theatreapp.databinding.ItemRoomBinding
-import com.example.theatreapp.listeners.HomeFragmentListener
 import com.example.theatreapp.models.room.Room
 
 class RoomsListAdapter(
     var context: Context,
-    var roomsList: List<Room>?,
-    var listener : HomeFragmentListener
+    var roomsList: List<Room>,
+    var roomSelectedListener: (Room) -> Unit
 ) : RecyclerView.Adapter<RoomsListAdapter.RoomViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RoomViewHolder {
@@ -31,19 +27,18 @@ class RoomsListAdapter(
     }
 
     override fun onBindViewHolder(holder: RoomViewHolder, position: Int) {
-        var room = roomsList?.get(position)
-        holder.bind(room)
-        holder.itemView.setOnClickListener {
-            listener.onRoomItemClick(position)
-        }
+        holder.bind(roomsList[position], roomSelectedListener)
     }
 
-    override fun getItemCount(): Int = roomsList ?. size ?: 0
+    override fun getItemCount(): Int = roomsList.size
 
     class RoomViewHolder(private val itemBinding: ItemRoomBinding) :
         RecyclerView.ViewHolder(itemBinding.root){
-        fun bind(room: Room?) {
-            itemBinding.room = room?: Room("0990", "Test Room", 3)
+        fun bind(room: Room, roomSelectedListener: (Room) -> Unit) {
+            itemBinding.room = room
+            itemBinding.root.setOnClickListener{
+                roomSelectedListener(room)
+            }
         }
     }
 }

@@ -32,7 +32,7 @@ class StreamingRoomFragment :
     private var user: String? = null
     private lateinit var socket: Socket
     private lateinit var binding : FragmentStreamingRoomBinding
-    private lateinit var mediaPlayerFragment : MediaPlayerFragment
+    private var mediaPlayerFragment : MediaPlayerFragment? = null
     private lateinit var viewPagerAdapter : StreamingViewPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,7 +84,7 @@ class StreamingRoomFragment :
 
     override fun onStop() {
         super.onStop()
-        mediaPlayerFragment.onStop()
+        mediaPlayerFragment?.onStop()
     }
 
     private fun setupViewPager() {
@@ -100,9 +100,11 @@ class StreamingRoomFragment :
     private fun addMediaPlayerFragment(){
         mediaPlayerFragment = MediaPlayerFragment.newInstance()
         var fragmentTransaction : FragmentTransaction = parentFragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.media_player_fragment_container, mediaPlayerFragment, MediaPlayerFragment.TAG)
-        fragmentTransaction.commit()
-        mediaPlayerFragment.addMediaPlayerFragmentListener(this)
+        mediaPlayerFragment?.let {
+            fragmentTransaction.add(R.id.media_player_fragment_container, it, MediaPlayerFragment.TAG)
+            fragmentTransaction.commit()
+            it.addMediaPlayerFragmentListener(this)
+        }
     }
 
     private fun addYoutubePlayerFragment(){

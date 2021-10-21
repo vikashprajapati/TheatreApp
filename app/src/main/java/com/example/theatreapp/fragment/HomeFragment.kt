@@ -11,6 +11,7 @@ import com.example.theatreapp.R
 import com.example.theatreapp.adapters.RoomsListAdapter
 import com.example.theatreapp.databinding.FragmentHomeBinding
 import com.example.theatreapp.listeners.HomeFragmentListener
+import com.example.theatreapp.models.room.Room
 import com.example.theatreapp.viewmodel.HomeFragmentViewModel
 
 /**
@@ -19,8 +20,7 @@ import com.example.theatreapp.viewmodel.HomeFragmentViewModel
  * create an instance of this fragment.
  */
 class HomeFragment :
-    Fragment(),
-    HomeFragmentListener {
+    Fragment() {
     private lateinit var binding : FragmentHomeBinding
     private val TAG = HomeFragment.javaClass.canonicalName
     private val viewModel = HomeFragmentViewModel()
@@ -46,7 +46,15 @@ class HomeFragment :
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        var roomListAdapter = context?.let { RoomsListAdapter(it, viewModel.getRoomsList().value, this) }
+        var roomListAdapter = context?.let {
+            viewModel.getRoomsList().value?.let { roomList ->
+                RoomsListAdapter(it, roomList) { selectedRoom: Room ->
+                    onRoomSelected(
+                        selectedRoom
+                    )
+                }
+            }
+        }
         binding.roomsRecyclerView.adapter = roomListAdapter
     }
 
@@ -69,8 +77,7 @@ class HomeFragment :
             }
     }
 
-    override fun onRoomItemClick(position: Int) {
-        var room = viewModel.getRoomsList().value?.get(position)
+    private fun onRoomSelected(room : Room) {
         var roomBundle = bundleOf(ROOM to (room?.name ?: "Test"), USER to "Ghost Rider")
         findNavController().navigate(R.id.action_homeFragment_to_roomFrament, roomBundle)
     }
