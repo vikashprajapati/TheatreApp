@@ -19,13 +19,5 @@
         android:id="@+id/roomFrament"
         android:name="com.example.theatreapp.fragment.StreamingRoomFragment"
         android:label="fragment_room_frament"
-        tools:layout="@layout/fragment_streaming_room" >
-        <action
-            android:id="@+id/action_roomFrament_to_youtubePlayerFragment"
-            app:destination="@id/youtubePlayerFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/youtubePlayerFragment"
-        android:name="com.example.theatreapp.fragment.YoutubePlayerFragment"
-        android:label="YoutubePlayerFragment" />
+        tools:layout="@layout/fragment_streaming_room" />
 </navigation>

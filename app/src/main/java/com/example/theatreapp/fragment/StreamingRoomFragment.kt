@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.fragment.findNavController
 import com.example.theatreapp.listeners.MediaPlayerFragmentListener
@@ -12,6 +13,7 @@ import com.example.theatreapp.R
 import com.example.theatreapp.adapters.StreamingViewPagerAdapter
 import com.example.theatreapp.connections.Socket
 import com.example.theatreapp.databinding.FragmentStreamingRoomBinding
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,6 +36,7 @@ class StreamingRoomFragment :
     private lateinit var binding : FragmentStreamingRoomBinding
     private var mediaPlayerFragment : MediaPlayerFragment? = null
     private lateinit var viewPagerAdapter : StreamingViewPagerAdapter
+    private lateinit var bottomSheetBehavior : BottomSheetBehavior<ConstraintLayout>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,21 +58,28 @@ class StreamingRoomFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        binding.playButton.setOnClickListener {
-//            if(binding.messageEditText.text.isEmpty())
-//                Toast.makeText( context, "Enter Message", Toast.LENGTH_SHORT ).show()
-//
-//            if(socket.instance.connected())
-//                socket.instance.emit("onMessage", ROOM, binding.messageEditText.text.toString())
-//        }
         setupViewPager()
         socket.setSocketListener(this)
         socket.initializeSocketEvents()
 
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetLayout.bottomSheet)
+        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback(){
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            }
+
+        })
+
         binding.searchChat.setOnClickListener {
-            findNavController().navigate(R.id.action_roomFrament_to_youtubePlayerFragment)
+            bottomSheetBehavior.state = if(bottomSheetBehavior.state == BottomSheetBehavior.STATE_HIDDEN)
+                BottomSheetBehavior.STATE_HALF_EXPANDED else
+                BottomSheetBehavior.STATE_HIDDEN
         }
     }
+
+
 
     override fun onStart() {
         super.onStart()
