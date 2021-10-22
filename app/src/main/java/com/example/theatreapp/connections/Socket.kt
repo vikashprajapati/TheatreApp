@@ -31,6 +31,8 @@ class Socket {
    listener.pauseEvent()
   }.on("previousVideo"){
    listener.previousVideoEvent()
+  }.on("joined room response"){
+   listener.joinRoomResponse(it.toString())
   }
   socket.connect()
  }
@@ -45,5 +47,6 @@ class Socket {
   fun sendRoomInfo()
   fun newParticipantJoinedEvent()
   fun connectionStatus(eventConnect: String)
+  fun joinRoomResponse(room : String)
  }
 }

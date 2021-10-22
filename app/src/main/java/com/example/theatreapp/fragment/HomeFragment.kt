@@ -9,6 +9,7 @@ import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import com.example.theatreapp.R
 import com.example.theatreapp.adapters.RoomsListAdapter
+import com.example.theatreapp.connections.Socket
 import com.example.theatreapp.databinding.FragmentHomeBinding
 import com.example.theatreapp.listeners.HomeFragmentListener
 import com.example.theatreapp.models.room.Room

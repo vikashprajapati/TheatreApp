@@ -1,18 +1,23 @@
 package com.example.theatreapp.fragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.fragment.findNavController
+import com.example.theatreapp.App
 import com.example.theatreapp.listeners.MediaPlayerFragmentListener
 import com.example.theatreapp.R
 import com.example.theatreapp.adapters.StreamingViewPagerAdapter
 import com.example.theatreapp.connections.Socket
 import com.example.theatreapp.databinding.FragmentStreamingRoomBinding
+import com.example.theatreapp.models.requests.Room
+import com.example.theatreapp.models.requests.User
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 // TODO: Rename parameter arguments, choose names that match
@@ -79,7 +84,14 @@ class StreamingRoomFragment :
         }
     }
 
-
+    private fun joinRoom(){
+        socket.instance
+            .emit(
+                "join room",
+                App.gson.toJson(Room("Movie Night")),
+                App.gson.toJson(User("Vikash"))
+            )
+    }
 
     override fun onStart() {
         super.onStart()
@@ -144,23 +156,24 @@ class StreamingRoomFragment :
     }
 
     override fun connectionStatus(eventConnect: String) {
-//        activity?.runOnUiThread {
-//            binding.connectionStatusTextview.text = eventConnect
-//            when(eventConnect) {
-//                io.socket.client.Socket.EVENT_CONNECT -> context?.getColor(R.color.teal_200)?.let {
-//                    binding.connectionStatusTextview.setTextColor(
-//                        it
-//                    )
-//                }
-//                io.socket.client.Socket.EVENT_CONNECT_ERROR,
-//                io.socket.client.Socket.EVENT_DISCONNECT -> context?.getColor(R.color.purple_700)?.let {
-//                    binding.connectionStatusTextview.setTextColor(
-//                        it
-//                    )
-//
-//                }
-//            }
-//        }
+        activity?.runOnUiThread {
+            when(eventConnect) {
+                io.socket.client.Socket.EVENT_CONNECT -> {
+                    Toast.makeText(context, "Socket connected", Toast.LENGTH_SHORT).show()
+                    joinRoom()
+                }
+                io.socket.client.Socket.EVENT_CONNECT_ERROR,
+                io.socket.client.Socket.EVENT_DISCONNECT -> {
+                    socket.instance.close()
+                    Toast.makeText(context, "Socket connection failed", Toast.LENGTH_SHORT).show()
+                    parentFragmentManager.popBackStack()
+                }
+            }
+        }
+    }
+
+    override fun joinRoomResponse(room: String) {
+        Log.i("TAG", "joinRoomResponse: ${room}" )
     }
 
     override fun playEvent() {
