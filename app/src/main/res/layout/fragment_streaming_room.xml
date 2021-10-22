@@ -26,14 +26,15 @@
                 android:padding="8dp">
 
                 <TextView
-                    android:id="@+id/user_name"
+                    android:id="@+id/video_title_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Vikash"
-                    android:textSize="18sp"
+                    android:text="Title of the video"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@+id/search_chat"/>
                 <ImageView
