@@ -46,17 +46,6 @@ class HomeFragment :
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-
-        var roomListAdapter = context?.let {
-            viewModel.getRoomsList().value?.let { roomList ->
-                RoomsListAdapter(it, roomList) { selectedRoom: Room ->
-                    onRoomSelected(
-                        selectedRoom
-                    )
-                }
-            }
-        }
-        binding.roomsRecyclerView.adapter = roomListAdapter
     }
 
 

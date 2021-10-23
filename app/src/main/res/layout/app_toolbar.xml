@@ -28,13 +28,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/app_toolbar_text_size"
-            android:text="@string/pull_to_refresh_text"
-            android:textColor="@color/pull_to_refresh_header_text_color"/>
+            android:text="@string/pull_to_refresh_text"/>
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_arrow_down"
-            app:tint="@color/pull_to_refresh_header_text_color" />
+            android:src="@drawable/ic_arrow_down"/>
     </LinearLayout>
 
     <ImageButton

@@ -3,6 +3,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="pull_to_refresh_text">Slide Down To Refresh</string>
-    <string name="search_bar_hint_text">Enter room name to join</string>
+    <string name="room_name_hint_text"><b>Enter room name</b></string>
+    <string name="user_name_hint_text"><b>Enter user name</b></string>
+    <string name="join_room_button"><b>Join Room</b></string>
     <string name="search_videos_hint_text">Search videos</string>
 </resources>
