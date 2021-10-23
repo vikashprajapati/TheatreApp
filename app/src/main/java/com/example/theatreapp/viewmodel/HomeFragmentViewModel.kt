@@ -19,8 +19,8 @@ class HomeFragmentViewModel : ViewModel() {
     }
 
     private fun loadAvailableRooms(){
-        var room1 = Room("", "Test Room 1", 2)
-        var room2 = Room("", "Test Room 2", 5)
+        var room1 = Room("", "Test Room 1", ArrayList())
+        var room2 = Room("", "Test Room 2", ArrayList())
         var rooms = ArrayList<Room>()
         rooms.add(room1)
         rooms.add(room2)

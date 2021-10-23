@@ -32,7 +32,7 @@ class Socket {
   }.on("previousVideo"){
    listener.previousVideoEvent()
   }.on("joined room response"){
-   listener.joinRoomResponse(it.toString())
+   listener.joinRoomResponse(it[0].toString())
   }
   socket.connect()
  }

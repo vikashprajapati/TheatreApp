@@ -16,6 +16,7 @@ import com.example.theatreapp.R
 import com.example.theatreapp.adapters.StreamingViewPagerAdapter
 import com.example.theatreapp.connections.Socket
 import com.example.theatreapp.databinding.FragmentStreamingRoomBinding
+import com.example.theatreapp.models.participants.Participant
 import com.example.theatreapp.models.requests.Room
 import com.example.theatreapp.models.requests.User
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -173,7 +174,7 @@ class StreamingRoomFragment :
     }
 
     override fun joinRoomResponse(room: String) {
-        Log.i("TAG", "joinRoomResponse: ${room}" )
+        var roomInfo = App.gson.fromJson<com.example.theatreapp.models.response.Room>(room, com.example.theatreapp.models.response.Room::class.java::class.java)
     }
 
     override fun playEvent() {
