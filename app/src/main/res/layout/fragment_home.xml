@@ -6,6 +6,9 @@
 
     <data>
         <variable
+            name="listener"
+            type="com.example.theatreapp.listeners.HomeFragmentListener" />
+        <variable
             name="viewModel"
             type="com.example.theatreapp.viewmodel.HomeFragmentViewModel" />
     </data>
@@ -24,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingVertical="16dp"
+                android:paddingVertical="48dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent">
                 <TextView
@@ -37,16 +40,28 @@
                     android:textSize="48sp"
                     android:textStyle="bold" />
 
-
-                <TextView
-                    android:id="@+id/welcome_message"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Welcome to Syncr"
-                    android:textColor="@color/tertiary_color"
-                    android:textSize="32sp"
-                    android:textStyle="bold"/>
+                    android:orientation="horizontal"
+                    android:gravity="center">
+                    <TextView
+                        android:id="@+id/welcome_message"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Welcome to "
+                        android:textColor="@color/tertiary_color"
+                        android:textSize="32sp"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Syncr"
+                        android:textColor="@color/primary_color"
+                        android:textSize="32sp"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_view"
@@ -70,7 +85,8 @@
                             style="@style/EditText.Style"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/user_name_hint_text" />
+                            android:hint="@string/user_name_hint_text"
+                            android:text="@={viewModel.userName}"/>
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/room_name"
@@ -78,13 +94,15 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
-                            android:hint="@string/room_name_hint_text" />
+                            android:hint="@string/room_name_hint_text"
+                            android:text="@{viewModel.roomName}"/>
 
                         <androidx.appcompat.widget.AppCompatButton
                             style="@style/AppBlockButton"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="24dp"
+                            android:onClick="@{() -> viewModel.validateInput()}"
                             android:text="@string/join_room_button" />
                     </LinearLayout>
 

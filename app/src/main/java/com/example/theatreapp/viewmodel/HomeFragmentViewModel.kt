@@ -1,29 +1,31 @@
 package com.example.theatreapp.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.theatreapp.models.room.Room
 
 class HomeFragmentViewModel : ViewModel() {
-    private val roomList : MutableLiveData<ArrayList<Room>> by lazy {
-        MutableLiveData<ArrayList<Room>>()
+    private lateinit var room : MutableLiveData<String>
+    private lateinit var user : MutableLiveData<String>
+
+    var roomName : String
+        get() = room?.value?:""
+        set(value){
+            room.value = value
+        }
+
+    var userName : String
+        get() = user?.value?:""
+        set(value){
+            user.value = value
+        }
+
+    fun validateInput() = if(room.value.isNullOrEmpty() || user.value.isNullOrEmpty()) invalidInput() else joinRoom()
+
+    private fun invalidInput(){
+
     }
 
-    init {
-        loadAvailableRooms()
-    }
+    private fun joinRoom(){
 
-    fun getRoomsList() : LiveData<ArrayList<Room>> {
-        return roomList
-    }
-
-    private fun loadAvailableRooms(){
-        var room1 = Room("", "Test Room 1", ArrayList())
-        var room2 = Room("", "Test Room 2", ArrayList())
-        var rooms = ArrayList<Room>()
-        rooms.add(room1)
-        rooms.add(room2)
-        roomList.value = rooms
     }
 }
