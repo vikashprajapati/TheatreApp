@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
 import com.example.theatreapp.R
 /**
@@ -13,8 +14,11 @@ import com.example.theatreapp.R
  * Use the [BaseFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-abstract class BaseFragment<VBinding : ViewBinding> : Fragment() {
-    protected lateinit var binding : VBinding
+abstract class BaseFragment<VBinding : ViewBinding, VModel : androidx.lifecycle.ViewModel> : Fragment() {
+    protected lateinit var viewModel: VModel
+    protected abstract fun initViewModel() : VModel
+
+    protected var binding : VBinding? = null
     protected abstract fun getViewBinding() : VBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,11 +33,12 @@ abstract class BaseFragment<VBinding : ViewBinding> : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return binding.root
+        return binding?.root
     }
 
     private fun init(){
         binding = getViewBinding()
+        viewModel = initViewModel()
     }
 
     open fun setUpViews() {}
@@ -54,5 +59,10 @@ abstract class BaseFragment<VBinding : ViewBinding> : Fragment() {
 
     protected fun longToast(resId : Int){
         Toast.makeText(context, resources.getText(resId), Toast.LENGTH_LONG).show()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 }

@@ -17,9 +17,8 @@ import com.example.theatreapp.viewmodel.HomeFragmentViewModel
  * create an instance of this fragment.
  */
 class HomeFragment :
-    BaseFragment<FragmentHomeBinding>(){
+    BaseFragment<FragmentHomeBinding, HomeFragmentViewModel>(){
     private val TAG = HomeFragment.javaClass.canonicalName
-    private val viewModel = HomeFragmentViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,19 +28,18 @@ class HomeFragment :
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return binding.root
+        return binding?.root
     }
 
-    override fun getViewBinding(): FragmentHomeBinding {
-        return FragmentHomeBinding.inflate(layoutInflater)
-    }
+    override fun getViewBinding(): FragmentHomeBinding = FragmentHomeBinding.inflate(layoutInflater)
+
+    override fun initViewModel(): HomeFragmentViewModel = HomeFragmentViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.lifecycleOwner = this
-        binding.viewModel = viewModel
-
-        binding.viewModel!!.invalidInput.observe(viewLifecycleOwner, { event ->
+        binding?.lifecycleOwner = this@HomeFragment
+        binding?.viewModel = viewModel
+        binding?.viewModel!!.invalidInput.observe(viewLifecycleOwner, { event ->
             event?.getContentIfNotHandledOrReturnNull()?.let {
                 shortToast(R.string.invalid_details_text)
             }
