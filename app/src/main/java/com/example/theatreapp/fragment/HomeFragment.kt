@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.theatreapp.R
 import com.example.theatreapp.databinding.FragmentHomeBinding
 import com.example.theatreapp.listeners.HomeFragmentListener
 import com.example.theatreapp.viewmodel.HomeFragmentViewModel
@@ -15,9 +17,8 @@ import com.example.theatreapp.viewmodel.HomeFragmentViewModel
  * create an instance of this fragment.
  */
 class HomeFragment :
-    Fragment(){
+    BaseFragment<FragmentHomeBinding>(){
     private val TAG = HomeFragment.javaClass.canonicalName
-    private lateinit var binding : FragmentHomeBinding
     private val viewModel = HomeFragmentViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,15 +29,23 @@ class HomeFragment :
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun getViewBinding(): FragmentHomeBinding {
+        return FragmentHomeBinding.inflate(layoutInflater)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+
+        binding.viewModel!!.invalidInput.observe(viewLifecycleOwner, { event ->
+            event?.getContentIfNotHandledOrReturnNull()?.let {
+                shortToast(R.string.invalid_details_text)
+            }
+        })
     }
 
     companion object {
