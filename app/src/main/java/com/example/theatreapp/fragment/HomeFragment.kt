@@ -39,6 +39,10 @@ class HomeFragment :
         super.onViewCreated(view, savedInstanceState)
         binding?.lifecycleOwner = this@HomeFragment
         binding?.viewModel = viewModel
+    }
+
+    override fun observeData() {
+        super.observeData()
         binding?.viewModel!!.invalidInput.observe(viewLifecycleOwner, { event ->
             event?.getContentIfNotHandledOrReturnNull()?.let {
                 shortToast(R.string.invalid_details_text)

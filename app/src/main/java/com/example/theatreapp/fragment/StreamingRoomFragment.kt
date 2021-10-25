@@ -50,7 +50,6 @@ class StreamingRoomFragment :
             room = it.getString(ROOM)
             user = it.getString(USER)
         }
-        socket = Socket()
     }
 
     override fun onCreateView(
@@ -65,7 +64,6 @@ class StreamingRoomFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupViewPager()
-        socket.setSocketListener(this)
         socket.initializeSocketEvents()
 
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetLayout.bottomSheet)
