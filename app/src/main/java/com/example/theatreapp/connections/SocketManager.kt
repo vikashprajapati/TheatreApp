@@ -1,10 +1,18 @@
 package com.example.theatreapp.connections
 
+import androidx.lifecycle.MutableLiveData
+import com.example.theatreapp.Event
 import com.example.theatreapp.connections.SocketService
 
 class SocketManager() : SocketService.SocketEventListener {
 
     private val socketService = SocketService()
+    val played = MutableLiveData<Event<String>>()
+    val paused = MutableLiveData<Event<String>>()
+    val previousVideoPlayed = MutableLiveData<Event<String>>()
+    val nextVideoPlayed = MutableLiveData<Event<String>>()
+    val connectionStatus = MutableLiveData<Event<String>>()
+    val joinedRoom = MutableLiveData<Event<String>>()
 
 
     // Events sent to the socket
@@ -12,7 +20,6 @@ class SocketManager() : SocketService.SocketEventListener {
         socketService.initializeSocketAndConnect()
         socketService.registerListener(this)
     }
-
 
     // Events from the socket server
     override fun playEvent() {

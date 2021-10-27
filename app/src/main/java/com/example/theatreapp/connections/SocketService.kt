@@ -62,6 +62,11 @@ class SocketService : BaseObservable<SocketService.SocketEventListener>() {
   socket.connect()
  }
 
+ fun send(eventType : String, args : List<Any>){
+  // serialize args
+  // check event type and emit event
+ }
+
  interface SocketEventListener{
   fun playEvent()
   fun pauseEvent()
