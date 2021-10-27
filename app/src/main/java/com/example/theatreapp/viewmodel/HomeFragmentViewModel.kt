@@ -3,7 +3,6 @@ package com.example.theatreapp.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.theatreapp.Event
-import com.example.theatreapp.connections.Socket
 
 class HomeFragmentViewModel : ViewModel() {
     private var room = MutableLiveData<String>()

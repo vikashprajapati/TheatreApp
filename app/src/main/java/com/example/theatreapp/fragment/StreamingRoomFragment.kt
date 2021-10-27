@@ -1,7 +1,6 @@
 package com.example.theatreapp.fragment
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,14 +8,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentTransaction
-import androidx.navigation.fragment.findNavController
 import com.example.theatreapp.App
 import com.example.theatreapp.listeners.MediaPlayerFragmentListener
 import com.example.theatreapp.R
 import com.example.theatreapp.adapters.StreamingViewPagerAdapter
-import com.example.theatreapp.connections.Socket
+import com.example.theatreapp.connections.SocketService
 import com.example.theatreapp.databinding.FragmentStreamingRoomBinding
-import com.example.theatreapp.models.participants.Participant
 import com.example.theatreapp.models.requests.Room
 import com.example.theatreapp.models.requests.User
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -34,11 +31,11 @@ public const val USER = "User"
 class StreamingRoomFragment :
     Fragment(),
     MediaPlayerFragmentListener,
-    Socket.SocketEventListener {
+    SocketService.SocketEventListener {
     // TODO: Rename and change types of parameters
     private var room: String? = null
     private var user: String? = null
-    private lateinit var socket: Socket
+    private lateinit var socket: SocketService
     private lateinit var binding : FragmentStreamingRoomBinding
     private var mediaPlayerFragment : MediaPlayerFragment? = null
     private lateinit var viewPagerAdapter : StreamingViewPagerAdapter
