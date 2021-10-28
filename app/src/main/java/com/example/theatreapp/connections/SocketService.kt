@@ -17,7 +17,7 @@ class SocketService : BaseObservable<SocketService.SocketEventListener>() {
 
  private fun joinRoom(response :String){
   for (listener in getListeners()){
-   listener.connectionStatus(response)
+   listener.joinRoomResponse(response)
   }
  }
 
@@ -65,6 +65,9 @@ class SocketService : BaseObservable<SocketService.SocketEventListener>() {
 
  fun send(eventType : String, args : List<Any>){
   // serialize args
+  val room = args[0]
+  val user = args[1]
+  socket.emit(eventType, room, user)
   // check event type and emit event
  }
 

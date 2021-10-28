@@ -1,5 +1,6 @@
 package com.example.theatreapp.connections
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.theatreapp.Event
 import com.example.theatreapp.connections.SocketService
@@ -21,6 +22,10 @@ class SocketManager() : SocketService.SocketEventListener {
     fun startListeningToServer(){
         socketService.registerListener(this)
         socketService.initializeSocketAndConnect()
+    }
+
+    fun joinRoom(room : Any, user : Any){
+        socketService.send("join room", listOf(room, user))
     }
 
     // Events from the socket server
@@ -61,7 +66,7 @@ class SocketManager() : SocketService.SocketEventListener {
     }
 
     override fun joinRoomResponse(room: String) {
-        TODO("Not yet implemented")
+        Log.i("TAG", "joinRoomResponse: ")
     }
 
     override fun userLeft() {

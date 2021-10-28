@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import com.example.theatreapp.Event
 import com.example.theatreapp.connections.SocketManager
+import com.google.gson.JsonObject
 import io.socket.engineio.client.Socket
 
 class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewModel() {
@@ -13,6 +14,7 @@ class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewMode
     private var room = MutableLiveData<String>()
     private var user = MutableLiveData<String>()
     val connectionState = MutableLiveData<String>()
+
     private var connectivityObserver = Observer<Event<String>>{
         var status = it.getContentIfNotHandledOrReturnNull()
 
@@ -61,5 +63,11 @@ class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewMode
 
     private fun joinRoom() {
         Log.i(TAG, "joinRoom: ")
+        var user = JsonObject()
+        user.addProperty("name", "vikash");
+        var room = JsonObject()
+        user.addProperty("name", "Test");
+
+        socketManager.joinRoom(room, user)
     }
 }
