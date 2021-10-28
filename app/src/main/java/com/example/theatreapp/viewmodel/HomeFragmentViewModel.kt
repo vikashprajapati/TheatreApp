@@ -12,11 +12,14 @@ class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewMode
     private val TAG: String = HomeFragmentViewModel::class.java.canonicalName
     private var room = MutableLiveData<String>()
     private var user = MutableLiveData<String>()
+    val connectionState = MutableLiveData<String>()
     private var connectivityObserver = Observer<Event<String>>{
         var status = it.getContentIfNotHandledOrReturnNull()
 
         if(status === io.socket.client.Socket.EVENT_CONNECT){
             joinRoom()
+        }else{
+            connectionState.postValue(status)
         }
     }
 

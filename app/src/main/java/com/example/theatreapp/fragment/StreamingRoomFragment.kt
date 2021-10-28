@@ -35,7 +35,7 @@ class StreamingRoomFragment :
     // TODO: Rename and change types of parameters
     private var room: String? = null
     private var user: String? = null
-    private lateinit var socket: SocketService
+//    private lateinit var socket: SocketService
     private lateinit var binding : FragmentStreamingRoomBinding
     private var mediaPlayerFragment : MediaPlayerFragment? = null
     private lateinit var viewPagerAdapter : StreamingViewPagerAdapter
@@ -61,7 +61,7 @@ class StreamingRoomFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupViewPager()
-        socket.initializeSocketEvents()
+//        socket.initializeSocketEvents()
 
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetLayout.bottomSheet)
         bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback(){
@@ -81,12 +81,12 @@ class StreamingRoomFragment :
     }
 
     private fun joinRoom(){
-        socket.instance
-            .emit(
-                "join room",
-                App.gson.toJson(Room("Movie Night")),
-                App.gson.toJson(User("Vikash"))
-            )
+//        socket.instance
+//            .emit(
+//                "join room",
+//                App.gson.toJson(Room("Movie Night")),
+//                App.gson.toJson(User("Vikash"))
+//            )
     }
 
     override fun onStart() {
@@ -97,7 +97,7 @@ class StreamingRoomFragment :
 
     override fun onPause() {
         super.onPause()
-        socket.instance.disconnect()
+//        socket.instance.disconnect()
     }
 
     override fun onStop() {
@@ -136,19 +136,19 @@ class StreamingRoomFragment :
     }
 
     override fun onVideoPlayed() {
-        socket.instance.emit("played", ROOM)
+//        socket.instance.emit("played", ROOM)
     }
 
     override fun onVideoPaused() {
-        socket.instance.emit("paused", ROOM)
+//        socket.instance.emit("paused", ROOM)
     }
 
     override fun onPrevVideo() {
-        socket.instance.emit("previousVideo", ROOM)
+//        socket.instance.emit("previousVideo", ROOM)
     }
 
     override fun onNextVideo() {
-        socket.instance.emit("nextVideo", ROOM)
+//        socket.instance.emit("nextVideo", ROOM)
     }
 
     override fun connectionStatus(eventConnect: String) {
@@ -160,7 +160,7 @@ class StreamingRoomFragment :
                 }
                 io.socket.client.Socket.EVENT_CONNECT_ERROR,
                 io.socket.client.Socket.EVENT_DISCONNECT -> {
-                    socket.instance.close()
+//                    socket.instance.close()
                     Toast.makeText(context, "Socket connection failed", Toast.LENGTH_SHORT).show()
                     parentFragmentManager.popBackStack()
                 }
@@ -170,6 +170,10 @@ class StreamingRoomFragment :
 
     override fun joinRoomResponse(room: String) {
         var roomInfo = App.gson.fromJson<com.example.theatreapp.models.response.Room>(room, com.example.theatreapp.models.response.Room::class.java::class.java)
+    }
+
+    override fun userLeft() {
+        TODO("Not yet implemented")
     }
 
     override fun playEvent() {
@@ -197,7 +201,7 @@ class StreamingRoomFragment :
     }
 
     override fun sendRoomInfo() {
-        socket.instance.emit("roomJoinInfo", ROOM)
+//        socket.instance.emit("roomJoinInfo", ROOM)
     }
 
     override fun newParticipantJoinedEvent() {

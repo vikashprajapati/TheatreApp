@@ -19,8 +19,8 @@ class SocketManager() : SocketService.SocketEventListener {
 
     // Events sent to the socket
     fun startListeningToServer(){
-        socketService.initializeSocketAndConnect()
         socketService.registerListener(this)
+        socketService.initializeSocketAndConnect()
     }
 
     // Events from the socket server
@@ -57,7 +57,7 @@ class SocketManager() : SocketService.SocketEventListener {
     }
 
     override fun connectionStatus(eventConnect: String) {
-        connectionStatus.value = Event(eventConnect)
+        connectionStatus.postValue(Event(eventConnect))
     }
 
     override fun joinRoomResponse(room: String) {

@@ -95,7 +95,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
                             android:hint="@string/room_name_hint_text"
-                            android:text="@{viewModel.roomName}"/>
+                            android:text="@={viewModel.roomName}"/>
 
                         <androidx.appcompat.widget.AppCompatButton
                             style="@style/AppBlockButton"

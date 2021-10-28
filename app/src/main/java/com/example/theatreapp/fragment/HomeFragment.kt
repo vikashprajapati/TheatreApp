@@ -46,15 +46,23 @@ class HomeFragment :
         super.onViewCreated(view, savedInstanceState)
         binding?.lifecycleOwner = this@HomeFragment
         binding?.viewModel = viewModel
+
+        observeData()
     }
 
     override fun observeData() {
         super.observeData()
-        binding?.viewModel!!.invalidInput.observe(viewLifecycleOwner, { event ->
-            event?.getContentIfNotHandledOrReturnNull()?.let {
-                shortToast(R.string.invalid_details_text)
-            }
-        })
+        binding?.viewModel!!.apply {
+            invalidInput.observe(viewLifecycleOwner, { event ->
+                event?.getContentIfNotHandledOrReturnNull()?.let {
+                    shortToast(R.string.invalid_details_text)
+                }
+            })
+
+            connectionState.observe(viewLifecycleOwner, { msg ->
+                shortToast(msg)
+            })
+        }
     }
 
     companion object {
