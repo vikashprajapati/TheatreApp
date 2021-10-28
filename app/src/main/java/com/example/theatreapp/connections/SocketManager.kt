@@ -7,12 +7,14 @@ import com.example.theatreapp.connections.SocketService
 class SocketManager() : SocketService.SocketEventListener {
 
     private val socketService = SocketService()
-    val played = MutableLiveData<Event<String>>()
-    val paused = MutableLiveData<Event<String>>()
-    val previousVideoPlayed = MutableLiveData<Event<String>>()
-    val nextVideoPlayed = MutableLiveData<Event<String>>()
-    val connectionStatus = MutableLiveData<Event<String>>()
-    val joinedRoom = MutableLiveData<Event<String>>()
+    private var played = MutableLiveData<Event<String>>()
+    private var paused = MutableLiveData<Event<String>>()
+    private var previousVideoPlayed = MutableLiveData<Event<String>>()
+    private var nextVideoPlayed = MutableLiveData<Event<String>>()
+    private var connectionStatus = MutableLiveData<Event<String>>()
+    private var joinedRoom = MutableLiveData<Event<String>>()
+
+    val connectionState : MutableLiveData<Event<String>> get() = connectionStatus
 
 
     // Events sent to the socket
@@ -23,27 +25,27 @@ class SocketManager() : SocketService.SocketEventListener {
 
     // Events from the socket server
     override fun playEvent() {
-        TODO("Not yet implemented")
+        played.value = Event("played")
     }
 
     override fun pauseEvent() {
-        TODO("Not yet implemented")
+        paused.value = Event("paused")
     }
 
     override fun previousVideoEvent() {
-        TODO("Not yet implemented")
+        previousVideoPlayed.value = Event("previousVideo")
     }
 
     override fun nextVideoEvent() {
-        TODO("Not yet implemented")
+        nextVideoPlayed.value = Event("nextVideo")
     }
 
     override fun syncVideoEvent() {
-        TODO("Not yet implemented")
+
     }
 
     override fun roomJoinedEvent() {
-        TODO("Not yet implemented")
+        joinedRoom.value = Event("joined room")
     }
 
     override fun sendRoomInfo() {
@@ -55,7 +57,7 @@ class SocketManager() : SocketService.SocketEventListener {
     }
 
     override fun connectionStatus(eventConnect: String) {
-        TODO("Not yet implemented")
+        connectionStatus.value = Event(eventConnect)
     }
 
     override fun joinRoomResponse(room: String) {

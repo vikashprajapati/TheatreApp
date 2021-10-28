@@ -59,6 +59,7 @@ class SocketService : BaseObservable<SocketService.SocketEventListener>() {
   }.on(ROOM_JOINED.name){
    joinRoom(it[0].toString())
   }
+
   socket.connect()
  }
 

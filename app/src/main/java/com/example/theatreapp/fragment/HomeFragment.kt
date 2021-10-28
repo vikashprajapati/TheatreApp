@@ -6,7 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import com.example.theatreapp.HomeViewModelFactory
 import com.example.theatreapp.R
+import com.example.theatreapp.connections.SocketManager
 import com.example.theatreapp.databinding.FragmentHomeBinding
 import com.example.theatreapp.listeners.HomeFragmentListener
 import com.example.theatreapp.viewmodel.HomeFragmentViewModel
@@ -33,7 +37,10 @@ class HomeFragment :
 
     override fun getViewBinding(): FragmentHomeBinding = FragmentHomeBinding.inflate(layoutInflater)
 
-    override fun initViewModel(): HomeFragmentViewModel = HomeFragmentViewModel()
+    override fun initViewModel(): HomeFragmentViewModel{
+        var viewModelFactory = HomeViewModelFactory(SocketManager())
+        return ViewModelProvider(this, viewModelFactory).get(HomeFragmentViewModel::class.java)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
