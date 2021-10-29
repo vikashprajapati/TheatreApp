@@ -201,10 +201,6 @@ class StreamingRoomFragment :
         TODO("Not yet implemented")
     }
 
-    override fun sendRoomInfo() {
-//        socket.instance.emit("roomJoinInfo", ROOM)
-    }
-
     override fun newParticipantJoinedEvent() {
         TODO("Not yet implemented")
     }

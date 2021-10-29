@@ -39,13 +39,18 @@ class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewMode
             return@Observer;
         }
         joinRoomState.postValue(App.gson.toJson(joinedRoomResponse))
+        clearFields()
     }
 
     init{
-        room.value = ""
-        user.value = ""
+        clearFields()
         socketManager.connectionState.observeForever(connectivityObserver)
         socketManager.joinedRoomState.observeForever(joinedRoomObserver)
+    }
+
+    private fun clearFields(){
+        room.value = ""
+        user.value = ""
     }
 
     var roomName : String

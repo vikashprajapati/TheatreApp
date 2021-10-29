@@ -84,7 +84,6 @@ class SocketService : BaseObservable<SocketService.SocketEventListener>() {
   fun nextVideoEvent()
   fun syncVideoEvent()
   fun roomJoinedEvent()
-  fun sendRoomInfo()
   fun newParticipantJoinedEvent()
   fun connectionStatus(eventConnect: String)
   fun joinRoomResponse(joinedRoomResponse: JoinedRoomResponse)

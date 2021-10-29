@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.example.theatreapp.HomeViewModelFactory
 import com.example.theatreapp.R
 import com.example.theatreapp.connections.SocketManager
@@ -64,7 +65,8 @@ class HomeFragment :
             })
 
             joinRoomState.observe(viewLifecycleOwner, { response ->
-
+                // navigate to streaming room fragment
+                findNavController().navigate(R.id.action_homeFragment_to_roomFrament)
             })
         }
     }

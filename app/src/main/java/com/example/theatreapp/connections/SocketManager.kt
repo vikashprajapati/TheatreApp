@@ -1,6 +1,7 @@
 package com.example.theatreapp.connections
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.theatreapp.Event
 import com.example.theatreapp.connections.SocketService
@@ -19,9 +20,11 @@ class SocketManager() : SocketService.SocketEventListener {
     private var connectionStatus = MutableLiveData<Event<String>>()
     private var joinedRoomStatus = MutableLiveData<Event<JoinedRoomResponse>>()
     private var joinedRoom = MutableLiveData<Event<String>>()
+    private var syncedVideo = MutableLiveData<Event<String>>()
+    private var participantJoined = MutableLiveData<Event<String>>()
 
-    val connectionState : MutableLiveData<Event<String>> get() = connectionStatus
-    val joinedRoomState : MutableLiveData<Event<JoinedRoomResponse>> get() = joinedRoomStatus
+    val connectionState : LiveData<Event<String>> get() = connectionStatus
+    val joinedRoomState : LiveData<Event<JoinedRoomResponse>> get() = joinedRoomStatus
 
 
     // Events sent to the socket
@@ -61,19 +64,15 @@ class SocketManager() : SocketService.SocketEventListener {
     }
 
     override fun syncVideoEvent() {
-
+        syncedVideo.value = Event("syncedVideo")
     }
 
     override fun roomJoinedEvent() {
         joinedRoom.value = Event("joined room")
     }
 
-    override fun sendRoomInfo() {
-        TODO("Not yet implemented")
-    }
-
     override fun newParticipantJoinedEvent() {
-        TODO("Not yet implemented")
+
     }
 
     override fun connectionStatus(eventConnect: String) {
