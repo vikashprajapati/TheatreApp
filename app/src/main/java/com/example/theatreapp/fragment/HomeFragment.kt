@@ -62,6 +62,10 @@ class HomeFragment :
             connectionState.observe(viewLifecycleOwner, { msg ->
                 shortToast(msg)
             })
+
+            joinRoomState.observe(viewLifecycleOwner, { response ->
+
+            })
         }
     }
 

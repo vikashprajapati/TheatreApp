@@ -4,6 +4,10 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.theatreapp.Event
 import com.example.theatreapp.connections.SocketService
+import com.example.theatreapp.models.requests.JoinRoomRequest
+import com.example.theatreapp.models.requests.Room
+import com.example.theatreapp.models.requests.User
+import com.example.theatreapp.models.response.joinroomresponse.JoinedRoomResponse
 
 class SocketManager() : SocketService.SocketEventListener {
 
@@ -13,9 +17,11 @@ class SocketManager() : SocketService.SocketEventListener {
     private var previousVideoPlayed = MutableLiveData<Event<String>>()
     private var nextVideoPlayed = MutableLiveData<Event<String>>()
     private var connectionStatus = MutableLiveData<Event<String>>()
+    private var joinedRoomStatus = MutableLiveData<Event<JoinedRoomResponse>>()
     private var joinedRoom = MutableLiveData<Event<String>>()
 
     val connectionState : MutableLiveData<Event<String>> get() = connectionStatus
+    val joinedRoomState : MutableLiveData<Event<JoinedRoomResponse>> get() = joinedRoomStatus
 
 
     // Events sent to the socket
@@ -24,8 +30,17 @@ class SocketManager() : SocketService.SocketEventListener {
         socketService.initializeSocketAndConnect()
     }
 
-    fun joinRoom(room : Any, user : Any){
-        socketService.send("join room", listOf(room, user))
+    fun stopListeningToServer(){
+        socketService.unRegisterListener(this)
+        socketService.disconnectSocket()
+    }
+
+    fun joinRoom(userName : String, roomName : String){
+        var joinRoomRequestParams = JoinRoomRequest().apply {
+            room = Room(roomName)
+            user = User(userName)
+        }
+        socketService.send("join room", joinRoomRequestParams)
     }
 
     // Events from the socket server
@@ -65,8 +80,8 @@ class SocketManager() : SocketService.SocketEventListener {
         connectionStatus.postValue(Event(eventConnect))
     }
 
-    override fun joinRoomResponse(room: String) {
-        Log.i("TAG", "joinRoomResponse: ")
+    override fun joinRoomResponse(joinedRoomResponse: JoinedRoomResponse) {
+        joinedRoomStatus.postValue(Event(joinedRoomResponse))
     }
 
     override fun userLeft() {

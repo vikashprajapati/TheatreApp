@@ -1,11 +1,14 @@
 package com.example.theatreapp.connections
 
-import com.example.theatreapp.constants.SocketConstants.*
+import com.example.theatreapp.App
+import com.example.theatreapp.constants.SocketConstants
+import com.example.theatreapp.models.response.joinroomresponse.JoinedRoomResponse
 import io.socket.client.IO
 import io.socket.client.Socket
 import java.net.URI
 
 class SocketService : BaseObservable<SocketService.SocketEventListener>() {
+
  private val SOCKET_ENDPOINT = "http://192.168.43.133:5000"
  private var socket : Socket = IO.socket(URI.create(SOCKET_ENDPOINT))
 
@@ -17,6 +20,7 @@ class SocketService : BaseObservable<SocketService.SocketEventListener>() {
 
  private fun joinRoom(response :String){
   for (listener in getListeners()){
+   val response = App.gson.fromJson<JoinedRoomResponse>(response, JoinedRoomResponse::class.java)
    listener.joinRoomResponse(response)
   }
  }
@@ -28,47 +32,49 @@ class SocketService : BaseObservable<SocketService.SocketEventListener>() {
    handleConnection(Socket.EVENT_CONNECT_ERROR)
   }.on(Socket.EVENT_DISCONNECT) {
    handleConnection(Socket.EVENT_DISCONNECT)
-  }.on(VIDEO_PLAYED.name){
+  }.on(SocketConstants.videoPlayed){
    for (listener in getListeners()){
     listener.playEvent()
    }
-  }.on(VIDEO_PAUSED.name){
+  }.on(SocketConstants.videoPaused){
    for (listener in getListeners()){
     listener.pauseEvent()
    }
-  }.on(PREVIOUS_VIDEO.name){
+  }.on(SocketConstants.previousVideo){
    for (listener in getListeners()){
     listener.previousVideoEvent()
    }
-  }.on(NEXT_VIDEO.name){
+  }.on(SocketConstants.nextVideo){
    for (listener in getListeners()){
     listener.nextVideoEvent()
    }
-  }.on(SYNCED_VIDEO.name){
+  }.on(SocketConstants.videoSynced){
    for (listener in getListeners()){
     listener.syncVideoEvent()
    }
-  }.on(NEW_USER_JOINED.name){
+  }.on(SocketConstants.participantJoined){
    for (listener in getListeners()){
     listener.newParticipantJoinedEvent()
    }
-  }.on(USER_LEFT.name){
+  }.on(SocketConstants.participantLeft){
    for (listener in getListeners()){
     listener.userLeft()
    }
-  }.on(ROOM_JOINED.name){
+  }.on(SocketConstants.roomJoined){
    joinRoom(it[0].toString())
   }
 
   socket.connect()
  }
 
- fun send(eventType : String, args : List<Any>){
+ fun send(eventType : String, params: Any){
   // serialize args
-  val room = args[0]
-  val user = args[1]
-  socket.emit(eventType, room, user)
-  // check event type and emit event
+  val params = App.gson.toJson(params)
+  socket.emit(eventType, params)
+ }
+
+ fun disconnectSocket(){
+  socket.disconnect()
  }
 
  interface SocketEventListener{
@@ -81,7 +87,7 @@ class SocketService : BaseObservable<SocketService.SocketEventListener>() {
   fun sendRoomInfo()
   fun newParticipantJoinedEvent()
   fun connectionStatus(eventConnect: String)
-  fun joinRoomResponse(room : String)
+  fun joinRoomResponse(joinedRoomResponse: JoinedRoomResponse)
   fun userLeft()
  }
 }

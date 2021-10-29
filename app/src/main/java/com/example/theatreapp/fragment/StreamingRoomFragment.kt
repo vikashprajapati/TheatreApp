@@ -16,6 +16,7 @@ import com.example.theatreapp.connections.SocketService
 import com.example.theatreapp.databinding.FragmentStreamingRoomBinding
 import com.example.theatreapp.models.requests.Room
 import com.example.theatreapp.models.requests.User
+import com.example.theatreapp.models.response.joinroomresponse.JoinedRoomResponse
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 // TODO: Rename parameter arguments, choose names that match
@@ -168,7 +169,7 @@ class StreamingRoomFragment :
         }
     }
 
-    override fun joinRoomResponse(room: String) {
+    override fun joinRoomResponse(joinedRoomResponse: JoinedRoomResponse) {
         var roomInfo = App.gson.fromJson<com.example.theatreapp.models.response.Room>(room, com.example.theatreapp.models.response.Room::class.java::class.java)
     }
 

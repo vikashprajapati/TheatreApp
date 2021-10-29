@@ -1,13 +1,24 @@
 package com.example.theatreapp.constants
 
-enum class SocketConstants(event : String) {
-    ON_MESSAGE("on message"),
-    ROOM_JOINED("joined room response"),
-    VIDEO_PLAYED("video played"),
-    VIDEO_PAUSED("video paused"),
-    PREVIOUS_VIDEO("previous video"),
-    NEXT_VIDEO("next video"),
-    NEW_USER_JOINED("participant joined"),
-    USER_LEFT("participant left"),
-    SYNCED_VIDEO("video synced")
+interface SocketConstants {
+    companion object{
+        val onMessage: String
+            get() = "on message"
+        val roomJoined: String
+            get() = "joined room response"
+        val videoPlayed : String
+            get() = "video played"
+        val videoPaused : String
+            get() = "video paused"
+        val previousVideo : String
+            get() = "previous video"
+        val nextVideo : String
+            get() = "next video"
+        val participantJoined : String
+            get() = "participant joined"
+        val participantLeft : String
+            get() = "participant left"
+        val videoSynced : String
+            get() = "video synced"
+    }
 }

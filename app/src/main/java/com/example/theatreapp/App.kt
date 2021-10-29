@@ -5,6 +5,8 @@ import com.google.gson.Gson
 
 class App : Application() {
 
+    public val gson : Gson = Gson()
+
     override fun onCreate() {
         super.onCreate()
     }
