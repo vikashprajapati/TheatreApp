@@ -1,6 +1,8 @@
 package com.example.theatreapp.viewmodel
 
 import android.util.Log
+import android.view.View
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -18,6 +20,7 @@ class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewMode
     private val TAG: String = HomeFragmentViewModel::class.java.canonicalName
     private var room = MutableLiveData<String>()
     private var user = MutableLiveData<String>()
+    public val loading = MutableLiveData<Int>()
     val connectionState = MutableLiveData<String>()
     val joinRoomState = MutableLiveData<String>()
 
@@ -27,13 +30,15 @@ class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewMode
         if(status === io.socket.client.Socket.EVENT_CONNECT){
             joinRoom()
         }else{
-            connectionState.postValue(status)
             socketManager.stopListeningToServer()
+            connectionState.postValue(status)
+            loading.postValue(View.GONE)
         }
     }
 
     private var joinedRoomObserver = Observer<Event<JoinedRoomResponse>>{
         var joinedRoomResponse = it.getContentIfNotHandledOrReturnNull()
+        loading.postValue(View.GONE)
         if(joinedRoomResponse == null){
             socketManager.stopListeningToServer()
             return@Observer;
@@ -43,6 +48,7 @@ class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewMode
     }
 
     init{
+        loading.value = View.GONE
         clearFields()
         socketManager.connectionState.observeForever(connectivityObserver)
         socketManager.joinedRoomState.observeForever(joinedRoomObserver)
@@ -72,8 +78,10 @@ class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewMode
     fun validateInput() {
         if (room.value.isNullOrEmpty() || user.value.isNullOrEmpty())
             invalidInput.value = Event("Invalid Input")
-        else
+        else{
+            loading.postValue(View.VISIBLE)
             connectSocket()
+        }
     }
 
     override fun onCleared() {

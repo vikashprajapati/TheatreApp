@@ -25,10 +25,6 @@ class HomeFragment :
     BaseFragment<FragmentHomeBinding, HomeFragmentViewModel>(){
     private val TAG = HomeFragment.javaClass.canonicalName
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
