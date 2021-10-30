@@ -1,4 +1,4 @@
-package com.example.theatreapp
+package com.example.theatreapp.utils
 
 class Event<Any> (private var content : Any) {
     var hasBeenHandled = false

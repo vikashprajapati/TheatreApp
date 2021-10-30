@@ -1,10 +1,8 @@
 package com.example.theatreapp.connections
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.theatreapp.Event
-import com.example.theatreapp.connections.SocketService
+import com.example.theatreapp.utils.Event
 import com.example.theatreapp.models.requests.JoinRoomRequest
 import com.example.theatreapp.models.requests.Room
 import com.example.theatreapp.models.requests.User

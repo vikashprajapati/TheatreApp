@@ -2,19 +2,16 @@ package com.example.theatreapp.viewmodel
 
 import android.util.Log
 import android.view.View
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import com.example.theatreapp.App
-import com.example.theatreapp.Event
+import com.example.theatreapp.utils.Event
 import com.example.theatreapp.connections.SocketManager
-import com.example.theatreapp.models.requests.JoinRoomRequest
-import com.example.theatreapp.models.requests.Room
 import com.example.theatreapp.models.requests.User
 import com.example.theatreapp.models.response.joinroomresponse.JoinedRoomResponse
-import com.google.gson.JsonObject
-import io.socket.engineio.client.Socket
+import com.example.theatreapp.models.response.joinroomresponse.ParticipantsItem
+import com.example.theatreapp.storage.SessionData
 
 class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewModel() {
     private val TAG: String = HomeFragmentViewModel::class.java.canonicalName
@@ -44,6 +41,7 @@ class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewMode
             return@Observer;
         }
         joinRoomState.postValue(App.gson.toJson(joinedRoomResponse))
+        updateSessionData(joinedRoomResponse)
         clearFields()
     }
 
@@ -57,6 +55,13 @@ class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewMode
     private fun clearFields(){
         room.value = ""
         user.value = ""
+    }
+
+    private fun updateSessionData(response: JoinedRoomResponse){
+        SessionData.localUser = User(user.value!!).apply { id = response.room.host }
+        SessionData.currentRoom = response.room
+        SessionData.participants = response.room.participants as MutableList<ParticipantsItem>
+        Log.i(TAG, "updateSessionData: $SessionData")
     }
 
     var roomName : String

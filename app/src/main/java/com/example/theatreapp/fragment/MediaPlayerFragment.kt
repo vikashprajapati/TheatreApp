@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.MediaController
 import com.example.theatreapp.listeners.MediaPlayerFragmentListener
 import com.example.theatreapp.listeners.PlaybackListener
-import com.example.theatreapp.uiutils.PlayerController
+import com.example.theatreapp.utils.PlayerController
 import com.example.theatreapp.databinding.FragmentMediaPlayerBinding
 import org.videolan.libvlc.LibVLC
 import org.videolan.libvlc.Media

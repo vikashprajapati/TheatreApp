@@ -1,4 +1,4 @@
-package com.example.theatreapp.uiutils
+package com.example.theatreapp.utils
 
 import android.content.Context
 import android.widget.MediaController

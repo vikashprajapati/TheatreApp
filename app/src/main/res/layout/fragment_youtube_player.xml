@@ -11,7 +11,7 @@
            android:layout_width="match_parent"
            android:layout_height="match_parent"
            app:videoId="q38kHkmChY8"
-           app:autoPlay="true"
+           app:autoPlay="false"
            app:showYouTubeButton="false"
            app:showFullScreenButton="false"/>
 

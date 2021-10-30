@@ -170,7 +170,7 @@ class StreamingRoomFragment :
     }
 
     override fun joinRoomResponse(joinedRoomResponse: JoinedRoomResponse) {
-        var roomInfo = App.gson.fromJson<com.example.theatreapp.models.response.Room>(room, com.example.theatreapp.models.response.Room::class.java::class.java)
+//        var roomInfo = App.gson.fromJson<com.example.theatreapp.models.response.Room>(room, com.example.theatreapp.models.response.Room::class.java::class.java)
     }
 
     override fun userLeft() {
