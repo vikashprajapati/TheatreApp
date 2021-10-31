@@ -77,6 +77,8 @@ class SocketService : BaseObservable<SocketService.SocketEventListener>() {
   socket.disconnect()
  }
 
+ fun isConnected() : Boolean = socket.connected()
+
  interface SocketEventListener{
   fun playEvent()
   fun pauseEvent()

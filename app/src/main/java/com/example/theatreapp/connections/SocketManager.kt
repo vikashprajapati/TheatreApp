@@ -44,6 +44,8 @@ object SocketManager : SocketService.SocketEventListener {
         socketService.send("join room", joinRoomRequestParams)
     }
 
+    fun isSocketConnected() : Boolean = socketService.isConnected()
+
     // Events from the socket server
     override fun playEvent() {
         played.value = Event("played")
