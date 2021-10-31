@@ -8,7 +8,7 @@ import com.example.theatreapp.models.requests.Room
 import com.example.theatreapp.models.requests.User
 import com.example.theatreapp.models.response.joinroomresponse.JoinedRoomResponse
 
-class SocketManager() : SocketService.SocketEventListener {
+object SocketManager : SocketService.SocketEventListener {
 
     private val socketService = SocketService()
     private var played = MutableLiveData<Event<String>>()

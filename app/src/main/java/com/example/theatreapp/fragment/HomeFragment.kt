@@ -32,7 +32,7 @@ class HomeFragment :
     override fun getViewBinding(): FragmentHomeBinding = FragmentHomeBinding.inflate(layoutInflater)
 
     override fun initViewModel(): HomeFragmentViewModel{
-        var viewModelFactory = HomeViewModelFactory(SocketManager())
+        var viewModelFactory = HomeViewModelFactory(SocketManager)
         return ViewModelProvider(this, viewModelFactory).get(HomeFragmentViewModel::class.java)
     }
 
