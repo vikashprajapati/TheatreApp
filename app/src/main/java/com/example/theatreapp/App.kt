@@ -43,7 +43,7 @@ class App : Application(), Application.ActivityLifecycleCallbacks {
     }
 
     override fun onActivityStopped(activity: Activity) {
-        if (SocketManager.isSocketConnected()) SocketManager.stopListeningToServer()
+        SocketManager.stopListeningToServer()
     }
 
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {

@@ -1,60 +1,75 @@
 package com.example.theatreapp.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.theatreapp.R
+import androidx.lifecycle.ViewModelProvider
 import com.example.theatreapp.adapters.ParticipantsRecyclerViewAdapter
+import com.example.theatreapp.databinding.FragmentParticipantsListBinding
 import com.example.theatreapp.models.participants.Participant
+import com.example.theatreapp.models.response.joinroomresponse.ParticipantsItem
+import com.example.theatreapp.viewmodel.StreamingRoomFragmentViewModel
 
 /**
  * A fragment representing a list of Items.
  */
-class ParticipantsFragment : Fragment() {
-
+class ParticipantsFragment : BaseFragment<FragmentParticipantsListBinding, StreamingRoomFragmentViewModel>() {
+    private val TAG = ParticipantsFragment.javaClass.canonicalName
     private var columnCount = 1
-    private var participantList : ArrayList<Participant> = ArrayList()
+    private var participantList : List<ParticipantsItem>? = null
+    private val participantAdapter : ParticipantsRecyclerViewAdapter = ParticipantsRecyclerViewAdapter(participantList)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         arguments?.let {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
         }
-
-        participantList.add(Participant("1", "Ghost Rider", "online"))
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_participants_list, container, false)
+        return binding?.root
+    }
 
-        // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                adapter = ParticipantsRecyclerViewAdapter(participantList)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setUpViews()
+        observeData()
+    }
+
+    override fun setUpViews() {
+        super.setUpViews()
+        binding?.participantRecyclerView?.apply {
+            layoutManager = when {
+                columnCount <= 1 -> LinearLayoutManager(context)
+                else -> GridLayoutManager(context, columnCount)
             }
+            adapter = participantAdapter
         }
-        return view
+    }
+
+    override fun initViewModel(): StreamingRoomFragmentViewModel {
+        return ViewModelProvider(requireActivity()).get(StreamingRoomFragmentViewModel::class.java)
+    }
+
+    override fun getViewBinding(): FragmentParticipantsListBinding = FragmentParticipantsListBinding.inflate(layoutInflater)
+
+    override fun observeData() {
+        super.observeData()
+        viewModel.participantsList.observe(viewLifecycleOwner, {
+            participantAdapter.updateParticipantList(it)
+        })
     }
 
     companion object {
-
-        // TODO: Customize parameter argument names
         const val ARG_COLUMN_COUNT = "column-count"
-
-        // TODO: Customize parameter initialization
         @JvmStatic
         fun newInstance(columnCount: Int = 1) =
             ParticipantsFragment().apply {

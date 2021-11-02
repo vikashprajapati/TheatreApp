@@ -3,7 +3,7 @@
     <data>
         <variable
             name="participant"
-            type="com.example.theatreapp.models.participants.Participant" />
+            type="com.example.theatreapp.models.response.joinroomresponse.ParticipantsItem" />
     </data>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -16,6 +16,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="@{participant.name}"
+            android:textColor="@color/primary_color"
             android:layout_margin="@dimen/text_margin"
             android:textAppearance="?attr/textAppearanceListItem" />
 
@@ -24,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
-            android:text="@{participant.onlineStatus}"
+            android:text="@{participant.id}"
             android:textAppearance="?attr/textAppearanceListItem" />
     </LinearLayout>
 </layout>

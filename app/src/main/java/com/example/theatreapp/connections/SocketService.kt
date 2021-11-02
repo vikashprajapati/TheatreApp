@@ -2,9 +2,7 @@ package com.example.theatreapp.connections
 
 import com.example.theatreapp.App
 import com.example.theatreapp.constants.SocketConstants
-import com.example.theatreapp.models.requests.LeaveRoomRequest
 import com.example.theatreapp.models.response.joinroomresponse.JoinedRoomResponse
-import com.example.theatreapp.storage.SessionData
 import io.socket.client.IO
 import io.socket.client.Socket
 import java.net.URI

@@ -1,21 +1,19 @@
 package com.example.theatreapp.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.theatreapp.R
 import com.example.theatreapp.databinding.ItemFragmentParticipantBinding
-
 import com.example.theatreapp.models.participants.Participant
 
+import com.example.theatreapp.models.response.joinroomresponse.ParticipantsItem
+
 /**
- * [RecyclerView.Adapter] that can display a [DummyItem].
+ * [RecyclerView.Adapter] that can display a [ParticipantsItem].
  * TODO: Replace the implementation with code for your data type.
  */
 class ParticipantsRecyclerViewAdapter(
-    private val participantList: ArrayList<Participant>
+    private var participantList: List<ParticipantsItem>?
 ) : RecyclerView.Adapter<ParticipantsRecyclerViewAdapter.ParticipantViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ParticipantViewHolder {
@@ -25,14 +23,23 @@ class ParticipantsRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: ParticipantViewHolder, position: Int) {
-        val participant = participantList[position]
-        holder.bind(participant)
+        val participant = participantList?.get(position)
+        if (participant != null) {
+            holder.bind(participant)
+        }
     }
 
-    override fun getItemCount(): Int = participantList.size
+    override fun getItemCount(): Int = participantList?.size?:0
+
+    fun updateParticipantList(participantList: List<ParticipantsItem>?){
+        if(participantList != null){
+            this.participantList = participantList
+            notifyDataSetChanged()
+        }
+    }
 
     inner class ParticipantViewHolder(private var binding: ItemFragmentParticipantBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(participant: Participant) {
+        fun bind(participant: ParticipantsItem?) {
             binding.participant = participant
         }
     }

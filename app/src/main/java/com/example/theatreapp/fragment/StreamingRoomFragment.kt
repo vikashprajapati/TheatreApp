@@ -43,8 +43,7 @@ class StreamingRoomFragment :
     }
 
     override fun initViewModel(): StreamingRoomFragmentViewModel {
-        viewModel = ViewModelProvider(requireActivity()).get(StreamingRoomFragmentViewModel::class.java)
-        return viewModel
+        return ViewModelProvider(requireActivity()).get(StreamingRoomFragmentViewModel::class.java)
     }
 
     override fun getViewBinding(): FragmentStreamingRoomBinding = FragmentStreamingRoomBinding.inflate(layoutInflater)
@@ -52,7 +51,6 @@ class StreamingRoomFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupViewPager()
-//        socket.initializeSocketEvents()
 
         bottomSheetBehavior = BottomSheetBehavior.from(binding!!.bottomSheetLayout.bottomSheet)
         bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback(){
@@ -84,11 +82,7 @@ class StreamingRoomFragment :
     }
 
     private fun setupViewPager() {
-        viewPagerAdapter = StreamingViewPagerAdapter(
-            parentFragmentManager,
-            listOf(ChatFragment.newInstance("", ""),
-                ParticipantsFragment.newInstance(1)))
-
+        viewPagerAdapter = StreamingViewPagerAdapter(parentFragmentManager)
         binding!!.viewpager.adapter = viewPagerAdapter
         binding!!.tabLayout.setupWithViewPager(binding!!.viewpager)
     }

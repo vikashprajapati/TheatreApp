@@ -8,12 +8,12 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.theatreapp.fragment.ChatFragment
+import com.example.theatreapp.fragment.ParticipantsFragment
 
-class StreamingViewPagerAdapter(
-    var fragmentManager: FragmentManager,
-    var fragmentList: List<Fragment>
-) : FragmentStatePagerAdapter(fragmentManager){
+class StreamingViewPagerAdapter(var fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager){
     private val titles = listOf<String>("Chats", "Participants")
+    private val fragmentList =  listOf(ChatFragment.newInstance(), ParticipantsFragment.newInstance(1))
     override fun getCount(): Int = fragmentList.size
 
     override fun getItem(position: Int): Fragment = fragmentList[position]
