@@ -62,7 +62,6 @@ class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewMode
     private fun updateSessionData(response: JoinedRoomResponse){
         SessionData.localUser = User(_user.value!!).apply { id = response.room.host }
         SessionData.currentRoom = response.room
-        SessionData.participants = response.room.participants as MutableList<ParticipantsItem>
         Log.i(TAG, "updateSessionData: $SessionData")
     }
 

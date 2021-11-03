@@ -6,7 +6,6 @@ import com.example.theatreapp.models.response.joinroomresponse.ParticipantsItem
 import com.example.theatreapp.models.response.joinroomresponse.Room
 
 object SessionData {
-    lateinit var participants : MutableList<ParticipantsItem>
     var localUser : User? = null
     var currentRoom : Room? = null
 }

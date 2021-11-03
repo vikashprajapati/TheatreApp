@@ -7,4 +7,5 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="card_corner_radius">12dp</dimen>
     <dimen name="card_padding">16dp</dimen>
+    <dimen name="recycler_view_item_padding">4dp</dimen>
 </resources>

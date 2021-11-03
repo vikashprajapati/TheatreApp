@@ -2,11 +2,14 @@ package com.example.theatreapp.connections
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.theatreapp.constants.SocketConstants
 import com.example.theatreapp.utils.Event
 import com.example.theatreapp.models.requests.JoinRoomRequest
 import com.example.theatreapp.models.requests.Room
 import com.example.theatreapp.models.requests.User
 import com.example.theatreapp.models.response.joinroomresponse.JoinedRoomResponse
+import com.example.theatreapp.models.response.joinroomresponse.ParticipantsItem
+import com.example.theatreapp.storage.SessionData
 
 object SocketManager : SocketService.SocketEventListener {
 
@@ -19,10 +22,11 @@ object SocketManager : SocketService.SocketEventListener {
     private var joinedRoomStatus = MutableLiveData<Event<JoinedRoomResponse>>()
     private var joinedRoom = MutableLiveData<Event<String>>()
     private var syncedVideo = MutableLiveData<Event<String>>()
-    private var participantJoined = MutableLiveData<Event<String>>()
+    private var _participantJoined = MutableLiveData<Event<ParticipantsItem>>()
 
     val connectionState : LiveData<Event<String>> get() = connectionStatus
     val joinedRoomState : LiveData<Event<JoinedRoomResponse>> get() = joinedRoomStatus
+    val participantJoined : LiveData<Event<ParticipantsItem>> get() = _participantJoined
 
 
     // Events sent to the socket
@@ -71,8 +75,9 @@ object SocketManager : SocketService.SocketEventListener {
         joinedRoom.value = Event("joined room")
     }
 
-    override fun newParticipantJoinedEvent() {
-
+    override fun newParticipantJoinedEvent(participant: ParticipantsItem) {
+        _participantJoined.postValue(Event(participant))
+        SessionData.currentRoom?.participants?.add(participant)
     }
 
     override fun connectionStatus(eventConnect: String) {

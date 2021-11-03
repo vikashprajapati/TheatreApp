@@ -3,5 +3,5 @@ package com.example.theatreapp.models.response.joinroomresponse
 data class Room(
 	val name: String,
 	val host: String,
-	val participants: List<ParticipantsItem>
+	val participants: MutableList<ParticipantsItem>
 )

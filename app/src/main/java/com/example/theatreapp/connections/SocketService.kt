@@ -2,7 +2,9 @@ package com.example.theatreapp.connections
 
 import com.example.theatreapp.App
 import com.example.theatreapp.constants.SocketConstants
+import com.example.theatreapp.models.requests.User
 import com.example.theatreapp.models.response.joinroomresponse.JoinedRoomResponse
+import com.example.theatreapp.models.response.joinroomresponse.ParticipantsItem
 import io.socket.client.IO
 import io.socket.client.Socket
 import java.net.URI
@@ -53,8 +55,9 @@ class SocketService : BaseObservable<SocketService.SocketEventListener>() {
                 listener.syncVideoEvent()
             }
         }.on(SocketConstants.participantJoined){
+            val participant = App.gson.fromJson<ParticipantsItem>(it[0] as String, ParticipantsItem::class.java)
             for (listener in getListeners()){
-                listener.newParticipantJoinedEvent()
+                listener.newParticipantJoinedEvent(participant)
             }
         }.on(SocketConstants.participantLeft){
             for (listener in getListeners()){
@@ -86,7 +89,7 @@ class SocketService : BaseObservable<SocketService.SocketEventListener>() {
         fun nextVideoEvent()
         fun syncVideoEvent()
         fun roomJoinedEvent()
-        fun newParticipantJoinedEvent()
+        fun newParticipantJoinedEvent(participantsItem: ParticipantsItem)
         fun connectionStatus(eventConnect: String)
         fun joinRoomResponse(joinedRoomResponse: JoinedRoomResponse)
         fun userLeft()
