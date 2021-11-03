@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import com.example.theatreapp.R
 import com.example.theatreapp.adapters.ParticipantsRecyclerViewAdapter
 import com.example.theatreapp.databinding.FragmentParticipantsListBinding
 import com.example.theatreapp.models.participants.Participant
@@ -63,8 +64,13 @@ class ParticipantsFragment : BaseFragment<FragmentParticipantsListBinding, Strea
 
     override fun observeData() {
         super.observeData()
-        viewModel.participantsList.observe(viewLifecycleOwner, {
+        viewModel.participants.observe(viewLifecycleOwner, {
             participantAdapter.updateParticipantList(it)
+
+            if(it.size > 1){
+                val msg = "${it[it.size - 1].name} ${resources.getString(R.string.participant_joined)}";
+                shortToast(msg)
+            }
         })
     }
 

@@ -77,7 +77,6 @@ object SocketManager : SocketService.SocketEventListener {
 
     override fun newParticipantJoinedEvent(participant: ParticipantsItem) {
         _participantJoined.postValue(Event(participant))
-        SessionData.currentRoom?.participants?.add(participant)
     }
 
     override fun connectionStatus(eventConnect: String) {

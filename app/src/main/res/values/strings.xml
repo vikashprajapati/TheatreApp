@@ -9,4 +9,5 @@
     <string name="search_videos_hint_text">Search videos</string>
     <string name="invalid_details_text">Please enter required details</string>
     <string name="join_room_error">Failed to join room</string>
+    <string name="participant_joined">Joined</string>
 </resources>
