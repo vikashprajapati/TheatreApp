@@ -32,4 +32,8 @@ class StreamingRoomFragmentViewModel : ViewModel() {
         connectionState.postValue(SocketManager.connectionState.value)
         SocketManager.participantJoined.observeForever(participantsObserver)
     }
+
+    fun leaveRoom(){
+        SocketManager.stopListeningToServer()
+    }
 }

@@ -43,6 +43,7 @@ class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewMode
             return@Observer;
         }
         joinRoomState.postValue(App.gson.toJson(joinedRoomResponse))
+        socketManager.connectionState.removeObserver(connectivityObserver)
         updateSessionData(joinedRoomResponse)
         clearFields()
     }

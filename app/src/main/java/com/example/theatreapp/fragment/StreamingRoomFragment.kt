@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.theatreapp.App
 import com.example.theatreapp.listeners.MediaPlayerFragmentListener
 import com.example.theatreapp.R
@@ -33,6 +35,25 @@ class StreamingRoomFragment :
     private var mediaPlayerFragment : MediaPlayerFragment? = null
     private lateinit var viewPagerAdapter : StreamingViewPagerAdapter
     private lateinit var bottomSheetBehavior : BottomSheetBehavior<ConstraintLayout>
+    private val backPressedCallback = object : OnBackPressedCallback(true){
+        override fun handleOnBackPressed() {
+            isEnabled = false
+            // disconnect socket and return to previous fragment
+            notifyAndDisconnectSocket()
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity?.onBackPressedDispatcher?.addCallback(this, backPressedCallback)
+    }
+
+    private fun notifyAndDisconnectSocket(){
+        viewModel.leaveRoom()
+
+        // return to previous fragment in backstack
+        findNavController().popBackStack()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -79,6 +100,14 @@ class StreamingRoomFragment :
     override fun onStop() {
         super.onStop()
         mediaPlayerFragment?.onStop()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        // backPressedCallback is not lifecycle aware so we need to unregister callback manually
+        backPressedCallback.isEnabled = false
+        backPressedCallback.remove()
     }
 
     private fun setupViewPager() {
