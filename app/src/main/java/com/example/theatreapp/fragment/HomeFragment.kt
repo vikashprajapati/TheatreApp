@@ -57,7 +57,7 @@ class HomeFragment :
                 shortToast(msg)
             })
 
-            joinRoomState.observe(viewLifecycleOwner, { response ->
+            joinRoomState.observe(viewLifecycleOwner, {
                 // navigate to streaming room fragment
                 findNavController().navigate(R.id.action_homeFragment_to_roomFrament)
             })

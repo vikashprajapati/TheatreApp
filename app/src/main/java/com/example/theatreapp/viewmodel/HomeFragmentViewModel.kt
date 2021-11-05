@@ -2,6 +2,7 @@ package com.example.theatreapp.viewmodel
 
 import android.util.Log
 import android.view.View
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -18,9 +19,11 @@ class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewMode
     private val TAG: String = HomeFragmentViewModel::class.java.canonicalName
     private var _room = MutableLiveData<String>()
     private var _user = MutableLiveData<String>()
+    private var _joinedRoomState = MutableLiveData<String>()
+    private var _connectionState = MutableLiveData<String>()
     val loading = MutableLiveData<Int>()
-    val connectionState = MutableLiveData<String>()
-    val joinRoomState = MutableLiveData<String>()
+    val connectionState : LiveData<String> get() = _connectionState
+    val joinRoomState : LiveData<String> get() = _joinedRoomState
 
     private var connectivityObserver = Observer<Event<String>>{
         var status = it.getContentIfNotHandledOrReturnNull()
@@ -29,7 +32,7 @@ class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewMode
             joinRoom()
         }else{
             socketManager.stopListeningToServer()
-            connectionState.postValue(status)
+            _connectionState.postValue(status)
             loading.postValue(View.GONE)
         }
     }
@@ -39,13 +42,13 @@ class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewMode
         loading.postValue(View.GONE)
         if(joinedRoomResponse == null){
             socketManager.stopListeningToServer()
-            connectionState.postValue("Failed to join room")
+            _connectionState.postValue("Failed to join room")
             return@Observer;
         }
-        joinRoomState.postValue(App.gson.toJson(joinedRoomResponse))
-        socketManager.connectionState.removeObserver(connectivityObserver)
+        _joinedRoomState.postValue(App.gson.toJson(joinedRoomResponse))
         updateSessionData(joinedRoomResponse)
         clearFields()
+        removeObservers()
     }
 
     init{
@@ -58,6 +61,11 @@ class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewMode
     private fun clearFields(){
         _room.value = ""
         _user.value = ""
+    }
+
+    private fun removeObservers(){
+        socketManager.joinedRoomState.removeObserver(joinedRoomObserver)
+        socketManager.connectionState.removeObserver(connectivityObserver)
     }
 
     private fun updateSessionData(response: JoinedRoomResponse){

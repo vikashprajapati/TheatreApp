@@ -45,7 +45,7 @@ class StreamingRoomFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activity?.onBackPressedDispatcher?.addCallback(this, backPressedCallback)
+        requireActivity().onBackPressedDispatcher.addCallback(this, backPressedCallback)
     }
 
     private fun notifyAndDisconnectSocket(){
