@@ -2,6 +2,7 @@ package com.example.theatreapp.data.connections
 
 import com.example.theatreapp.App
 import com.example.theatreapp.constants.SocketConstants
+import com.example.theatreapp.data.models.Message
 import com.example.theatreapp.data.models.response.joinroomresponse.JoinedRoomResponse
 import com.example.theatreapp.data.models.response.joinroomresponse.ParticipantsItem
 import io.socket.client.IO
@@ -64,6 +65,11 @@ class SocketService : BaseObservable<SocketService.SocketEventListener>() {
             }
         }.on(SocketConstants.roomJoined){
             joinRoom(it[0].toString())
+        }.on(SocketConstants.onMessage){
+            val message = App.gson.fromJson<Message>(it[0] as String, Message::class.java)
+            for(listener in getListeners()){
+                listener.onMessage(message)
+            }
         }
 
         socket.connect()
@@ -92,5 +98,6 @@ class SocketService : BaseObservable<SocketService.SocketEventListener>() {
         fun connectionStatus(eventConnect: String)
         fun joinRoomResponse(joinedRoomResponse: JoinedRoomResponse)
         fun userLeft()
+        fun onMessage(message: Message)
     }
 }

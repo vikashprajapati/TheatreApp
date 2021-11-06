@@ -2,6 +2,7 @@ package com.example.theatreapp.data.connections
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.theatreapp.data.models.Message
 import com.example.theatreapp.utils.Event
 import com.example.theatreapp.data.models.requests.JoinRoomRequest
 import com.example.theatreapp.data.models.requests.Room
@@ -21,10 +22,12 @@ object SocketManager : SocketService.SocketEventListener {
     private var joinedRoom = MutableLiveData<Event<String>>()
     private var syncedVideo = MutableLiveData<Event<String>>()
     private var _participantJoined = MutableLiveData<Event<ParticipantsItem>>()
+    private var _onMessage = MutableLiveData<Event<Message>>()
 
     val connectionState : LiveData<Event<String>> get() = connectionStatus
     val joinedRoomState : LiveData<Event<JoinedRoomResponse>> get() = joinedRoomStatus
     val participantJoined : LiveData<Event<ParticipantsItem>> get() = _participantJoined
+    val onMessage : LiveData<Event<Message>> get() = _onMessage
 
 
     // Events sent to the socket
@@ -87,5 +90,9 @@ object SocketManager : SocketService.SocketEventListener {
 
     override fun userLeft() {
         TODO("Not yet implemented")
+    }
+
+    override fun onMessage(message: Message) {
+        _onMessage.postValue(Event(message))
     }
 }

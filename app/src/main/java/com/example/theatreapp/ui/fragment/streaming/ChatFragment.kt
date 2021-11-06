@@ -5,19 +5,22 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.theatreapp.R
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import com.example.theatreapp.data.models.Message
+import com.example.theatreapp.databinding.FragmentChatBinding
+import com.example.theatreapp.ui.adapters.ChatMessagesAdapter
+import com.example.theatreapp.ui.fragment.BaseFragment
 
 /**
  * A simple [Fragment] subclass.
  * Use the [ChatFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ChatFragment : Fragment() {
+class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>() {
+    private val chatAdapter = ChatMessagesAdapter(arrayListOf())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +31,31 @@ class ChatFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chat, container, false)
+        return binding?.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setUpViews()
+        observeData()
+    }
+
+    override fun initViewModel(): ChatViewModel = ViewModelProvider(this).get(ChatViewModel::class.java)
+
+    override fun getViewBinding(): FragmentChatBinding = FragmentChatBinding.inflate(layoutInflater)
+
+    override fun observeData() {
+        super.observeData()
+        viewModel.messageList.observe(viewLifecycleOwner){
+            chatAdapter.updateMessageList(it as ArrayList<Message>)
+        }
+    }
+
+    override fun setUpViews() {
+        super.setUpViews()
+        binding?.messageRecyclerView.apply {
+            this?.adapter = chatAdapter
+        }
     }
 
     companion object {
