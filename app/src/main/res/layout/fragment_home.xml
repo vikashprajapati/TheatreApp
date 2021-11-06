@@ -6,17 +6,14 @@
 
     <data>
         <variable
-            name="listener"
-            type="com.example.theatreapp.listeners.HomeFragmentListener" />
-        <variable
             name="viewModel"
-            type="com.example.theatreapp.viewmodel.HomeFragmentViewModel" />
+            type="com.example.theatreapp.ui.fragment.main.HomeFragmentViewModel" />
     </data>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragment.HomeFragment">
+        tools:context=".ui.fragment.main.HomeFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

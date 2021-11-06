@@ -2,7 +2,7 @@ package com.example.theatreapp.utils
 
 import android.content.Context
 import android.widget.MediaController
-import com.example.theatreapp.listeners.PlaybackListener
+import com.example.theatreapp.ui.listeners.PlaybackListener
 
 class PlayerController(
     var context: Context,

@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.theatreapp.fragment.HomeFragment"
+        android:name="com.example.theatreapp.ui.fragment.main.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/roomFrament"
-        android:name="com.example.theatreapp.fragment.StreamingRoomFragment"
+        android:name="com.example.theatreapp.ui.fragment.streaming.StreamingRoomFragment"
         android:label="fragment_room_frament"
         tools:layout="@layout/fragment_streaming_room" />
 </navigation>

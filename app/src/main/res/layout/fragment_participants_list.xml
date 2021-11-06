@@ -15,6 +15,6 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context=".fragment.ParticipantsFragment"
+        tools:context=".ui.fragment.streaming.ParticipantsFragment"
         tools:listitem="@layout/item_fragment_participant" />
 </layout>

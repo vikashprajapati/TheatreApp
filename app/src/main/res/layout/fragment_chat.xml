@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/app_screen_padding"
-    tools:context=".fragment.ChatFragment">
+    tools:context=".ui.fragment.streaming.ChatFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.TheatreApp">
-        <activity android:name=".activities.MainActivity">
+        <activity android:name="com.example.theatreapp.ui.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

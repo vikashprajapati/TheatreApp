@@ -4,7 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import android.util.Log
-import com.example.theatreapp.connections.SocketManager
+import com.example.theatreapp.data.connections.SocketManager
 import com.google.gson.Gson
 
 class App : Application(), Application.ActivityLifecycleCallbacks {
@@ -43,7 +43,6 @@ class App : Application(), Application.ActivityLifecycleCallbacks {
     }
 
     override fun onActivityStopped(activity: Activity) {
-        SocketManager.stopListeningToServer()
     }
 
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
