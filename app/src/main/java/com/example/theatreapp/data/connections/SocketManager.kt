@@ -29,8 +29,10 @@ object SocketManager : SocketService.SocketEventListener {
     val participantJoined : LiveData<Event<ParticipantsItem>> get() = _participantJoined
     val onMessage : LiveData<Event<Message>> get() = _onMessage
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Events sent to the socket                                                                                                        //
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // Events sent to the socket
     fun startListeningToServer(){
         socketService.registerListener(this)
         socketService.initializeSocketAndConnect()
@@ -49,9 +51,20 @@ object SocketManager : SocketService.SocketEventListener {
         socketService.send("join room", joinRoomRequestParams)
     }
 
+    fun sendChatMessage(msg : String){
+        val message = Message(from = "", message = msg, timeStamp =  "now")
+        socketService.send("on message", message)
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Helper methods                                                                                                                   //
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     fun isSocketConnected() : Boolean = socketService.isConnected()
 
-    // Events from the socket server
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Received Events from the socket server                                                                                           //
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     override fun playEvent() {
         played.value = Event("played")
     }
@@ -89,7 +102,7 @@ object SocketManager : SocketService.SocketEventListener {
     }
 
     override fun userLeft() {
-        TODO("Not yet implemented")
+
     }
 
     override fun onMessage(message: Message) {

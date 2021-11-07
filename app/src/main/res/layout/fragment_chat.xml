@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.theatreapp.ui.fragment.streaming.ChatViewModel" />
+    </data>
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -31,6 +36,7 @@
                     style="@style/EditText.Style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@={viewModel.messageText}"
                     android:hint="@string/enter_message_hint"/>
             </LinearLayout>
 
@@ -39,6 +45,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:src="@drawable/ic_send"
+                android:onClick="@{() -> viewModel.validateInput()}"
                 android:layout_marginLeft="@dimen/icon_button_left_margin"
                 style="@style/AppIconButton"/>
         </LinearLayout>
