@@ -30,4 +30,9 @@
         <item name="android:background">@drawable/button_background</item>
         <item name="android:textColor">@color/on_primary_color</item>
     </style>
+
+    <style name="AppIconButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button_background</item>
+        <item name="android:tint">@color/on_primary_color</item>
+    </style>
 </resources>
