@@ -1,9 +1,11 @@
 package com.example.theatreapp.ui.adapters
 
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.theatreapp.data.SessionData
 import com.example.theatreapp.data.models.Message
 import com.example.theatreapp.databinding.ChatItemBinding
 
@@ -28,6 +30,10 @@ class ChatMessagesAdapter(private val messagesList : ArrayList<Message>) : Recyc
 	inner class MessageViewHolder(private val binding : ChatItemBinding) : RecyclerView.ViewHolder(binding.root) {
 		fun bind(message : Message){
 			binding.message = message
+			if(message.from == SessionData.localUser?.id)
+				binding.chatItemLinearLayout.gravity = Gravity.RIGHT
+			else
+				binding.chatItemLinearLayout.gravity = Gravity.LEFT
 		}
 	}
 }
