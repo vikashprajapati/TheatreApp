@@ -36,6 +36,7 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding?.lifecycleOwner = this@ChatFragment
         binding?.viewModel = viewModel
         setUpViews()
         observeData()

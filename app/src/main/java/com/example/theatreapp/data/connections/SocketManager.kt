@@ -11,7 +11,7 @@ import com.example.theatreapp.data.models.response.joinroomresponse.JoinedRoomRe
 import com.example.theatreapp.data.models.response.joinroomresponse.ParticipantsItem
 
 object SocketManager : SocketService.SocketEventListener {
-
+    // Too much responsiblity, class needs to be refactored
     private val socketService = SocketService()
     private var played = MutableLiveData<Event<String>>()
     private var paused = MutableLiveData<Event<String>>()

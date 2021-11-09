@@ -5,7 +5,7 @@
             name="viewModel"
             type="com.example.theatreapp.ui.fragment.streaming.ChatViewModel" />
     </data>
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,23 +16,26 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/message_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/chat_input"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
         <LinearLayout
+            android:id="@+id/chat_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:elevation="12dp"
-            android:layout_alignParentBottom="true">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/message_recycler_view">
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:orientation="horizontal"
                 android:layout_height="wrap_content">
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/msg_edit_text"
+                <EditText
                     style="@style/EditText.Style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -50,5 +53,5 @@
                 style="@style/AppIconButton"/>
         </LinearLayout>
 
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

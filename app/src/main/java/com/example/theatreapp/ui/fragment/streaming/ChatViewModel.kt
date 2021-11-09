@@ -10,36 +10,37 @@ import com.example.theatreapp.data.models.Message
 import com.example.theatreapp.utils.Event
 
 class ChatViewModel : ViewModel() {
-	private var _messageEditText = MutableLiveData<String>("")
+	private val _messageEditText = MutableLiveData<String>()
 	private val _messageList = MutableLiveData<MutableList<Message>>()
-	private val messageObserver = Observer<Event<Message>>{
+	private val invalidInput = MutableLiveData<Event<String>>()
+
+	val messageList : LiveData<MutableList<Message>> get() = _messageList
+	var messageText : String
+		get() = _messageEditText.value?:""
+		set(value) {
+			_messageEditText.value = value
+		}
+	private val onMessageObserver = Observer<Event<Message>>{
 		val message = it.getContentIfNotHandledOrReturnNull()?:return@Observer
 
 		val msgList = _messageList.value
 		msgList?.add(message)
 		_messageList.postValue(msgList)
 	}
-	val messageList : LiveData<MutableList<Message>> get() = _messageList
-	private val invalidInput = MutableLiveData<Event<String>>()
-	var messageText : String
-		get() = _messageEditText?.value?:""
-		set(value) {
-			_messageEditText.value = value
-		}
-
 
 	init {
+		clearMessageField()
 		_messageList.value = mutableListOf()
-		SocketManager.onMessage.observeForever(messageObserver)
+		SocketManager.onMessage.observeForever(onMessageObserver)
 	}
 
 	override fun onCleared() {
 		super.onCleared()
-		SocketManager.onMessage.removeObserver(messageObserver)
+		SocketManager.onMessage.removeObserver(onMessageObserver)
 	}
 
 	fun validateInput(){
-		if(messageText.isNullOrEmpty()) invalidInput.postValue(Event("Message typed is empty"))
+		if(_messageEditText.value.isNullOrEmpty()) invalidInput.postValue(Event("Message typed is empty"))
 		else{
 			// pass the msg body to socket manager
 			SocketManager.sendChatMessage(_messageEditText.value!!)
@@ -48,6 +49,6 @@ class ChatViewModel : ViewModel() {
 	}
 
 	private fun clearMessageField(){
-		messageText = ""
+		_messageEditText.value = ""
 	}
 }
