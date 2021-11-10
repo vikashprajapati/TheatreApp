@@ -43,6 +43,7 @@ class SocketService : BaseObservable<SocketService.SocketEventListener>() {
     private fun participantJoined(response : String){
         val participant = App.gson.fromJson<ParticipantsItem>(response as String, ParticipantsItem::class.java)
         SessionData.participantsMap[participant.id] = participant.name
+        SessionData.currentRoom?.participants?.add(participant)
         for (listener in getListeners()){
             listener.newParticipantJoinedEvent(participant)
         }

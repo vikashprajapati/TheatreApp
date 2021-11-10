@@ -20,8 +20,6 @@ class StreamingRoomFragmentViewModel : ViewModel() {
 
     private var participantsObserver = Observer<Event<ParticipantsItem>>{
         val participant = it.getContentIfNotHandledOrReturnNull() ?: return@Observer
-        val temporaryParticipantList = _participants.value
-        temporaryParticipantList?.add(participant)
         _participants.postValue(SessionData.currentRoom?.participants)
     }
 

@@ -7,146 +7,110 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.MediaController
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.theatreapp.ui.listeners.MediaPlayerFragmentListener
 import com.example.theatreapp.ui.listeners.PlaybackListener
 import com.example.theatreapp.utils.PlayerController
 import com.example.theatreapp.databinding.FragmentMediaPlayerBinding
+import com.example.theatreapp.ui.fragment.BaseFragment
 import org.videolan.libvlc.LibVLC
 import org.videolan.libvlc.Media
 import org.videolan.libvlc.MediaPlayer
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
  * Use the [MediaPlayerFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class MediaPlayerFragment : Fragment(), PlaybackListener {
-    private lateinit var binding: FragmentMediaPlayerBinding
-    private lateinit var libvlc: LibVLC
-    private lateinit var mediaPlayer : MediaPlayer
-    private lateinit var parentActivityListener: MediaPlayerFragmentListener
+class MediaPlayerFragment :
+	BaseFragment<FragmentMediaPlayerBinding, StreamingRoomFragmentViewModel>(), PlaybackListener {
+	private lateinit var libvlc: LibVLC
+	private lateinit var mediaPlayer: MediaPlayer
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-//        arguments?.let {
-//
-//        }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+	override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        binding =  FragmentMediaPlayerBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    ): View? = binding?.root
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupVlcMediaPlayer()
-    }
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
+		setupVlcMediaPlayer()
+	}
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-    }
+    override fun initViewModel():
+            StreamingRoomFragmentViewModel = ViewModelProvider(requireActivity())
+        .get(StreamingRoomFragmentViewModel::class.java)
 
-    override fun onStart() {
-        super.onStart()
-        mediaPlayer.attachViews(binding.videoPlayerLayout, null, false, false)
-//        var media : Media = Media(libvlc, Uri.parse("rtsp://hdvcuser:PlayEP1234@p2ptrials.ddns.net:8804"))
-        var media : Media = Media(libvlc, context?.assets?.openFd("videoplayback.mp4"))
-        mediaPlayer.media = media
-        media.release()
+	override fun getViewBinding(): FragmentMediaPlayerBinding =
+		FragmentMediaPlayerBinding.inflate(layoutInflater)
 
-        parentActivityListener.onVideoPlayed()
-        mediaPlayer.play()
-    }
+	override fun onStart() {
+		super.onStart()
+		mediaPlayer.attachViews(binding!!.videoPlayerLayout, null, false, false)
+		var media = Media(libvlc, context?.assets?.openFd("videoplayback.mp4"))
+		mediaPlayer.media = media
+		media.release()
 
-    override fun onPause() {
-        super.onPause()
-        parentActivityListener.onVideoPaused()
-        mediaPlayer.pause()
-        mediaPlayer.detachViews()
-    }
+		mediaPlayer.play()
+	}
 
-    override fun onStop() {
-        super.onStop()
-        mediaPlayer.stop()
-    }
+	override fun onPause() {
+		super.onPause()
+		mediaPlayer.pause()
+		mediaPlayer.detachViews()
+	}
 
-    fun addMediaPlayerFragmentListener(mediaPlayerFragmentListener : MediaPlayerFragmentListener){
-        parentActivityListener = mediaPlayerFragmentListener
-    }
+	override fun onStop() {
+		super.onStop()
+		mediaPlayer.stop()
+	}
 
-    private fun setupVlcMediaPlayer() {
-        // setup player
-        val args = ArrayList<String>()
-        args.add("-vvv")
-        libvlc =  LibVLC(context, args)
-        mediaPlayer= MediaPlayer(libvlc)
+	private fun setupVlcMediaPlayer() {
+		// setup player
+		val args = ArrayList<String>()
+		args.add("-vvv")
+		libvlc = LibVLC(context, args)
+		mediaPlayer = MediaPlayer(libvlc)
 
-        // setup video controller
-        val videoController = MediaController(context)
-        videoController.setMediaPlayer(PlayerController(requireContext(), mediaPlayer, this))
-        videoController.setAnchorView(binding.videoPlayerLayout)
-        binding.videoPlayerLayout.setOnClickListener{
-            videoController.show(5000)
-        }
+		// setup video controller
+		val videoController = MediaController(context)
+		videoController.setMediaPlayer(PlayerController(requireContext(), mediaPlayer, this))
+		videoController.setAnchorView(binding!!.videoPlayerLayout)
+		binding!!.videoPlayerLayout.setOnClickListener {
+			videoController.show(5000)
+		}
 
-        videoController.setPrevNextListeners({
+		videoController.setPrevNextListeners({
             // next is pressed
             mediaPlayer.position = 0F
-            parentActivityListener.onNextVideo()
         }, {
             // prev is pressed
             mediaPlayer.position = 0F
             mediaPlayer.pause()
-            parentActivityListener.onPrevVideo()
         })
 
-    }
+	}
 
-    fun play(){
-        mediaPlayer.play()
-    }
+	override fun onVideoPlayed() {
+	}
 
-    fun pause(){
-        mediaPlayer.pause()
-    }
+	override fun onVideoPaused() {
+	}
 
-    fun previousVideo() {
-        //        mediaPlayer.stop()
-        mediaPlayer.position = 0F
-        mediaPlayer.pause()
-    }
+	companion object {
+		@JvmStatic
+		val TAG = MediaPlayerFragment::class.java.canonicalName
 
-    override fun onVideoPlayed() {
-        parentActivityListener.onVideoPlayed()
-    }
+		/**
+		 * Use this factory method to create a new instance of
+		 * this fragment using the provided parameters.
+		 *
+		 * @return A new instance of fragment MediaPlayerFragment.
+		 */
+		@JvmStatic
+		fun newInstance() = MediaPlayerFragment()
 
-    override fun onVideoPaused() {
-        parentActivityListener.onVideoPaused()
-    }
-
-    companion object {
-        val TAG = MediaPlayerFragment::class.java.canonicalName
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MediaPlayerFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance() = MediaPlayerFragment()
-
-    }
+	}
 }
