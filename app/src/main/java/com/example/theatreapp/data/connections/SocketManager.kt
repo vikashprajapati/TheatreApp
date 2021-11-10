@@ -2,6 +2,7 @@ package com.example.theatreapp.data.connections
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.theatreapp.data.SessionData
 import com.example.theatreapp.data.models.Message
 import com.example.theatreapp.utils.Event
 import com.example.theatreapp.data.models.requests.JoinRoomRequest
@@ -10,7 +11,7 @@ import com.example.theatreapp.data.models.requests.User
 import com.example.theatreapp.data.models.response.joinroomresponse.JoinedRoomResponse
 import com.example.theatreapp.data.models.response.joinroomresponse.ParticipantsItem
 
-object SocketManager : SocketService.SocketEvents {
+object SocketManager : SocketService.SocketEventsListener {
     // Too much responsiblity, class needs to be refactored
     private val socketService = SocketService()
     private var played = MutableLiveData<Event<String>>()
@@ -97,8 +98,9 @@ object SocketManager : SocketService.SocketEvents {
         joinedRoom.value = Event("joined room")
     }
 
-    override fun newParticipantJoinedEvent(participantsItem: ParticipantsItem) {
-        _participantJoined.postValue(Event(participantsItem))
+    override fun newParticipantJoinedEvent(participant: ParticipantsItem) {
+        SessionData.addNewParticipant(participant)
+        _participantJoined.postValue(Event(participant))
     }
 
     override fun connectionStatus(eventConnect: String) {
@@ -106,6 +108,7 @@ object SocketManager : SocketService.SocketEvents {
     }
 
     override fun joinRoomResponse(joinedRoomResponse: JoinedRoomResponse) {
+        SessionData.updateSessionData(joinedRoomResponse)
         joinedRoomStatus.postValue(Event(joinedRoomResponse))
     }
 

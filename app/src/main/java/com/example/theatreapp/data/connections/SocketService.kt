@@ -11,73 +11,54 @@ import io.socket.client.IO
 import io.socket.client.Socket
 import java.net.URI
 
-class SocketService : BaseObservable<SocketService.SocketEvents>() {
+class SocketService{
     private val TAG = SocketService::class.java.canonicalName
     private val SOCKET_ENDPOINT = "http://192.168.43.133:5000"
     private var socket : Socket = IO.socket(URI.create(SOCKET_ENDPOINT))
+    private var listener : SocketEventsListener? = null
 
-    private fun handleConnection(connectionStatus : String){
-        for (listener in getListeners()){
-            listener.connectionStatus(connectionStatus)
-        }
+    fun registerListener(listener: SocketEventsListener){
+        this.listener = listener
     }
 
-    private fun joinRoom(response :String){
-        val response = App.gson.fromJson<JoinedRoomResponse>(response, JoinedRoomResponse::class.java)
-        SessionData.updateSessionData(response)
-        for (listener in getListeners()){
-            listener.joinRoomResponse(response)
-        }
-    }
-
-    private fun participantJoined(response : String){
-        val participant = App.gson.fromJson<ParticipantsItem>(response as String, ParticipantsItem::class.java)
-        SessionData.addNewParticipant(participant)
-        for (listener in getListeners()){
-            listener.newParticipantJoinedEvent(participant)
-        }
+    fun unRegisterListener(listener: SocketEventsListener) {
+        this.listener = null
     }
 
     fun initializeSocketAndConnect(){
         socket.on(Socket.EVENT_CONNECT) {
-            handleConnection(Socket.EVENT_CONNECT)
+            listener?.connectionStatus(Socket.EVENT_CONNECT)
         }.on(Socket.EVENT_CONNECT_ERROR) {
-            handleConnection(Socket.EVENT_CONNECT_ERROR)
+            listener?.connectionStatus(Socket.EVENT_CONNECT_ERROR)
         }.on(Socket.EVENT_DISCONNECT) {
-            handleConnection(Socket.EVENT_DISCONNECT)
+            listener?.connectionStatus(Socket.EVENT_DISCONNECT)
         }.on(SocketConstants.videoPlayed){
-            for (listener in getListeners()){
-                listener.playEvent()
-            }
+            listener?.playEvent()
         }.on(SocketConstants.videoPaused){
-            for (listener in getListeners()){
-                listener.pauseEvent()
-            }
+            listener?.pauseEvent()
         }.on(SocketConstants.previousVideo){
-            for (listener in getListeners()){
-                listener.previousVideoEvent()
-            }
+            listener?.previousVideoEvent()
         }.on(SocketConstants.nextVideo){
-            for (listener in getListeners()){
-                listener.nextVideoEvent()
-            }
+            listener?.nextVideoEvent()
         }.on(SocketConstants.videoSynced){
-            for (listener in getListeners()){
-                listener.syncVideoEvent()
-            }
+            listener?.syncVideoEvent()
         }.on(SocketConstants.participantJoined){
-            participantJoined(it[0].toString())
+            val participant = App.gson.fromJson<ParticipantsItem>(
+                it[0] as String,
+                ParticipantsItem::class.java
+            )
+            listener?.newParticipantJoinedEvent(participant)
         }.on(SocketConstants.participantLeft){
-            for (listener in getListeners()){
-                listener.userLeft()
-            }
+            listener?.userLeft()
         }.on(SocketConstants.roomJoined){
-            joinRoom(it[0].toString())
+            val response = App.gson.fromJson<JoinedRoomResponse>(
+                it[0].toString(),
+                JoinedRoomResponse::class.java
+            )
+            listener?.joinRoomResponse(response)
         }.on(SocketConstants.onMessage){
             val message = App.gson.fromJson<Message>(it[0] as String, Message::class.java)
-            for(listener in getListeners()){
-                listener.onMessage(message)
-            }
+            listener?.onMessage(message)
         }
 
         socket.connect()
@@ -95,7 +76,7 @@ class SocketService : BaseObservable<SocketService.SocketEvents>() {
 
     fun isConnected() : Boolean = socket.connected()
 
-    interface SocketEvents{
+    interface SocketEventsListener{
         fun playEvent()
         fun pauseEvent()
         fun previousVideoEvent()
