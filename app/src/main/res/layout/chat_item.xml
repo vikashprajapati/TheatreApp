@@ -2,6 +2,7 @@
 <layout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
+        <import type="com.example.theatreapp.data.SessionData" />
         <variable
             name="message"
             type="com.example.theatreapp.data.models.Message" />
@@ -36,7 +37,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/primary_color"
-                        android:text="@{message.from}"/>
+                        android:text="@{SessionData.INSTANCE.participantsMap.get(message.from)}"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:textColor="@color/tertiary_color"

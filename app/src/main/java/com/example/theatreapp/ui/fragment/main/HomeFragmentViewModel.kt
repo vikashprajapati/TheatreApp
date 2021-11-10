@@ -44,7 +44,6 @@ class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewMode
             return@Observer;
         }
         _joinedRoomState.postValue(App.gson.toJson(joinedRoomResponse))
-        updateSessionData(joinedRoomResponse)
         clearFields()
         removeObservers()
     }
@@ -64,12 +63,6 @@ class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewMode
     private fun removeObservers(){
         socketManager.joinedRoomState.removeObserver(joinedRoomObserver)
         socketManager.connectionState.removeObserver(connectivityObserver)
-    }
-
-    private fun updateSessionData(response: JoinedRoomResponse){
-        SessionData.localUser = User(_user.value!!).apply { id = response.room.host }
-        SessionData.currentRoom = response.room
-        Log.i(TAG, "updateSessionData: $SessionData")
     }
 
     var room : String

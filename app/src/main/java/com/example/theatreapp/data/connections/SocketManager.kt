@@ -46,7 +46,7 @@ object SocketManager : SocketService.SocketEventListener {
     fun joinRoom(userName : String, roomName : String){
         var joinRoomRequestParams = JoinRoomRequest().apply {
             room = Room(roomName)
-            user = User(userName)
+            user = User(userName, "")
         }
         socketService.send("join room", joinRoomRequestParams)
     }

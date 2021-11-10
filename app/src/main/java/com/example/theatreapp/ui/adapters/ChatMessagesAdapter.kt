@@ -34,6 +34,7 @@ class ChatMessagesAdapter(private val messagesList : ArrayList<Message>) : Recyc
 				binding.chatItemLinearLayout.gravity = Gravity.RIGHT
 			else
 				binding.chatItemLinearLayout.gravity = Gravity.LEFT
+			binding.executePendingBindings()
 		}
 	}
 }

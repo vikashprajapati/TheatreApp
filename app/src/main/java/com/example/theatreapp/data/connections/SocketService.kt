@@ -1,7 +1,9 @@
 package com.example.theatreapp.data.connections
 
+import android.util.Log
 import com.example.theatreapp.App
 import com.example.theatreapp.constants.SocketConstants
+import com.example.theatreapp.data.SessionData
 import com.example.theatreapp.data.models.Message
 import com.example.theatreapp.data.models.response.joinroomresponse.JoinedRoomResponse
 import com.example.theatreapp.data.models.response.joinroomresponse.ParticipantsItem
@@ -10,7 +12,7 @@ import io.socket.client.Socket
 import java.net.URI
 
 class SocketService : BaseObservable<SocketService.SocketEventListener>() {
-
+    private val TAG = SocketService::class.java.canonicalName
     private val SOCKET_ENDPOINT = "http://192.168.43.133:5000"
     private var socket : Socket = IO.socket(URI.create(SOCKET_ENDPOINT))
 
@@ -21,9 +23,28 @@ class SocketService : BaseObservable<SocketService.SocketEventListener>() {
     }
 
     private fun joinRoom(response :String){
+        val response = App.gson.fromJson<JoinedRoomResponse>(response, JoinedRoomResponse::class.java)
+        updateSessionData(response)
         for (listener in getListeners()){
-            val response = App.gson.fromJson<JoinedRoomResponse>(response, JoinedRoomResponse::class.java)
             listener.joinRoomResponse(response)
+        }
+    }
+
+    private fun updateSessionData(response: JoinedRoomResponse){
+        SessionData.localUser = response.localUser
+        SessionData.currentRoom = response.room
+
+        for(participant in response.room.participants){
+            SessionData.participantsMap[participant.id] = participant.name
+        }
+        Log.i(TAG, "updateSessionData: $SessionData")
+    }
+
+    private fun participantJoined(response : String){
+        val participant = App.gson.fromJson<ParticipantsItem>(response as String, ParticipantsItem::class.java)
+        SessionData.participantsMap[participant.id] = participant.name
+        for (listener in getListeners()){
+            listener.newParticipantJoinedEvent(participant)
         }
     }
 
@@ -55,10 +76,7 @@ class SocketService : BaseObservable<SocketService.SocketEventListener>() {
                 listener.syncVideoEvent()
             }
         }.on(SocketConstants.participantJoined){
-            val participant = App.gson.fromJson<ParticipantsItem>(it[0] as String, ParticipantsItem::class.java)
-            for (listener in getListeners()){
-                listener.newParticipantJoinedEvent(participant)
-            }
+            participantJoined(it[0].toString())
         }.on(SocketConstants.participantLeft){
             for (listener in getListeners()){
                 listener.userLeft()
