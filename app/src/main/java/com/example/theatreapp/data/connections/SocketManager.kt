@@ -10,7 +10,7 @@ import com.example.theatreapp.data.models.requests.User
 import com.example.theatreapp.data.models.response.joinroomresponse.JoinedRoomResponse
 import com.example.theatreapp.data.models.response.joinroomresponse.ParticipantsItem
 
-object SocketManager : SocketService.SocketEventListener {
+object SocketManager : SocketService.SocketEvents {
     // Too much responsiblity, class needs to be refactored
     private val socketService = SocketService()
     private var played = MutableLiveData<Event<String>>()
@@ -54,6 +54,14 @@ object SocketManager : SocketService.SocketEventListener {
     fun sendChatMessage(msg : String){
         val message = Message(from = "", message = msg, timeStamp =  "now")
         socketService.send("on message", message)
+    }
+
+    fun sendVideoStartedEvent(playbackStatus: String) {
+        socketService.send("on video playback", playbackStatus);
+    }
+
+    fun sendVideoChangedEvent(direction: String) {
+        socketService.send("on video changed", direction);
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

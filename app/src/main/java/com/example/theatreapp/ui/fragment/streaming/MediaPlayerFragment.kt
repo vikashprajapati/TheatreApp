@@ -2,6 +2,7 @@ package com.example.theatreapp.ui.fragment.streaming
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,11 @@ import android.view.ViewGroup
 import android.widget.MediaController
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.theatreapp.constants.VideoPlaybackConstants
+import com.example.theatreapp.constants.VideoPlaybackConstants.Companion.nextVideo
+import com.example.theatreapp.constants.VideoPlaybackConstants.Companion.prevVideo
+import com.example.theatreapp.constants.VideoPlaybackConstants.Companion.videoPaused
+import com.example.theatreapp.constants.VideoPlaybackConstants.Companion.videoPlayed
 import com.example.theatreapp.ui.listeners.MediaPlayerFragmentListener
 import com.example.theatreapp.ui.listeners.PlaybackListener
 import com.example.theatreapp.utils.PlayerController
@@ -51,9 +57,6 @@ class MediaPlayerFragment :
 		mediaPlayer.attachViews(binding!!.videoPlayerLayout, null, false, false)
 		var media = Media(libvlc, context?.assets?.openFd("videoplayback.mp4"))
 		mediaPlayer.media = media
-		media.release()
-
-		mediaPlayer.play()
 	}
 
 	override fun onPause() {
@@ -76,7 +79,7 @@ class MediaPlayerFragment :
 
 		// setup video controller
 		val videoController = MediaController(context)
-		videoController.setMediaPlayer(PlayerController(requireContext(), mediaPlayer, this))
+		videoController.setMediaPlayer(PlayerController(mediaPlayer, this))
 		videoController.setAnchorView(binding!!.videoPlayerLayout)
 		binding!!.videoPlayerLayout.setOnClickListener {
 			videoController.show(5000)
@@ -85,24 +88,27 @@ class MediaPlayerFragment :
 		videoController.setPrevNextListeners({
             // next is pressed
             mediaPlayer.position = 0F
+			viewModel.sendVideoChangedEvent(nextVideo)
         }, {
             // prev is pressed
             mediaPlayer.position = 0F
+			viewModel.sendVideoChangedEvent(prevVideo)
             mediaPlayer.pause()
         })
 
 	}
 
 	override fun onVideoPlayed() {
+		viewModel.sendVideoPlaybackEvent(videoPlayed)
 	}
 
 	override fun onVideoPaused() {
+		viewModel.sendVideoPlaybackEvent(videoPaused)
 	}
 
 	companion object {
 		@JvmStatic
 		val TAG = MediaPlayerFragment::class.java.canonicalName
-
 		/**
 		 * Use this factory method to create a new instance of
 		 * this fragment using the provided parameters.

@@ -32,4 +32,12 @@ class StreamingRoomFragmentViewModel : ViewModel() {
     fun leaveRoom(){
         SocketManager.stopListeningToServer()
     }
+
+    fun sendVideoPlaybackEvent(playbackStatus : String) {
+        SocketManager.sendVideoStartedEvent(playbackStatus)
+    }
+
+    fun sendVideoChangedEvent(direction : String){
+        SocketManager.sendVideoChangedEvent(direction)
+    }
 }

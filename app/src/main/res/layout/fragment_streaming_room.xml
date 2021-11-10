@@ -21,9 +21,10 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="8dp"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="16dp"
                 android:elevation="4dp">
                 <TextView
                     android:id="@+id/video_title_textView"
@@ -42,6 +43,10 @@
                     android:src="@drawable/ic_search"
                     app:tint="@color/primary_color"/>
             </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/light_gray"/>
 
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewpager"

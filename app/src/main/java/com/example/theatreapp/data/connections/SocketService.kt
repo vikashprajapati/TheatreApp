@@ -11,7 +11,7 @@ import io.socket.client.IO
 import io.socket.client.Socket
 import java.net.URI
 
-class SocketService : BaseObservable<SocketService.SocketEventListener>() {
+class SocketService : BaseObservable<SocketService.SocketEvents>() {
     private val TAG = SocketService::class.java.canonicalName
     private val SOCKET_ENDPOINT = "http://192.168.43.133:5000"
     private var socket : Socket = IO.socket(URI.create(SOCKET_ENDPOINT))
@@ -94,7 +94,7 @@ class SocketService : BaseObservable<SocketService.SocketEventListener>() {
         socket.connect()
     }
 
-    fun send(eventType : String, params: Any){
+    fun send(eventType : String, params: Any?){
         // serialize args
         val params = App.gson.toJson(params)
         socket.emit(eventType, params)
@@ -106,7 +106,7 @@ class SocketService : BaseObservable<SocketService.SocketEventListener>() {
 
     fun isConnected() : Boolean = socket.connected()
 
-    interface SocketEventListener{
+    interface SocketEvents{
         fun playEvent()
         fun pauseEvent()
         fun previousVideoEvent()
