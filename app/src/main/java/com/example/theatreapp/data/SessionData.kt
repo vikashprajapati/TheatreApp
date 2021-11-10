@@ -1,6 +1,8 @@
 package com.example.theatreapp.data
 
 import com.example.theatreapp.data.models.requests.User
+import com.example.theatreapp.data.models.response.joinroomresponse.JoinedRoomResponse
+import com.example.theatreapp.data.models.response.joinroomresponse.ParticipantsItem
 import com.example.theatreapp.data.models.response.joinroomresponse.Room
 
 object SessionData {
@@ -9,4 +11,18 @@ object SessionData {
 
     // participant map contains <userId, userName> mapping
     val participantsMap = mutableMapOf<String, String>()
+
+    fun updateSessionData(response: JoinedRoomResponse){
+        localUser = response.localUser
+        currentRoom = response.room
+
+        for(participant in response.room.participants){
+            participantsMap[participant.id] = participant.name
+        }
+    }
+
+    fun addNewParticipant(participant : ParticipantsItem){
+        participantsMap[participant.id] = participant.name
+        currentRoom?.participants?.add(participant)
+    }
 }

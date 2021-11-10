@@ -24,26 +24,15 @@ class SocketService : BaseObservable<SocketService.SocketEvents>() {
 
     private fun joinRoom(response :String){
         val response = App.gson.fromJson<JoinedRoomResponse>(response, JoinedRoomResponse::class.java)
-        updateSessionData(response)
+        SessionData.updateSessionData(response)
         for (listener in getListeners()){
             listener.joinRoomResponse(response)
         }
     }
 
-    private fun updateSessionData(response: JoinedRoomResponse){
-        SessionData.localUser = response.localUser
-        SessionData.currentRoom = response.room
-
-        for(participant in response.room.participants){
-            SessionData.participantsMap[participant.id] = participant.name
-        }
-        Log.i(TAG, "updateSessionData: $SessionData")
-    }
-
     private fun participantJoined(response : String){
         val participant = App.gson.fromJson<ParticipantsItem>(response as String, ParticipantsItem::class.java)
-        SessionData.participantsMap[participant.id] = participant.name
-        SessionData.currentRoom?.participants?.add(participant)
+        SessionData.addNewParticipant(participant)
         for (listener in getListeners()){
             listener.newParticipantJoinedEvent(participant)
         }
