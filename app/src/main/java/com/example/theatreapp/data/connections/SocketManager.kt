@@ -2,7 +2,7 @@ package com.example.theatreapp.data.connections
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.theatreapp.constants.SocketConstants
+import com.example.theatreapp.constants.SocketConstants.OutgoingEvents
 import com.example.theatreapp.constants.VideoPlaybackConstants
 import com.example.theatreapp.data.SessionData
 import com.example.theatreapp.data.models.Message
@@ -16,13 +16,11 @@ import com.example.theatreapp.data.models.response.joinroomresponse.Participants
 object SocketManager : SocketService.SocketEventsListener {
     // Too much responsiblity, class needs to be refactored
     private val socketService = SocketService()
-    private var _playedVideo = MutableLiveData<Event<String>>()
-    private var _pausedVideo = MutableLiveData<Event<String>>()
-    private var _previousVideoPlayed = MutableLiveData<Event<String>>()
-    private var _nextVideoPlayed = MutableLiveData<Event<String>>()
+    private var _playbackVideo = MutableLiveData<Event<String>>()
+    private var _changedVideo = MutableLiveData<Event<String>>()
+    private var _syncedVideo = MutableLiveData<Event<String>>()
     private var _connectionStatus = MutableLiveData<Event<String>>()
     private var _joinedRoomStatus = MutableLiveData<Event<JoinedRoomResponse>>()
-    private var _syncedVideo = MutableLiveData<Event<String>>()
     private var _participantJoined = MutableLiveData<Event<ParticipantsItem>>()
     private var _participantLeft = MutableLiveData<Event<ParticipantsItem>>()
     private var _onMessage = MutableLiveData<Event<Message>>()
@@ -31,10 +29,13 @@ object SocketManager : SocketService.SocketEventsListener {
     val joinedRoomStatus : LiveData<Event<JoinedRoomResponse>> get() = _joinedRoomStatus
     val participantJoined : LiveData<Event<ParticipantsItem>> get() = _participantJoined
     val participantLeft : LiveData<Event<ParticipantsItem>> get() = _participantLeft
+    val playbackVideo : LiveData<Event<String>> get() = _playbackVideo
+    val changedVideo : LiveData<Event<String>> get() = _changedVideo
+    val syncedVideo : LiveData<Event<String>> get() = _syncedVideo
     val onMessage : LiveData<Event<Message>> get() = _onMessage
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Events sent to the socket                                                                                                        //
+    // Outgoing Socket Events                                                                                                           //
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     fun startListeningToServer(){
@@ -52,28 +53,28 @@ object SocketManager : SocketService.SocketEventsListener {
             room = Room(roomName)
             user = User(userName, "")
         }
-        socketService.send(SocketConstants.OutgoingEvents.sendJoinRoom, joinRoomRequestParams)
+        socketService.send(OutgoingEvents.sendJoinRoom, joinRoomRequestParams)
     }
 
     fun sendLeaveRoom(){
-        socketService.send(SocketConstants.OutgoingEvents.leaveRoom, "")
+        socketService.send(OutgoingEvents.sendLeaveRoom, "")
     }
 
     fun sendChatMessage(msg : String){
         val message = Message(from = "", message = msg, timeStamp =  "now")
-        socketService.send(SocketConstants.OutgoingEvents.sendMessage, message)
+        socketService.send(OutgoingEvents.sendMessage, message)
     }
 
     fun sendVideoStartedEvent(playbackStatus: String) {
-        socketService.send(SocketConstants.OutgoingEvents.videoPlayback, playbackStatus);
+        socketService.send(OutgoingEvents.sendVideoPlayback, playbackStatus);
     }
 
     fun sendVideoChangedEvent(direction: String) {
-        socketService.send(SocketConstants.OutgoingEvents.videoChanged, direction);
+        socketService.send(OutgoingEvents.sendVideoChanged, direction);
     }
 
     fun sendVideoSyncEvent(currentTimestamp: String) {
-        socketService.send(SocketConstants.OutgoingEvents.videoSynced, currentTimestamp);
+        socketService.send(OutgoingEvents.sendVideoSynced, currentTimestamp);
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -87,26 +88,19 @@ object SocketManager : SocketService.SocketEventsListener {
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Received Events from the socket server                                                                                           //
+    // Incoming Socket Events                                                                                                           //
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    override fun playEvent() {
-        _playedVideo.postValue(Event(VideoPlaybackConstants.videoPlayed))
+
+    override fun playbackEvent(playbackStatus: String) {
+        _playbackVideo.postValue(Event(playbackStatus))
     }
 
-    override fun pauseEvent() {
-        _pausedVideo.postValue(Event(VideoPlaybackConstants.videoPaused))
+    override fun videoChangedEvent(playbackDirection: String) {
+        _changedVideo.postValue(Event(playbackDirection))
     }
 
-    override fun previousVideoEvent() {
-        _previousVideoPlayed.postValue(Event(VideoPlaybackConstants.prevVideo))
-    }
-
-    override fun nextVideoEvent() {
-        _nextVideoPlayed.postValue(Event(VideoPlaybackConstants.nextVideo))
-    }
-
-    override fun syncVideoEvent() {
-        _syncedVideo.postValue(Event(VideoPlaybackConstants.syncedVideo))
+    override fun syncVideoEvent(playbackTimestamp : String) {
+        _syncedVideo.postValue(Event(playbackTimestamp))
     }
 
     override fun newParticipantJoinedEvent(participant: ParticipantsItem) {

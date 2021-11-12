@@ -11,4 +11,5 @@
     <string name="join_room_error">Failed to join room</string>
     <string name="participant_joined">Joined</string>
     <string name="enter_message_hint">Type your message here...</string>
+    <string name="socket_disconnected">Connection error</string>
 </resources>

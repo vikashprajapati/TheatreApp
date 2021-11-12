@@ -7,20 +7,16 @@ interface SocketConstants {
                 get() = "on message"
             val onRoomJoined: String
                 get() = "joined room response"
-            val onVideoPlayed : String
-                get() = "video played"
-            val onVideoPaused : String
-                get() = "video paused"
-            val onPreviousVideo : String
-                get() = "previous video"
-            val onNextVideo : String
-                get() = "next video"
+            val onVideoPlayback : String
+                get() = "video playback"
+            val onVideoChanged : String
+                get() = "video changed"
+            val onVideoSynced : String
+                get() = "video synced"
             val onParticipantJoined : String
                 get() = "participant joined"
             val onParticipantLeft : String
                 get() = "participant left"
-            val onVideoSynced : String
-                get() = "video synced"
         }
     }
 
@@ -30,13 +26,13 @@ interface SocketConstants {
                 get() = "on message"
             val sendJoinRoom: String
                 get() = "join room"
-            val videoPlayback : String
+            val sendVideoPlayback : String
                 get() = "video playback"
-            val videoChanged : String
+            val sendVideoChanged : String
                 get() = "video changed"
-            val videoSynced : String
+            val sendVideoSynced : String
                 get() = "video synced"
-            val leaveRoom : String
+            val sendLeaveRoom : String
                 get() = "leave room"
         }
     }

@@ -61,14 +61,22 @@ class ParticipantsFragment : BaseFragment<FragmentParticipantsListBinding, Strea
 
     override fun observeData() {
         super.observeData()
-        viewModel.participants.observe(viewLifecycleOwner, {
-            participantAdapter.updateParticipantList(it)
+        viewModel.apply {
+            participants.observe(viewLifecycleOwner, {
+                participantAdapter.updateParticipantList(it)
 
-            if(it.size > 1){
-                val msg = "${it[it.size - 1].name} ${resources.getString(R.string.participant_joined)}";
-                shortToast(msg)
+                if(it.size > 1){
+                    val msg = "${it[it.size - 1].name} ${resources.getString(R.string.participant_joined)}";
+                    shortToast(msg)
+                }
+            })
+
+            participantLeft.observe(viewLifecycleOwner){
+                val participant = it.getContentIfNotHandledOrReturnNull()?:return@observe
+
+                shortToast("${participant.name} left")
             }
-        })
+        }
     }
 
     companion object {

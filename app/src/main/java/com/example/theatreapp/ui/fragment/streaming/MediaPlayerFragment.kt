@@ -98,6 +98,43 @@ class MediaPlayerFragment :
 
 	}
 
+	override fun observeData() {
+		super.observeData()
+		viewModel.apply {
+			videoPlayback.observe(viewLifecycleOwner){
+				val playbackState = it.getContentIfNotHandledOrReturnNull()?:return@observe
+				when(playbackState){
+					videoPlayed -> {
+						mediaPlayer.play()
+					}
+
+					videoPaused -> {
+						mediaPlayer.pause()
+					}
+				}
+			}
+
+			videoChanged.observe(viewLifecycleOwner){
+				val playbackDirection = it.getContentIfNotHandledOrReturnNull()?:return@observe
+				when(playbackDirection){
+					nextVideo -> {
+
+					}
+
+					prevVideo -> {
+
+					}
+				}
+			}
+
+			videoSynced.observe(viewLifecycleOwner){
+				val timestamp = it.getContentIfNotHandledOrReturnNull()?:return@observe
+				// timestamp to be converted to milliseconds
+				mediaPlayer.time = 1000
+			}
+		}
+	}
+
 	override fun onVideoPlayed() {
 		viewModel.sendVideoPlaybackEvent(videoPlayed)
 	}

@@ -15,6 +15,8 @@ import com.example.theatreapp.databinding.FragmentStreamingRoomBinding
 import com.example.theatreapp.ui.adapters.StreamingViewPagerAdapter
 import com.example.theatreapp.ui.fragment.BaseFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import io.socket.client.Socket.EVENT_CONNECT_ERROR
+import io.socket.client.Socket.EVENT_DISCONNECT
 
 /**
  * A simple [Fragment] subclass.
@@ -61,18 +63,16 @@ class StreamingRoomFragment :
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+		setUpViews()
+	}
+
+	override fun setUpViews() {
+		super.setUpViews()
+		addMediaPlayerFragment()
+
 		setupViewPager()
 
 		bottomSheetBehavior = BottomSheetBehavior.from(binding!!.bottomSheetLayout.bottomSheet)
-		bottomSheetBehavior.addBottomSheetCallback(object :
-            BottomSheetBehavior.BottomSheetCallback() {
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-            }
-
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-            }
-
-        })
 
 		binding!!.searchChat.setOnClickListener {
 			bottomSheetBehavior.state =
@@ -84,8 +84,8 @@ class StreamingRoomFragment :
 
 	override fun onStart() {
 		super.onStart()
-		addMediaPlayerFragment()
-//        addYoutubePlayerFragment()
+//        addYoutubePlayerFragment
+		observeData()
 	}
 
 	override fun onStop() {
@@ -99,6 +99,20 @@ class StreamingRoomFragment :
 		// backPressedCallback is not lifecycle aware so we need to unregister callback manually
 		backPressedCallback.isEnabled = false
 		backPressedCallback.remove()
+	}
+
+	override fun observeData() {
+		super.observeData()
+		viewModel.apply {
+			connectionState.observe(viewLifecycleOwner){
+				val status = it.getContentIfNotHandledOrReturnNull()
+
+				if(status == null || status == EVENT_CONNECT_ERROR || status == EVENT_DISCONNECT){
+					shortToast(R.string.socket_disconnected)
+					requireActivity().finish()
+				}
+			}
+		}
 	}
 
 	private fun setupViewPager() {
