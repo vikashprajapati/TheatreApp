@@ -105,7 +105,7 @@ class StreamingRoomFragment :
 		super.observeData()
 		viewModel.apply {
 			connectionState.observe(viewLifecycleOwner){
-				val status = it.getContentIfNotHandledOrReturnNull()
+				val status = it
 
 				if(status == null || status == EVENT_CONNECT_ERROR || status == EVENT_DISCONNECT){
 					shortToast(R.string.socket_disconnected)

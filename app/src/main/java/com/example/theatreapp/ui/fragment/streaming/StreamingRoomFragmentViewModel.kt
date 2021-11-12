@@ -13,7 +13,7 @@ import com.example.theatreapp.utils.Event
 class StreamingRoomFragmentViewModel : ViewModel() {
     // temporarily we are keeping only video url, later we will be needing more video details
     private val activeVideoUrl = MutableLiveData<String>()
-    private var _connectionState = MutableLiveData<Event<String>>()
+    private var _connectionState = MutableLiveData<String>()
     private val _participants = MutableLiveData<MutableList<ParticipantsItem>>()
     private val _videoPlayback = MutableLiveData<Event<String>>()
     private val _videoChanged = MutableLiveData<Event<String>>()
@@ -25,7 +25,7 @@ class StreamingRoomFragmentViewModel : ViewModel() {
     var videoPlayback : LiveData<Event<String>> = _videoPlayback
     var videoChanged : LiveData<Event<String>> = _videoChanged
     var videoSynced : LiveData<Event<String>> = _videoSynced
-    var connectionState : LiveData<Event<String>> = _connectionState
+    var connectionState : LiveData<String> = _connectionState
     var participantLeft : LiveData<Event<ParticipantsItem>> = _participantLeft
 
     private var participantJoinedObserver = Observer<Event<ParticipantsItem>>{
@@ -51,12 +51,12 @@ class StreamingRoomFragmentViewModel : ViewModel() {
         _participants.postValue(SessionData.currentRoom?.participants)
     }
 
-    private var connectivityObserver = Observer<Event<String>>{
-        var status = it.getContentIfNotHandledOrReturnNull()?:return@Observer
+    private var connectivityObserver = Observer<String>{
+        var status = it
 
         if(status !== io.socket.client.Socket.EVENT_CONNECT) {
             SocketManager.stopListeningToServer()
-            _connectionState.postValue(Event(status))
+            _connectionState.postValue(status)
         }
     }
 

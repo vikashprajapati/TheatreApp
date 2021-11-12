@@ -19,13 +19,13 @@ object SocketManager : SocketService.SocketEventsListener {
     private var _playbackVideo = MutableLiveData<Event<String>>()
     private var _changedVideo = MutableLiveData<Event<String>>()
     private var _syncedVideo = MutableLiveData<Event<String>>()
-    private var _connectionStatus = MutableLiveData<Event<String>>()
+    private var _connectionStatus = MutableLiveData<String>()
     private var _joinedRoomStatus = MutableLiveData<Event<JoinedRoomResponse>>()
     private var _participantJoined = MutableLiveData<Event<ParticipantsItem>>()
     private var _participantLeft = MutableLiveData<Event<ParticipantsItem>>()
     private var _onMessage = MutableLiveData<Event<Message>>()
 
-    val connectionStatus : LiveData<Event<String>> get() = _connectionStatus
+    val connectionStatus : LiveData<String> get() = _connectionStatus
     val joinedRoomStatus : LiveData<Event<JoinedRoomResponse>> get() = _joinedRoomStatus
     val participantJoined : LiveData<Event<ParticipantsItem>> get() = _participantJoined
     val participantLeft : LiveData<Event<ParticipantsItem>> get() = _participantLeft
@@ -109,7 +109,7 @@ object SocketManager : SocketService.SocketEventsListener {
     }
 
     override fun connectionStatus(eventConnect: String) {
-        _connectionStatus.postValue(Event(eventConnect))
+        _connectionStatus.postValue(eventConnect)
     }
 
     override fun joinRoomResponse(joinedRoomResponse: JoinedRoomResponse) {

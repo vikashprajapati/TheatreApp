@@ -23,9 +23,8 @@ class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewMode
     val connectionState : LiveData<String> get() = _connectionState
     val joinRoomState : LiveData<String> get() = _joinedRoomState
 
-    private var connectivityObserver = Observer<Event<String>>{
-        var status = it.getContentIfNotHandledOrReturnNull()
-
+    private var connectivityObserver = Observer<String>{
+        val status = it
         if(status === io.socket.client.Socket.EVENT_CONNECT){
             joinRoom()
         }else{
