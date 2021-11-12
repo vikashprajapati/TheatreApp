@@ -51,8 +51,8 @@ class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewMode
     init{
         loading.value = View.GONE
         clearFields()
-        socketManager.connectionState.observeForever(connectivityObserver)
-        socketManager.joinedRoomState.observeForever(joinedRoomObserver)
+        socketManager.connectionStatus.observeForever(connectivityObserver)
+        socketManager.joinedRoomStatus.observeForever(joinedRoomObserver)
     }
 
     private fun clearFields(){
@@ -61,8 +61,8 @@ class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewMode
     }
 
     private fun removeObservers(){
-        socketManager.joinedRoomState.removeObserver(joinedRoomObserver)
-        socketManager.connectionState.removeObserver(connectivityObserver)
+        socketManager.joinedRoomStatus.removeObserver(joinedRoomObserver)
+        socketManager.connectionStatus.removeObserver(connectivityObserver)
     }
 
     var room : String
@@ -92,8 +92,8 @@ class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewMode
 
     override fun onCleared() {
         super.onCleared()
-        socketManager.connectionState.removeObserver(connectivityObserver)
-        socketManager.joinedRoomState.removeObserver(joinedRoomObserver)
+        socketManager.connectionStatus.removeObserver(connectivityObserver)
+        socketManager.joinedRoomStatus.removeObserver(joinedRoomObserver)
     }
 
     private fun connectSocket(){
@@ -102,6 +102,6 @@ class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewMode
 
     private fun joinRoom() {
         Log.i(TAG, "joinRoom: ")
-        socketManager.joinRoom(_user.value!!, _room.value!!)
+        socketManager.sendJoinRoom(_user.value!!, _room.value!!)
     }
 }

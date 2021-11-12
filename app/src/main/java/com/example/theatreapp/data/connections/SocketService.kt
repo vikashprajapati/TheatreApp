@@ -32,31 +32,35 @@ class SocketService{
             listener?.connectionStatus(Socket.EVENT_CONNECT_ERROR)
         }.on(Socket.EVENT_DISCONNECT) {
             listener?.connectionStatus(Socket.EVENT_DISCONNECT)
-        }.on(SocketConstants.videoPlayed){
+        }.on(SocketConstants.IncomingEvents.onVideoPlayed){
             listener?.playEvent()
-        }.on(SocketConstants.videoPaused){
+        }.on(SocketConstants.IncomingEvents.onVideoPaused){
             listener?.pauseEvent()
-        }.on(SocketConstants.previousVideo){
+        }.on(SocketConstants.IncomingEvents.onPreviousVideo){
             listener?.previousVideoEvent()
-        }.on(SocketConstants.nextVideo){
+        }.on(SocketConstants.IncomingEvents.onNextVideo){
             listener?.nextVideoEvent()
-        }.on(SocketConstants.videoSynced){
+        }.on(SocketConstants.IncomingEvents.onVideoSynced){
             listener?.syncVideoEvent()
-        }.on(SocketConstants.participantJoined){
+        }.on(SocketConstants.IncomingEvents.onParticipantJoined){
             val participant = App.gson.fromJson<ParticipantsItem>(
                 it[0] as String,
                 ParticipantsItem::class.java
             )
             listener?.newParticipantJoinedEvent(participant)
-        }.on(SocketConstants.participantLeft){
-            listener?.userLeft()
-        }.on(SocketConstants.roomJoined){
+        }.on(SocketConstants.IncomingEvents.onParticipantLeft){
+            val participant = App.gson.fromJson<ParticipantsItem>(
+                it[0] as String,
+                ParticipantsItem::class.java
+            )
+            listener?.userLeft(participant)
+        }.on(SocketConstants.IncomingEvents.onRoomJoined){
             val response = App.gson.fromJson<JoinedRoomResponse>(
                 it[0].toString(),
                 JoinedRoomResponse::class.java
             )
             listener?.joinRoomResponse(response)
-        }.on(SocketConstants.onMessage){
+        }.on(SocketConstants.IncomingEvents.onMessage){
             val message = App.gson.fromJson<Message>(it[0] as String, Message::class.java)
             listener?.onMessage(message)
         }
@@ -70,10 +74,6 @@ class SocketService{
         socket.emit(eventType, params)
     }
 
-    fun disconnectSocket(){
-        socket.emit("leave room")
-    }
-
     fun isConnected() : Boolean = socket.connected()
 
     interface SocketEventsListener{
@@ -82,11 +82,10 @@ class SocketService{
         fun previousVideoEvent()
         fun nextVideoEvent()
         fun syncVideoEvent()
-        fun roomJoinedEvent()
         fun newParticipantJoinedEvent(participantsItem: ParticipantsItem)
         fun connectionStatus(eventConnect: String)
         fun joinRoomResponse(joinedRoomResponse: JoinedRoomResponse)
-        fun userLeft()
+        fun userLeft(participantsItem: ParticipantsItem)
         fun onMessage(message: Message)
     }
 }

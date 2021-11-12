@@ -25,12 +25,8 @@ class StreamingRoomFragmentViewModel : ViewModel() {
 
     init {
         _participants.postValue(SessionData.currentRoom?.participants)
-        connectionState.postValue(SocketManager.connectionState.value)
+        connectionState.postValue(SocketManager.connectionStatus.value)
         SocketManager.participantJoined.observeForever(participantsObserver)
-    }
-
-    fun leaveRoom(){
-        SocketManager.stopListeningToServer()
     }
 
     fun sendVideoPlaybackEvent(playbackStatus : String) {
@@ -39,5 +35,13 @@ class StreamingRoomFragmentViewModel : ViewModel() {
 
     fun sendVideoChangedEvent(direction : String){
         SocketManager.sendVideoChangedEvent(direction)
+    }
+
+    fun sendVideoSyncedEvent(currentTimestamp : String){
+        SocketManager.sendVideoSyncEvent(currentTimestamp)
+    }
+
+    fun leaveRoom(){
+        SocketManager.stopListeningToServer()
     }
 }

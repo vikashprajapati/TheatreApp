@@ -8,5 +8,6 @@ interface VideoPlaybackConstants {
 		val prevVideo = "previous"
 		val nextVideo = "next"
 		val seek = "video seeked"
+		val syncedVideo = "synchronize video"
 	}
 }
