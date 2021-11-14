@@ -12,6 +12,7 @@ import java.net.URI
 class SocketService{
     private val TAG = SocketService::class.java.canonicalName
     private val SOCKET_ENDPOINT = "http://192.168.43.133:5000"
+//    private val SOCKET_ENDPOINT = "ws://syncr-server.herokuapp.com/socket.io/?EIO=4&transport=websocket"
     private var socket : Socket = IO.socket(URI.create(SOCKET_ENDPOINT))
     private var listener : SocketEventsListener? = null
 
@@ -62,10 +63,11 @@ class SocketService{
         socket.connect()
     }
 
-    fun send(eventType : String, params: Any?){
+    fun send(eventType : String,params: Any?){
         // serialize args
-        val params = App.gson.toJson(params)
-        socket.emit(eventType, params)
+        if(params !is String){
+            socket.emit(eventType, App.gson.toJson(params))
+        }else socket.emit(eventType, params)
     }
 
     fun isConnected() : Boolean = socket.connected()

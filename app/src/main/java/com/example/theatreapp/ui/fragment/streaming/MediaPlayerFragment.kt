@@ -35,19 +35,19 @@ class MediaPlayerFragment :
 	private lateinit var mediaPlayer: MediaPlayer
 
 	override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = binding?.root
+		inflater: LayoutInflater,
+		container: ViewGroup?,
+		savedInstanceState: Bundle?
+	): View? = binding?.root
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		setupVlcMediaPlayer()
 	}
 
-    override fun initViewModel():
-            StreamingRoomFragmentViewModel = ViewModelProvider(requireActivity())
-        .get(StreamingRoomFragmentViewModel::class.java)
+	override fun initViewModel():
+			StreamingRoomFragmentViewModel = ViewModelProvider(requireActivity())
+		.get(StreamingRoomFragmentViewModel::class.java)
 
 	override fun getViewBinding(): FragmentMediaPlayerBinding =
 		FragmentMediaPlayerBinding.inflate(layoutInflater)
@@ -57,6 +57,8 @@ class MediaPlayerFragment :
 		mediaPlayer.attachViews(binding!!.videoPlayerLayout, null, false, false)
 		var media = Media(libvlc, context?.assets?.openFd("videoplayback.mp4"))
 		mediaPlayer.media = media
+
+		observeData()
 	}
 
 	override fun onPause() {
@@ -86,52 +88,50 @@ class MediaPlayerFragment :
 		}
 
 		videoController.setPrevNextListeners({
-            // next is pressed
-            mediaPlayer.position = 0F
+			// next is pressed
+			mediaPlayer.position = 0F
 			viewModel.sendVideoChangedEvent(nextVideo)
-        }, {
-            // prev is pressed
-            mediaPlayer.position = 0F
+		}, {
+			// prev is pressed
+			mediaPlayer.position = 0F
 			viewModel.sendVideoChangedEvent(prevVideo)
-            mediaPlayer.pause()
-        })
+			mediaPlayer.pause()
+		})
 
 	}
 
 	override fun observeData() {
 		super.observeData()
-		viewModel.apply {
-			videoPlayback.observe(viewLifecycleOwner){
-				val playbackState = it.getContentIfNotHandledOrReturnNull()?:return@observe
-				when(playbackState){
-					videoPlayed -> {
-						mediaPlayer.play()
-					}
+		viewModel.videoPlayback.observe(viewLifecycleOwner){
+			val playbackState = it.getContentIfNotHandledOrReturnNull()?:return@observe
+			when(playbackState){
+				videoPlayed -> {
+					mediaPlayer.play()
+				}
 
-					videoPaused -> {
-						mediaPlayer.pause()
-					}
+				videoPaused -> {
+					mediaPlayer.pause()
 				}
 			}
+		}
 
-			videoChanged.observe(viewLifecycleOwner){
-				val playbackDirection = it.getContentIfNotHandledOrReturnNull()?:return@observe
-				when(playbackDirection){
-					nextVideo -> {
+		viewModel.videoChanged.observe(viewLifecycleOwner){
+			val playbackDirection = it.getContentIfNotHandledOrReturnNull()?:return@observe
+			when(playbackDirection){
+				nextVideo -> {
 
-					}
+				}
 
-					prevVideo -> {
+				prevVideo -> {
 
-					}
 				}
 			}
+		}
 
-			videoSynced.observe(viewLifecycleOwner){
-				val timestamp = it.getContentIfNotHandledOrReturnNull()?:return@observe
-				// timestamp to be converted to milliseconds
-				mediaPlayer.time = 1000
-			}
+		viewModel.videoSynced.observe(viewLifecycleOwner){
+			val timestamp = it.getContentIfNotHandledOrReturnNull()?:return@observe
+			// timestamp to be converted to milliseconds
+			mediaPlayer.time = 1000
 		}
 	}
 

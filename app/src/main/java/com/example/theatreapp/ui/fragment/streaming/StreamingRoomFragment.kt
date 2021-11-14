@@ -20,7 +20,7 @@ import io.socket.client.Socket.EVENT_DISCONNECT
 
 /**
  * A simple [Fragment] subclass.
- * Use the [RoomFrament.newInstance] factory method to
+ * Use the [StreamingRoomFrament.newInstance] factory method to
  * create an instance of this fragment.
  */
 class StreamingRoomFragment :
@@ -109,7 +109,7 @@ class StreamingRoomFragment :
 
 				if(status == null || status == EVENT_CONNECT_ERROR || status == EVENT_DISCONNECT){
 					shortToast(R.string.socket_disconnected)
-					requireActivity().finish()
+					findNavController().popBackStack()
 				}
 			}
 		}
@@ -123,7 +123,7 @@ class StreamingRoomFragment :
 
 	private fun addMediaPlayerFragment() {
 		mediaPlayerFragment = MediaPlayerFragment.newInstance()
-		var fragmentTransaction: FragmentTransaction = parentFragmentManager.beginTransaction()
+		val fragmentTransaction: FragmentTransaction = parentFragmentManager.beginTransaction()
 		mediaPlayerFragment?.let {
 			fragmentTransaction.add(
                 R.id.media_player_fragment_container, it,
@@ -134,7 +134,7 @@ class StreamingRoomFragment :
 	}
 
 	private fun addYoutubePlayerFragment() {
-		var youtubePlayerFragment = YoutubePlayerFragment.newInstance("", "")
+		val youtubePlayerFragment = YoutubePlayerFragment.newInstance("", "")
 		parentFragmentManager.beginTransaction()
 			.add(
                 R.id.media_player_fragment_container,

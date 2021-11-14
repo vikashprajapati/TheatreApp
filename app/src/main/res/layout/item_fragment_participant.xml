@@ -24,8 +24,8 @@
                 android:text="@{participant.name}"
                 android:textColor="@color/secondary_color"
                 android:layout_margin="@dimen/text_margin"
-                android:textSize="18dp"
-                android:inputType="textCapWords"
+                android:textSize="18sp"
+                android:textAllCaps="true"
                 android:textAppearance="?attr/textAppearanceListItem" />
 
 <!--            <TextView-->
