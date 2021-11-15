@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.example.theatreapp.R
+import com.example.theatreapp.data.SessionData
 import com.example.theatreapp.ui.adapters.ParticipantsRecyclerViewAdapter
 import com.example.theatreapp.databinding.FragmentParticipantsListBinding
 import com.example.theatreapp.data.models.response.joinroomresponse.ParticipantsItem
@@ -62,11 +63,11 @@ class ParticipantsFragment : BaseFragment<FragmentParticipantsListBinding, Strea
     override fun observeData() {
         super.observeData()
         viewModel.apply {
-            participants.observe(viewLifecycleOwner, {
-                participantAdapter.updateParticipantList(it)
+            participants.observe(viewLifecycleOwner, {  participants ->
+                participantAdapter.updateParticipantList(participants)
 
-                if(it.size > 1){
-                    val msg = "${it[it.size - 1].name} ${resources.getString(R.string.participant_joined)}";
+                if(participants.size > 1 && participants[participants.size - 1].id != SessionData.localUser?.id){
+                    val msg = "${participants[participants.size - 1].name} ${resources.getString(R.string.participant_joined)}"
                     shortToast(msg)
                 }
             })
