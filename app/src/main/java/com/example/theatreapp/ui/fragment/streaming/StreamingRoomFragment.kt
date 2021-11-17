@@ -70,7 +70,7 @@ class StreamingRoomFragment :
 		super.setUpViews()
 		addMediaPlayerFragment()
 
-//		setupViewPager()
+		setupViewPager()
 
 		bottomSheetBehavior = BottomSheetBehavior.from(binding!!.bottomSheetLayout.bottomSheet)
 
@@ -116,9 +116,9 @@ class StreamingRoomFragment :
 	}
 
 	private fun setupViewPager() {
-		/*viewPagerAdapter = StreamingViewPagerAdapter(parentFragmentManager)
+		viewPagerAdapter = StreamingViewPagerAdapter(parentFragmentManager)
 		binding!!.viewpager.adapter = viewPagerAdapter
-		binding!!.tabLayout.setupWithViewPager(binding!!.viewpager)*/
+		binding!!.tabLayout.setupWithViewPager(binding!!.viewpager)
 	}
 
 	private fun addMediaPlayerFragment() {

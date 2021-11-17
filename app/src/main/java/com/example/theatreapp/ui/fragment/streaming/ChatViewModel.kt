@@ -15,10 +15,10 @@ class ChatViewModel : ViewModel() {
 	private val invalidInput = MutableLiveData<Event<String>>()
 
 	val messageList : LiveData<MutableList<Message>> get() = _messageList
-	var messageText : String
-		get() = _messageEditText.value?:""
-		set(value) {
-			_messageEditText.value = value
+	var messageText : MutableLiveData<String>
+		get() = _messageEditText
+		set(data) {
+			_messageEditText.value = data.value
 		}
 	private val onMessageObserver = Observer<Event<Message>>{
 		val message = it.getContentIfNotHandledOrReturnNull()?:return@Observer
