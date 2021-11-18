@@ -7,21 +7,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import com.example.theatreapp.App
-import com.example.theatreapp.utils.Event
 import com.example.theatreapp.data.connections.SocketManager
-import com.example.theatreapp.data.models.requests.User
 import com.example.theatreapp.data.models.response.joinroomresponse.JoinedRoomResponse
-import com.example.theatreapp.data.SessionData
+import com.example.theatreapp.utils.Event
 
 class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewModel() {
     private val TAG = HomeFragmentViewModel::class.java.canonicalName
     private var _room = MutableLiveData<String>()
     private var _user = MutableLiveData<String>()
-    private var _joinedRoomState = MutableLiveData<String>()
-    private var _connectionState = MutableLiveData<String>()
+    private var _joinedRoomState = MutableLiveData<Event<String>>()
+    private var _connectionState = MutableLiveData<Event<String>>()
     val loading = MutableLiveData<Int>()
-    val connectionState : LiveData<String> get() = _connectionState
-    val joinRoomState : LiveData<String> get() = _joinedRoomState
+    val connectionState : LiveData<Event<String>> get() = _connectionState
+    val joinRoomState : LiveData<Event<String>> get() = _joinedRoomState
 
     private var connectivityObserver = Observer<String>{
         val status = it
@@ -29,7 +27,7 @@ class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewMode
             joinRoom()
         }else{
             socketManager.stopListeningToServer()
-            _connectionState.postValue(status)
+            _connectionState.postValue(Event(status))
             loading.postValue(View.GONE)
         }
     }
@@ -39,12 +37,11 @@ class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewMode
         loading.postValue(View.GONE)
         if(joinedRoomResponse == null){
             socketManager.stopListeningToServer()
-            _connectionState.postValue("Failed to join room")
+            _connectionState.postValue(Event("Failed to join room"))
             return@Observer;
         }
-        _joinedRoomState.postValue(App.gson.toJson(joinedRoomResponse))
+        _joinedRoomState.postValue(Event(App.gson.toJson(joinedRoomResponse)))
         clearFields()
-        removeObservers()
     }
 
     init{
@@ -59,23 +56,23 @@ class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewMode
         _user.value = ""
     }
 
-    private fun removeObservers(){
+    fun removeObservers(){
         socketManager.joinedRoomStatus.removeObserver(joinedRoomObserver)
         socketManager.connectionStatus.removeObserver(connectivityObserver)
     }
 
-    var room : String
-        set(value){
-            _room.value = value
+    var room : MutableLiveData<String>
+        set(data){
+            _room.value = data.value
         }
-        get() = _room.value?:""
+        get() = _room
 
 
-    var user : String
-        set(value){
-            _user.value = value
+    var user : MutableLiveData<String>
+        set(data){
+            _user.value = data.value
         }
-        get() = _user.value?:""
+        get() = _user
 
 
     var invalidInput = MutableLiveData<Event<String>>()
@@ -91,8 +88,7 @@ class HomeFragmentViewModel(private var socketManager: SocketManager) : ViewMode
 
     override fun onCleared() {
         super.onCleared()
-        socketManager.connectionStatus.removeObserver(connectivityObserver)
-        socketManager.joinedRoomStatus.removeObserver(joinedRoomObserver)
+        removeObservers()
     }
 
     private fun connectSocket(){

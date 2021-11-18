@@ -12,6 +12,7 @@ import java.net.URI
 class SocketService{
     private val TAG = SocketService::class.java.canonicalName
     private val SOCKET_ENDPOINT = "http://192.168.43.133:5000"
+//    private val SOCKET_ENDPOINT = "http://26.13.221.239:5000"
 //    private val SOCKET_ENDPOINT = "ws://syncr-server.herokuapp.com/socket.io/?EIO=4&transport=websocket"
     private var socket : Socket = IO.socket(URI.create(SOCKET_ENDPOINT))
     private var listener : SocketEventsListener? = null

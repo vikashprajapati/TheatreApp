@@ -63,7 +63,6 @@ class StreamingRoomFragment :
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		setUpViews()
 	}
 
 	override fun setUpViews() {
@@ -85,7 +84,6 @@ class StreamingRoomFragment :
 	override fun onStart() {
 		super.onStart()
 //        addYoutubePlayerFragment
-		observeData()
 	}
 
 	override fun onStop() {

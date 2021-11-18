@@ -1,6 +1,5 @@
-package com.example.theatreapp.ui.fragment.streaming
+package com.example.theatreapp.ui.fragment.streaming.viewpager
 
-import android.util.EventLog
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer

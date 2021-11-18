@@ -20,6 +20,3 @@ App built with Kotlin and Android Jetpack Components.
 - Player control events will be broadcasted to let other people in the room know who sent which event.
 - Streaming screen UI will be updated to include information regarding the current room.
 - In upcoming build youtube player will be included with search functionality.
-
-## Contribute
-If you want to contribute the project, you can fork the project to your account and later send a pull request.

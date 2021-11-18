@@ -1,4 +1,4 @@
-package com.example.theatreapp.ui.fragment.streaming
+package com.example.theatreapp.ui.fragment.streaming.viewpager
 
 import android.os.Bundle
 import androidx.recyclerview.widget.GridLayoutManager
@@ -13,6 +13,7 @@ import com.example.theatreapp.ui.adapters.ParticipantsRecyclerViewAdapter
 import com.example.theatreapp.databinding.FragmentParticipantsListBinding
 import com.example.theatreapp.data.models.response.joinroomresponse.ParticipantsItem
 import com.example.theatreapp.ui.fragment.BaseFragment
+import com.example.theatreapp.ui.fragment.streaming.StreamingRoomFragmentViewModel
 
 /**
  * A fragment representing a list of Items.
@@ -39,8 +40,6 @@ class ParticipantsFragment : BaseFragment<FragmentParticipantsListBinding, Strea
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUpViews()
-        observeData()
     }
 
     override fun setUpViews() {

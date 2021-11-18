@@ -57,8 +57,6 @@ class MediaPlayerFragment :
 		mediaPlayer.attachViews(binding!!.videoPlayerLayout, null, false, false)
 		var media = Media(libvlc, context?.assets?.openFd("videoplayback.mp4"))
 		mediaPlayer.media = media
-
-		observeData()
 	}
 
 	override fun onPause() {

@@ -12,6 +12,7 @@ import com.example.theatreapp.R
 import com.example.theatreapp.data.connections.SocketManager
 import com.example.theatreapp.databinding.FragmentHomeBinding
 import com.example.theatreapp.ui.fragment.BaseFragment
+import io.socket.client.Socket
 
 /**
  * A simple [Fragment] subclass.
@@ -40,8 +41,6 @@ class HomeFragment :
         super.onViewCreated(view, savedInstanceState)
         binding?.lifecycleOwner = this@HomeFragment
         binding?.viewModel = viewModel
-
-        observeData()
     }
 
     override fun observeData() {
@@ -53,12 +52,15 @@ class HomeFragment :
                 }
             })
 
-            connectionState.observe(viewLifecycleOwner, { msg ->
-                shortToast(msg)
-            })
+            connectionState.observe(viewLifecycleOwner){
+                val msg = it.getContentIfNotHandledOrReturnNull()?:return@observe
+                shortToast(msg.toString())
+            }
 
             joinRoomState.observe(viewLifecycleOwner, {
                 // navigate to streaming room fragment
+                val roomDetails = it.getContentIfNotHandledOrReturnNull()?:return@observe
+                removeObservers()
                 findNavController().navigate(R.id.action_homeFragment_to_roomFrament)
             })
         }

@@ -25,4 +25,6 @@ object SessionData {
         participantsMap[participant.id] = participant.name
         currentRoom?.participants?.add(participant)
     }
+
+    fun getParticipantName(userId : String) : String = participantsMap[userId] ?: userId
 }

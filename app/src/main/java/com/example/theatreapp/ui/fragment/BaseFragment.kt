@@ -40,6 +40,16 @@ abstract class BaseFragment<VBinding : ViewBinding, VModel : androidx.lifecycle.
         viewModel = initViewModel()
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setUpViews()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        observeData()
+    }
+
     open fun setUpViews() {}
 
     open fun observeData() {}

@@ -1,14 +1,11 @@
-package com.example.theatreapp.ui.fragment.streaming
+package com.example.theatreapp.ui.fragment.streaming.viewpager
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.theatreapp.R
 import com.example.theatreapp.data.models.Message
 import com.example.theatreapp.databinding.FragmentChatBinding
 import com.example.theatreapp.ui.adapters.ChatMessagesAdapter
@@ -38,8 +35,6 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>() {
         super.onViewCreated(view, savedInstanceState)
         binding?.lifecycleOwner = this@ChatFragment
         binding?.viewModel = viewModel
-        setUpViews()
-        observeData()
     }
 
     override fun initViewModel(): ChatViewModel = ViewModelProvider(this).get(ChatViewModel::class.java)

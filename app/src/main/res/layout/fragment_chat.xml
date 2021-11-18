@@ -3,7 +3,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.theatreapp.ui.fragment.streaming.ChatViewModel" />
+            type="com.example.theatreapp.ui.fragment.streaming.viewpager.ChatViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:padding="@dimen/app_screen_padding"
         android:background="@color/off_white"
-        tools:context=".ui.fragment.streaming.ChatFragment">
+        tools:context=".ui.fragment.streaming.viewpager.ChatFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/message_recycler_view"
