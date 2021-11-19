@@ -1,28 +1,21 @@
 package com.example.theatreapp.ui.fragment.streaming
 
-import android.content.Context
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.MediaController
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.theatreapp.constants.VideoPlaybackConstants
 import com.example.theatreapp.constants.VideoPlaybackConstants.Companion.nextVideo
 import com.example.theatreapp.constants.VideoPlaybackConstants.Companion.prevVideo
 import com.example.theatreapp.constants.VideoPlaybackConstants.Companion.videoPaused
 import com.example.theatreapp.constants.VideoPlaybackConstants.Companion.videoPlayed
-import com.example.theatreapp.ui.listeners.MediaPlayerFragmentListener
 import com.example.theatreapp.ui.listeners.PlaybackListener
-import com.example.theatreapp.utils.PlayerController
 import com.example.theatreapp.databinding.FragmentMediaPlayerBinding
 import com.example.theatreapp.ui.fragment.BaseFragment
-import org.videolan.libvlc.LibVLC
-import org.videolan.libvlc.Media
-import org.videolan.libvlc.MediaPlayer
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
 
 /**
  * A simple [Fragment] subclass.
@@ -31,8 +24,7 @@ import org.videolan.libvlc.MediaPlayer
  */
 class MediaPlayerFragment :
 	BaseFragment<FragmentMediaPlayerBinding, StreamingRoomFragmentViewModel>(), PlaybackListener {
-	private lateinit var libvlc: LibVLC
-	private lateinit var mediaPlayer: MediaPlayer
+	private lateinit var exoplayer : ExoPlayer
 
 	override fun onCreateView(
 		inflater: LayoutInflater,
@@ -42,7 +34,7 @@ class MediaPlayerFragment :
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		setupVlcMediaPlayer()
+		setupMediaPlayer()
 	}
 
 	override fun initViewModel():
@@ -54,48 +46,25 @@ class MediaPlayerFragment :
 
 	override fun onStart() {
 		super.onStart()
-		mediaPlayer.attachViews(binding!!.videoPlayerLayout, null, false, false)
-		var media = Media(libvlc, context?.assets?.openFd("videoplayback.mp4"))
-		mediaPlayer.media = media
+		exoplayer.setMediaItem(MediaItem.fromUri(Uri.parse("asset:///videoplayback.mp4")))
+		exoplayer.prepare()
+		exoplayer.play()
 	}
 
 	override fun onPause() {
 		super.onPause()
-		mediaPlayer.pause()
-		mediaPlayer.detachViews()
+		exoplayer.pause()
 	}
 
 	override fun onStop() {
 		super.onStop()
-		mediaPlayer.stop()
+		exoplayer.stop()
 	}
 
-	private fun setupVlcMediaPlayer() {
+	private fun setupMediaPlayer() {
 		// setup player
-		val args = ArrayList<String>()
-		args.add("-vvv")
-		libvlc = LibVLC(context, args)
-		mediaPlayer = MediaPlayer(libvlc)
-
-		// setup video controller
-		val videoController = MediaController(context)
-		videoController.setMediaPlayer(PlayerController(mediaPlayer, this))
-		videoController.setAnchorView(binding!!.videoPlayerLayout)
-		binding!!.videoPlayerLayout.setOnClickListener {
-			videoController.show(5000)
-		}
-
-		videoController.setPrevNextListeners({
-			// next is pressed
-			mediaPlayer.position = 0F
-			viewModel.sendVideoChangedEvent(nextVideo)
-		}, {
-			// prev is pressed
-			mediaPlayer.position = 0F
-			viewModel.sendVideoChangedEvent(prevVideo)
-			mediaPlayer.pause()
-		})
-
+		exoplayer = ExoPlayer.Builder(requireContext()).build()
+		exoplayer.setVideoSurfaceView(binding?.surfaceView)
 	}
 
 	override fun observeData() {
@@ -104,11 +73,11 @@ class MediaPlayerFragment :
 			val playbackState = it.getContentIfNotHandledOrReturnNull()?:return@observe
 			when(playbackState){
 				videoPlayed -> {
-					mediaPlayer.play()
+					exoplayer.play()
 				}
 
 				videoPaused -> {
-					mediaPlayer.pause()
+					exoplayer.pause()
 				}
 			}
 		}
@@ -129,7 +98,6 @@ class MediaPlayerFragment :
 		viewModel.videoSynced.observe(viewLifecycleOwner){
 			val timestamp = it.getContentIfNotHandledOrReturnNull()?:return@observe
 			// timestamp to be converted to milliseconds
-			mediaPlayer.time = 1000
 		}
 	}
 
