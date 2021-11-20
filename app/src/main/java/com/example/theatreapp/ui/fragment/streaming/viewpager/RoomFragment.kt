@@ -34,7 +34,9 @@ class RoomFragment : BaseFragment<FragmentRoomBinding, StreamingRoomFragmentView
 
 	override fun observeData() {
 		super.observeData()
-		viewModel.participants
+		viewModel.participants.observe(viewLifecycleOwner){
+			binding?.room = SessionData.currentRoom
+		}
 	}
 
 	override fun initViewModel(): StreamingRoomFragmentViewModel = ViewModelProvider(requireActivity()).get(StreamingRoomFragmentViewModel::class.java)
