@@ -38,4 +38,9 @@
 
     <style name="ChatMessage" parent="Widget.MaterialComponents.CardView">
     </style>
+
+    <style name="ExoMediaButton.VideoSync">
+        <item name="android:src">@drawable/ic_sync</item>
+        <item name="android:contentDescription">@string/exo_controls_video_sync_description</item>
+    </style>
 </resources>

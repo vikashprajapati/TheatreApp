@@ -26,13 +26,14 @@ import com.google.android.exoplayer2.Player
  * create an instance of this fragment.
  */
 class MediaPlayerFragment :
-	BaseFragment<FragmentMediaPlayerBinding, StreamingRoomFragmentViewModel>(), PlaybackListener,
-	Player.Listener, View.OnClickListener {
+	BaseFragment<FragmentMediaPlayerBinding, StreamingRoomFragmentViewModel>(),
+	View.OnClickListener {
 	private lateinit var exoplayer : ExoPlayer
 	private lateinit var rewindButton : ImageButton
 	private lateinit var playButton : ImageButton
 	private lateinit var pauseButton : ImageButton
 	private lateinit var forwardButton : ImageButton
+	private lateinit var syncButton : ImageButton
 
 	override fun onCreateView(
 		inflater: LayoutInflater,
@@ -56,7 +57,6 @@ class MediaPlayerFragment :
 		super.onStart()
 		exoplayer.setMediaItem(MediaItem.fromUri(Uri.parse("asset:///videoplayback.mp4")))
 		exoplayer.prepare()
-		exoplayer.play()
 
 		setupPlayerControlButtonsListener()
 	}
@@ -66,6 +66,7 @@ class MediaPlayerFragment :
 		pauseButton.setOnClickListener(this)
 		rewindButton.setOnClickListener(this)
 		forwardButton.setOnClickListener(this)
+		syncButton.setOnClickListener(this)
 	}
 
 	override fun onPause() {
@@ -89,6 +90,7 @@ class MediaPlayerFragment :
 			playButton = findViewById(R.id.exo_play)!!
 			pauseButton = findViewById(R.id.exo_pause)!!
 			forwardButton = findViewById(R.id.exo_ffwd)!!
+			syncButton = findViewById(R.id.exo_video_sync)!!
 		}
 	}
 
@@ -111,22 +113,24 @@ class MediaPlayerFragment :
 			val playbackDirection = it.getContentIfNotHandledOrReturnNull()?:return@observe
 			when(playbackDirection){
 				forwardVideo -> {
-
+					exoplayer.seekForward()
 				}
 
 				rewindVideo -> {
-
+					exoplayer.seekBack()
 				}
 			}
 		}
 
 		viewModel.videoSynced.observe(viewLifecycleOwner){
 			val timestamp = it.getContentIfNotHandledOrReturnNull()?:return@observe
-			// timestamp to be converted to milliseconds
+			exoplayer.seekTo(timestamp.toLong())
+			exoplayer.play()
 		}
 	}
 
 	override fun onClick(button: View?) {
+		val currentTime = exoplayer.currentPosition.toString()
 		when(button?.id){
 			R.id.exo_play -> {
 				viewModel.sendVideoPlaybackEvent(videoPlayed)
@@ -143,15 +147,12 @@ class MediaPlayerFragment :
 			R.id.exo_ffwd -> {
 				viewModel.sendVideoJumpEvent(forwardVideo)
 			}
+
+			R.id.exo_video_sync -> {
+				exoplayer.pause()
+				viewModel.sendVideoSyncedEvent(currentTime)
+			}
 		}
-	}
-
-	override fun onVideoPlayed() {
-		viewModel.sendVideoPlaybackEvent(videoPlayed)
-	}
-
-	override fun onVideoPaused() {
-		viewModel.sendVideoPlaybackEvent(videoPaused)
 	}
 
 	companion object {

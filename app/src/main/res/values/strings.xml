@@ -15,4 +15,5 @@
     <string name="room_name_label">Room Name</string>
     <string name="host_name_label">Room Host</string>
     <string name="participant_count_label">Participant Count</string>
+    <string name="exo_controls_video_sync_description">Video Sync</string>
 </resources>
