@@ -32,6 +32,11 @@ class RoomFragment : BaseFragment<FragmentRoomBinding, StreamingRoomFragmentView
 		binding?.room = SessionData.currentRoom
 	}
 
+	override fun observeData() {
+		super.observeData()
+		viewModel.participants
+	}
+
 	override fun initViewModel(): StreamingRoomFragmentViewModel = ViewModelProvider(requireActivity()).get(StreamingRoomFragmentViewModel::class.java)
 
 	override fun getViewBinding(): FragmentRoomBinding = FragmentRoomBinding.inflate(layoutInflater)

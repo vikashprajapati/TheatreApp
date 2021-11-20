@@ -107,6 +107,16 @@ class StreamingRoomFragment :
 					findNavController().popBackStack()
 				}
 			}
+
+			participantLeft.observe(viewLifecycleOwner){
+				val participant = it.getContentIfNotHandledOrReturnNull()?:return@observe
+				shortToast("${participant.name} left")
+			}
+
+			participantJoined.observe(viewLifecycleOwner){
+				val participant = it.getContentIfNotHandledOrReturnNull()?:return@observe
+				shortToast("${participant.name} joined")
+			}
 		}
 	}
 

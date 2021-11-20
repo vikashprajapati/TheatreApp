@@ -3,18 +3,17 @@ package com.example.theatreapp.data.connections
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.theatreapp.constants.SocketConstants.OutgoingEvents
-import com.example.theatreapp.constants.VideoPlaybackConstants
 import com.example.theatreapp.data.SessionData
 import com.example.theatreapp.data.models.Message
-import com.example.theatreapp.utils.Event
 import com.example.theatreapp.data.models.requests.JoinRoomRequest
 import com.example.theatreapp.data.models.requests.Room
 import com.example.theatreapp.data.models.requests.User
 import com.example.theatreapp.data.models.response.joinroomresponse.JoinedRoomResponse
 import com.example.theatreapp.data.models.response.joinroomresponse.ParticipantsItem
+import com.example.theatreapp.utils.Event
 
 object SocketManager : SocketService.SocketEventsListener {
-    // Too much responsiblity, class needs to be refactored
+    // Too much responsibility, class needs to be refactored
     private val socketService = SocketService()
     private var _playbackVideo = MutableLiveData<Event<String>>()
     private var _changedVideo = MutableLiveData<Event<String>>()
@@ -49,14 +48,14 @@ object SocketManager : SocketService.SocketEventsListener {
     }
 
     fun sendJoinRoom(userName : String, roomName : String){
-        var joinRoomRequestParams = JoinRoomRequest().apply {
+        val joinRoomRequestParams = JoinRoomRequest().apply {
             room = Room(roomName)
             user = User(userName, "")
         }
         socketService.send(OutgoingEvents.sendJoinRoom, joinRoomRequestParams)
     }
 
-    fun sendLeaveRoom(){
+    private fun sendLeaveRoom(){
         socketService.send(OutgoingEvents.sendLeaveRoom, "")
     }
 
@@ -66,15 +65,15 @@ object SocketManager : SocketService.SocketEventsListener {
     }
 
     fun sendVideoStartedEvent(playbackStatus: String) {
-        socketService.send(OutgoingEvents.sendVideoPlayback, playbackStatus);
+        socketService.send(OutgoingEvents.sendVideoPlayback, playbackStatus)
     }
 
     fun sendVideoJumpEvent(direction: String) {
-        socketService.send(OutgoingEvents.sendVideoChanged, direction);
+        socketService.send(OutgoingEvents.sendVideoChanged, direction)
     }
 
     fun sendVideoSyncEvent(currentTimestamp: String) {
-        socketService.send(OutgoingEvents.sendVideoSynced, currentTimestamp);
+        socketService.send(OutgoingEvents.sendVideoSynced, currentTimestamp)
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,9 +102,9 @@ object SocketManager : SocketService.SocketEventsListener {
         _syncedVideo.postValue(Event(playbackTimestamp))
     }
 
-    override fun newParticipantJoinedEvent(participant: ParticipantsItem) {
-        SessionData.addNewParticipant(participant)
-        _participantJoined.postValue(Event(participant))
+    override fun newParticipantJoinedEvent(participantsItem: ParticipantsItem) {
+        SessionData.addNewParticipant(participantsItem)
+        _participantJoined.postValue(Event(participantsItem))
     }
 
     override fun connectionStatus(eventConnect: String) {
@@ -117,8 +116,8 @@ object SocketManager : SocketService.SocketEventsListener {
         _joinedRoomStatus.postValue(Event(joinedRoomResponse))
     }
 
-    override fun userLeft(participant: ParticipantsItem) {
-        _participantLeft.postValue(Event(participant))
+    override fun userLeft(participantsItem: ParticipantsItem) {
+        _participantLeft.postValue(Event(participantsItem))
     }
 
     override fun onMessage(message: Message) {

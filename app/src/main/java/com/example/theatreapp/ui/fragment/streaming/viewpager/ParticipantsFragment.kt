@@ -64,18 +64,7 @@ class ParticipantsFragment : BaseFragment<FragmentParticipantsListBinding, Strea
         viewModel.apply {
             participants.observe(viewLifecycleOwner, {  participants ->
                 participantAdapter.updateParticipantList(participants)
-
-                if(participants.size > 1 && participants[participants.size - 1].id != SessionData.localUser?.id){
-                    val msg = "${participants[participants.size - 1].name} ${resources.getString(R.string.participant_joined)}"
-                    shortToast(msg)
-                }
             })
-
-            participantLeft.observe(viewLifecycleOwner){
-                val participant = it.getContentIfNotHandledOrReturnNull()?:return@observe
-
-                shortToast("${participant.name} left")
-            }
         }
     }
 
