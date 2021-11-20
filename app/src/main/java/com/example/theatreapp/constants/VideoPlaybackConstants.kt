@@ -5,8 +5,8 @@ interface VideoPlaybackConstants {
 		val videoPlayed = "video played"
 		val videoPaused = "video paused"
 		val videoStopped = "video stopped"
-		val prevVideo = "previous video"
-		val nextVideo = "next video"
+		val rewindVideo = "rewind video"
+		val forwardVideo = "forward video"
 		val seek = "video seeked"
 		val syncedVideo = "synchronize video"
 	}

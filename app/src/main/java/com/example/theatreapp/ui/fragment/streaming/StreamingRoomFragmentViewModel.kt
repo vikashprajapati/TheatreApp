@@ -85,8 +85,8 @@ class StreamingRoomFragmentViewModel : ViewModel() {
         SocketManager.sendVideoStartedEvent(playbackStatus)
     }
 
-    fun sendVideoChangedEvent(direction : String){
-        SocketManager.sendVideoChangedEvent(direction)
+    fun sendVideoJumpEvent(direction : String){
+        SocketManager.sendVideoJumpEvent(direction)
     }
 
     fun sendVideoSyncedEvent(currentTimestamp : String){

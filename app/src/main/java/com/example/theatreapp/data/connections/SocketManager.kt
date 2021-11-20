@@ -69,7 +69,7 @@ object SocketManager : SocketService.SocketEventsListener {
         socketService.send(OutgoingEvents.sendVideoPlayback, playbackStatus);
     }
 
-    fun sendVideoChangedEvent(direction: String) {
+    fun sendVideoJumpEvent(direction: String) {
         socketService.send(OutgoingEvents.sendVideoChanged, direction);
     }
 
@@ -95,7 +95,7 @@ object SocketManager : SocketService.SocketEventsListener {
         _playbackVideo.postValue(Event(playbackStatus))
     }
 
-    override fun videoChangedEvent(playbackDirection: String) {
+    override fun videoJumpEvent(playbackDirection: String) {
         _changedVideo.postValue(Event(playbackDirection))
     }
 

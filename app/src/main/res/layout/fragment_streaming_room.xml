@@ -32,7 +32,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_gravity="center"
-                    android:text="Title of the video"
+                    android:text="Best is yet to come"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="@color/tertiary_color"/>

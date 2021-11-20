@@ -2,20 +2,23 @@ package com.example.theatreapp.ui.fragment.streaming
 
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.theatreapp.constants.VideoPlaybackConstants.Companion.nextVideo
-import com.example.theatreapp.constants.VideoPlaybackConstants.Companion.prevVideo
+import com.example.theatreapp.R
+import com.example.theatreapp.constants.VideoPlaybackConstants.Companion.forwardVideo
+import com.example.theatreapp.constants.VideoPlaybackConstants.Companion.rewindVideo
 import com.example.theatreapp.constants.VideoPlaybackConstants.Companion.videoPaused
 import com.example.theatreapp.constants.VideoPlaybackConstants.Companion.videoPlayed
-import com.example.theatreapp.ui.listeners.PlaybackListener
 import com.example.theatreapp.databinding.FragmentMediaPlayerBinding
 import com.example.theatreapp.ui.fragment.BaseFragment
+import com.example.theatreapp.ui.listeners.PlaybackListener
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.Player
 
 /**
  * A simple [Fragment] subclass.
@@ -23,8 +26,13 @@ import com.google.android.exoplayer2.MediaItem
  * create an instance of this fragment.
  */
 class MediaPlayerFragment :
-	BaseFragment<FragmentMediaPlayerBinding, StreamingRoomFragmentViewModel>(), PlaybackListener {
+	BaseFragment<FragmentMediaPlayerBinding, StreamingRoomFragmentViewModel>(), PlaybackListener,
+	Player.Listener, View.OnClickListener {
 	private lateinit var exoplayer : ExoPlayer
+	private lateinit var rewindButton : ImageButton
+	private lateinit var playButton : ImageButton
+	private lateinit var pauseButton : ImageButton
+	private lateinit var forwardButton : ImageButton
 
 	override fun onCreateView(
 		inflater: LayoutInflater,
@@ -49,6 +57,15 @@ class MediaPlayerFragment :
 		exoplayer.setMediaItem(MediaItem.fromUri(Uri.parse("asset:///videoplayback.mp4")))
 		exoplayer.prepare()
 		exoplayer.play()
+
+		setupPlayerControlButtonsListener()
+	}
+
+	private fun setupPlayerControlButtonsListener() {
+		playButton.setOnClickListener(this)
+		pauseButton.setOnClickListener(this)
+		rewindButton.setOnClickListener(this)
+		forwardButton.setOnClickListener(this)
 	}
 
 	override fun onPause() {
@@ -63,8 +80,16 @@ class MediaPlayerFragment :
 
 	private fun setupMediaPlayer() {
 		// setup player
-		exoplayer = ExoPlayer.Builder(requireContext()).build()
-		exoplayer.setVideoSurfaceView(binding?.surfaceView)
+		exoplayer = ExoPlayer.Builder(requireContext()).build().also { player ->
+			binding?.playerView?.player = player
+		}
+
+		binding?.playerView?.run {
+			rewindButton = findViewById(R.id.exo_rew)!!
+			playButton = findViewById(R.id.exo_play)!!
+			pauseButton = findViewById(R.id.exo_pause)!!
+			forwardButton = findViewById(R.id.exo_ffwd)!!
+		}
 	}
 
 	override fun observeData() {
@@ -85,11 +110,11 @@ class MediaPlayerFragment :
 		viewModel.videoChanged.observe(viewLifecycleOwner){
 			val playbackDirection = it.getContentIfNotHandledOrReturnNull()?:return@observe
 			when(playbackDirection){
-				nextVideo -> {
+				forwardVideo -> {
 
 				}
 
-				prevVideo -> {
+				rewindVideo -> {
 
 				}
 			}
@@ -98,6 +123,26 @@ class MediaPlayerFragment :
 		viewModel.videoSynced.observe(viewLifecycleOwner){
 			val timestamp = it.getContentIfNotHandledOrReturnNull()?:return@observe
 			// timestamp to be converted to milliseconds
+		}
+	}
+
+	override fun onClick(button: View?) {
+		when(button?.id){
+			R.id.exo_play -> {
+				viewModel.sendVideoPlaybackEvent(videoPlayed)
+			}
+
+			R.id.exo_pause -> {
+				viewModel.sendVideoPlaybackEvent(videoPaused)
+			}
+
+			R.id.exo_rew -> {
+				viewModel.sendVideoJumpEvent(rewindVideo)
+			}
+
+			R.id.exo_ffwd -> {
+				viewModel.sendVideoJumpEvent(forwardVideo)
+			}
 		}
 	}
 
@@ -111,7 +156,7 @@ class MediaPlayerFragment :
 
 	companion object {
 		@JvmStatic
-		val TAG = MediaPlayerFragment::class.java.canonicalName
+		val TAG: String? = MediaPlayerFragment::class.java.canonicalName
 		/**
 		 * Use this factory method to create a new instance of
 		 * this fragment using the provided parameters.

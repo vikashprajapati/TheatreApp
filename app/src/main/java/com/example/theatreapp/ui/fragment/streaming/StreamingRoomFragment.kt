@@ -43,9 +43,6 @@ class StreamingRoomFragment :
 
 	private fun notifyAndDisconnectSocket() {
 		viewModel.leaveRoom()
-
-		// return to previous fragment in backstack
-		findNavController().popBackStack()
 	}
 
 	override fun onCreateView(

@@ -35,7 +35,7 @@ class SocketService{
         }.on(IncomingEvents.onVideoPlayback){
             listener?.playbackEvent(it[0] as String)
         }.on(IncomingEvents.onVideoChanged){
-            listener?.videoChangedEvent(it[0] as String)
+            listener?.videoJumpEvent(it[0] as String)
         }.on(IncomingEvents.onVideoSynced){
             listener?.syncVideoEvent(it[0] as String)
         }.on(IncomingEvents.onParticipantJoined){
@@ -75,7 +75,7 @@ class SocketService{
 
     interface SocketEventsListener{
         fun playbackEvent(playbackStatus : String)
-        fun videoChangedEvent(playbackDirection : String)
+        fun videoJumpEvent(playbackDirection : String)
         fun syncVideoEvent(playbackTimestamp : String)
         fun newParticipantJoinedEvent(participantsItem: ParticipantsItem)
         fun connectionStatus(eventConnect: String)
