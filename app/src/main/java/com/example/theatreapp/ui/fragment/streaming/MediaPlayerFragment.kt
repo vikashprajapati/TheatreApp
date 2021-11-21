@@ -13,12 +13,11 @@ import com.example.theatreapp.constants.VideoPlaybackConstants.Companion.forward
 import com.example.theatreapp.constants.VideoPlaybackConstants.Companion.rewindVideo
 import com.example.theatreapp.constants.VideoPlaybackConstants.Companion.videoPaused
 import com.example.theatreapp.constants.VideoPlaybackConstants.Companion.videoPlayed
+import com.example.theatreapp.data.SessionData
 import com.example.theatreapp.databinding.FragmentMediaPlayerBinding
 import com.example.theatreapp.ui.fragment.BaseFragment
-import com.example.theatreapp.ui.listeners.PlaybackListener
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.Player
 
 /**
  * A simple [Fragment] subclass.
@@ -97,34 +96,43 @@ class MediaPlayerFragment :
 	override fun observeData() {
 		super.observeData()
 		viewModel.videoPlayback.observe(viewLifecycleOwner){
-			val playbackState = it.getContentIfNotHandledOrReturnNull()?:return@observe
-			when(playbackState){
+			val videoPlaybackData = it.getContentIfNotHandledOrReturnNull()?:return@observe
+			when(videoPlaybackData.playbackStatus){
 				videoPlayed -> {
 					exoplayer.play()
+					if(!videoPlaybackData.id.equals(SessionData.localUser?.id))
+						shortToast("${SessionData.getParticipantName(videoPlaybackData.id)} played video")
 				}
 
 				videoPaused -> {
 					exoplayer.pause()
+
+					if(!videoPlaybackData.id.equals(SessionData.localUser?.id))
+						shortToast("${SessionData.getParticipantName(videoPlaybackData.id)} paused video")
 				}
 			}
 		}
 
 		viewModel.videoChanged.observe(viewLifecycleOwner){
-			val playbackDirection = it.getContentIfNotHandledOrReturnNull()?:return@observe
-			when(playbackDirection){
+			val videoChangedData = it.getContentIfNotHandledOrReturnNull()?:return@observe
+			when(videoChangedData.playbackDirection){
 				forwardVideo -> {
 					exoplayer.seekForward()
+					if(!videoChangedData.id.equals(SessionData.localUser?.id))
+					shortToast("${SessionData.getParticipantName(videoChangedData.id)} seeked forward")
 				}
 
 				rewindVideo -> {
 					exoplayer.seekBack()
+					if(!videoChangedData.id.equals(SessionData.localUser?.id))
+					shortToast("${SessionData.getParticipantName(videoChangedData.id)}  seeked backward")
 				}
 			}
 		}
 
 		viewModel.videoSynced.observe(viewLifecycleOwner){
-			val timestamp = it.getContentIfNotHandledOrReturnNull()?:return@observe
-			exoplayer.seekTo(timestamp.toLong())
+			val videoSyncedData = it.getContentIfNotHandledOrReturnNull()?:return@observe
+			exoplayer.seekTo(videoSyncedData.playbackTimestamp.toLong())
 			exoplayer.play()
 		}
 	}

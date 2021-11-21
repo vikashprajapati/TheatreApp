@@ -5,6 +5,9 @@ import com.example.theatreapp.constants.SocketConstants.IncomingEvents
 import com.example.theatreapp.data.models.Message
 import com.example.theatreapp.data.models.response.joinroomresponse.JoinedRoomResponse
 import com.example.theatreapp.data.models.response.joinroomresponse.ParticipantsItem
+import com.example.theatreapp.data.models.videoplaybackevents.VideoChanged
+import com.example.theatreapp.data.models.videoplaybackevents.VideoPlayback
+import com.example.theatreapp.data.models.videoplaybackevents.VideoSynced
 import io.socket.client.IO
 import io.socket.client.Socket
 import java.net.URI
@@ -33,11 +36,23 @@ class SocketService{
         }.on(Socket.EVENT_DISCONNECT) {
             listener?.connectionStatus(Socket.EVENT_DISCONNECT)
         }.on(IncomingEvents.onVideoPlayback){
-            listener?.playbackEvent(it[0] as String)
+            val videoPlayback = App.gson.fromJson<VideoPlayback>(
+                it[0] as String,
+                VideoPlayback::class.java
+            )
+            listener?.playbackEvent(videoPlayback)
         }.on(IncomingEvents.onVideoChanged){
-            listener?.videoJumpEvent(it[0] as String)
+            val videoChanged = App.gson.fromJson<VideoChanged>(
+                it[0] as String,
+                VideoChanged::class.java
+            )
+            listener?.videoJumpEvent(videoChanged)
         }.on(IncomingEvents.onVideoSynced){
-            listener?.syncVideoEvent(it[0] as String)
+            val videoSynced = App.gson.fromJson<VideoSynced>(
+                it[0] as String,
+                VideoSynced::class.java
+            )
+            listener?.syncVideoEvent(videoSynced)
         }.on(IncomingEvents.onParticipantJoined){
             val participant = App.gson.fromJson<ParticipantsItem>(
                 it[0] as String,
@@ -74,9 +89,9 @@ class SocketService{
     fun isConnected() : Boolean = socket.connected()
 
     interface SocketEventsListener{
-        fun playbackEvent(playbackStatus : String)
-        fun videoJumpEvent(playbackDirection : String)
-        fun syncVideoEvent(playbackTimestamp : String)
+        fun playbackEvent(videoPlayback: VideoPlayback)
+        fun videoJumpEvent(videoChanged: VideoChanged)
+        fun syncVideoEvent(videoSynced: VideoSynced)
         fun newParticipantJoinedEvent(participantsItem: ParticipantsItem)
         fun connectionStatus(eventConnect: String)
         fun joinRoomResponse(joinedRoomResponse: JoinedRoomResponse)

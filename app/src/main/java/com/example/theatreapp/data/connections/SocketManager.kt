@@ -10,14 +10,17 @@ import com.example.theatreapp.data.models.requests.Room
 import com.example.theatreapp.data.models.requests.User
 import com.example.theatreapp.data.models.response.joinroomresponse.JoinedRoomResponse
 import com.example.theatreapp.data.models.response.joinroomresponse.ParticipantsItem
+import com.example.theatreapp.data.models.videoplaybackevents.VideoChanged
+import com.example.theatreapp.data.models.videoplaybackevents.VideoPlayback
+import com.example.theatreapp.data.models.videoplaybackevents.VideoSynced
 import com.example.theatreapp.utils.Event
 
 object SocketManager : SocketService.SocketEventsListener {
     // Too much responsibility, class needs to be refactored
     private val socketService = SocketService()
-    private var _playbackVideo = MutableLiveData<Event<String>>()
-    private var _changedVideo = MutableLiveData<Event<String>>()
-    private var _syncedVideo = MutableLiveData<Event<String>>()
+    private var _playbackVideo = MutableLiveData<Event<VideoPlayback>>()
+    private var _changedVideo = MutableLiveData<Event<VideoChanged>>()
+    private var _syncedVideo = MutableLiveData<Event<VideoSynced>>()
     private var _connectionStatus = MutableLiveData<String>()
     private var _joinedRoomStatus = MutableLiveData<Event<JoinedRoomResponse>>()
     private var _participantJoined = MutableLiveData<Event<ParticipantsItem>>()
@@ -28,9 +31,9 @@ object SocketManager : SocketService.SocketEventsListener {
     val joinedRoomStatus : LiveData<Event<JoinedRoomResponse>> get() = _joinedRoomStatus
     val participantJoined : LiveData<Event<ParticipantsItem>> get() = _participantJoined
     val participantLeft : LiveData<Event<ParticipantsItem>> get() = _participantLeft
-    val playbackVideo : LiveData<Event<String>> get() = _playbackVideo
-    val changedVideo : LiveData<Event<String>> get() = _changedVideo
-    val syncedVideo : LiveData<Event<String>> get() = _syncedVideo
+    val playbackVideo : LiveData<Event<VideoPlayback>> get() = _playbackVideo
+    val changedVideo : LiveData<Event<VideoChanged>> get() = _changedVideo
+    val syncedVideo : LiveData<Event<VideoSynced>> get() = _syncedVideo
     val onMessage : LiveData<Event<Message>> get() = _onMessage
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,16 +93,16 @@ object SocketManager : SocketService.SocketEventsListener {
     // Incoming Socket Events                                                                                                           //
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    override fun playbackEvent(playbackStatus: String) {
-        _playbackVideo.postValue(Event(playbackStatus))
+    override fun playbackEvent(videoPlayback: VideoPlayback) {
+        _playbackVideo.postValue(Event(videoPlayback))
     }
 
-    override fun videoJumpEvent(playbackDirection: String) {
-        _changedVideo.postValue(Event(playbackDirection))
+    override fun videoJumpEvent(videoChanged: VideoChanged) {
+        _changedVideo.postValue(Event(videoChanged))
     }
 
-    override fun syncVideoEvent(playbackTimestamp : String) {
-        _syncedVideo.postValue(Event(playbackTimestamp))
+    override fun syncVideoEvent(videoSynced: VideoSynced) {
+        _syncedVideo.postValue(Event(videoSynced))
     }
 
     override fun newParticipantJoinedEvent(participantsItem: ParticipantsItem) {

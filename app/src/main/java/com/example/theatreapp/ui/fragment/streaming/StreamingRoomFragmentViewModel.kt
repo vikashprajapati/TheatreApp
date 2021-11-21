@@ -8,6 +8,9 @@ import androidx.lifecycle.ViewModel
 import com.example.theatreapp.data.connections.SocketManager
 import com.example.theatreapp.data.models.response.joinroomresponse.ParticipantsItem
 import com.example.theatreapp.data.SessionData
+import com.example.theatreapp.data.models.videoplaybackevents.VideoChanged
+import com.example.theatreapp.data.models.videoplaybackevents.VideoPlayback
+import com.example.theatreapp.data.models.videoplaybackevents.VideoSynced
 import com.example.theatreapp.utils.Event
 
 class StreamingRoomFragmentViewModel : ViewModel() {
@@ -15,17 +18,17 @@ class StreamingRoomFragmentViewModel : ViewModel() {
     private val activeVideoUrl = MutableLiveData<String>()
     private var _connectionState = MutableLiveData<String>()
     private val _participants = MutableLiveData<MutableList<ParticipantsItem>>()
-    private val _videoPlayback = MutableLiveData<Event<String>>()
-    private val _videoChanged = MutableLiveData<Event<String>>()
-    private val _videoSynced = MutableLiveData<Event<String>>()
+    private val _videoPlayback = MutableLiveData<Event<VideoPlayback>>()
+    private val _videoChanged = MutableLiveData<Event<VideoChanged>>()
+    private val _videoSynced = MutableLiveData<Event<VideoSynced>>()
     private val _participantLeft = MutableLiveData<Event<ParticipantsItem>>()
     private val _participantJoined = MutableLiveData<Event<ParticipantsItem>>()
 
     // participants to be changed to livedata of list<participantItem>
     var participants : LiveData<List<ParticipantsItem>> = _participants as LiveData<List<ParticipantsItem>>
-    var videoPlayback : LiveData<Event<String>> = _videoPlayback
-    var videoChanged : LiveData<Event<String>> = _videoChanged
-    var videoSynced : LiveData<Event<String>> = _videoSynced
+    var videoPlayback : LiveData<Event<VideoPlayback>> = _videoPlayback
+    var videoChanged : LiveData<Event<VideoChanged>> = _videoChanged
+    var videoSynced : LiveData<Event<VideoSynced>> = _videoSynced
     var connectionState : LiveData<String> = _connectionState
     var participantLeft : LiveData<Event<ParticipantsItem>> = _participantLeft
     var participantJoined : LiveData<Event<ParticipantsItem>> = _participantJoined
@@ -37,15 +40,15 @@ class StreamingRoomFragmentViewModel : ViewModel() {
         _participantJoined.postValue(Event(participant))
     }
 
-    private var videoPlaybackObserver = Observer<Event<String>>{
+    private var videoPlaybackObserver = Observer<Event<VideoPlayback>>{
         _videoPlayback.postValue(it)
     }
 
-    private var videoChangedObserver = Observer<Event<String>>{
+    private var videoChangedObserver = Observer<Event<VideoChanged>>{
         _videoChanged.postValue(it)
     }
 
-    private var videoSyncedObserver = Observer<Event<String>>{
+    private var videoSyncedObserver = Observer<Event<VideoSynced>>{
         _videoSynced.postValue(it)
     }
 
