@@ -14,6 +14,8 @@ import com.example.theatreapp.data.models.videoplaybackevents.VideoChanged
 import com.example.theatreapp.data.models.videoplaybackevents.VideoPlayback
 import com.example.theatreapp.data.models.videoplaybackevents.VideoSynced
 import com.example.theatreapp.utils.Event
+import com.example.theatreapp.utils.Helpers
+import java.util.*
 
 object SocketManager : SocketService.SocketEventsListener {
     // Too much responsibility, class needs to be refactored
@@ -63,7 +65,7 @@ object SocketManager : SocketService.SocketEventsListener {
     }
 
     fun sendChatMessage(msg : String){
-        val message = Message(from = "", message = msg, timeStamp =  "now")
+        val message = Message(from = "", message = msg, timeStamp = Helpers.getCurrentTime())
         socketService.send(OutgoingEvents.sendMessage, message)
     }
 

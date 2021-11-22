@@ -4,8 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/vikash/.gradle/caches/transforms-3/b0e32d9c7da6315f09b2fd9efdcb8596/transformed/jetified-exoplayer-ui-2.16.1/res/layout/exo_player_control_view.xml" value="0.1" />
+        <entry key="..\:/Users/vikash/Documents/projects/TheatreApp/app/src/main/res/layout/chat_item.xml" value="0.17552083333333332" />
         <entry key="..\:/Users/vikash/Documents/projects/TheatreApp/app/src/main/res/layout/custom_exoplayer_controls_ui.xml" value="0.1286231884057971" />
         <entry key="..\:/Users/vikash/Documents/projects/TheatreApp/app/src/main/res/layout/fragment_media_player.xml" value="0.17552083333333332" />
+        <entry key="..\:/Users/vikash/Documents/projects/TheatreApp/app/src/main/res/layout/fragment_room.xml" value="0.17552083333333332" />
         <entry key="..\:/Users/vikash/Documents/projects/TheatreApp/app/src/main/res/layout/fragment_streaming_room.xml" value="0.17552083333333332" />
       </map>
     </option>

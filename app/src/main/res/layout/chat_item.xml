@@ -2,6 +2,7 @@
 <layout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
+        <import type="com.example.theatreapp.utils.Helpers"/>
         <import type="com.example.theatreapp.data.SessionData" />
         <variable
             name="message"
