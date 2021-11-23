@@ -4,7 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import android.util.Log
-import com.example.theatreapp.data.connections.SocketManager
+import com.vikash.syncr_core.data.connections.SocketManager
 import com.google.gson.Gson
 
 class App : Application(), Application.ActivityLifecycleCallbacks {

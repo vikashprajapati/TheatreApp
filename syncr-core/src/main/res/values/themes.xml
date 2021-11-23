@@ -1,0 +1,46 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.TheatreApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primary_color</item>
+        <item name="colorOnPrimary">@color/on_primary_color</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/secondary_color</item>
+        <item name="colorSecondaryVariant">@color/tertiary_color</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
+        <!-- Customize your theme here. -->
+
+        <item name="android:fontFamily">@font/trebuc</item>
+        <item name="fontFamily">@font/trebuc</item>
+    </style>
+
+    <style name="EditText.Style" parent="Widget.AppCompat.EditText">
+        <item name="android:textColorHint">@color/tertiary_color</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:textColor">@color/secondary_color</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="hintAnimationEnabled">true</item>
+        <item name="android:background">@drawable/edittext_background</item>
+    </style>
+
+    <style name="AppBlockButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button_background</item>
+        <item name="android:textColor">@color/on_primary_color</item>
+    </style>
+
+    <style name="AppIconButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button_background</item>
+        <item name="android:tint">@color/on_primary_color</item>
+    </style>
+
+    <style name="ChatMessage" parent="Widget.MaterialComponents.CardView">
+    </style>
+
+    <style name="ExoMediaButton.VideoSync">
+        <item name="android:src">@drawable/ic_sync</item>
+        <item name="android:contentDescription">@string/exo_controls_video_sync_description</item>
+    </style>
+</resources>

@@ -1,3 +1,4 @@
 include ':app'
 rootProject.name = "TheatreApp"
 include ':tv_theatre_app'
+include ':syncr-core'

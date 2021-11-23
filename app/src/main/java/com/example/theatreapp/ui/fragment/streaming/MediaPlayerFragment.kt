@@ -9,11 +9,11 @@ import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.theatreapp.R
-import com.example.theatreapp.constants.VideoPlaybackConstants.Companion.forwardVideo
-import com.example.theatreapp.constants.VideoPlaybackConstants.Companion.rewindVideo
-import com.example.theatreapp.constants.VideoPlaybackConstants.Companion.videoPaused
-import com.example.theatreapp.constants.VideoPlaybackConstants.Companion.videoPlayed
-import com.example.theatreapp.data.SessionData
+import com.vikash.syncr_core.constants.VideoPlaybackConstants.Companion.forwardVideo
+import com.vikash.syncr_core.constants.VideoPlaybackConstants.Companion.rewindVideo
+import com.vikash.syncr_core.constants.VideoPlaybackConstants.Companion.videoPaused
+import com.vikash.syncr_core.constants.VideoPlaybackConstants.Companion.videoPlayed
+import com.vikash.syncr_core.data.SessionData
 import com.example.theatreapp.databinding.FragmentMediaPlayerBinding
 import com.example.theatreapp.ui.fragment.BaseFragment
 import com.google.android.exoplayer2.ExoPlayer

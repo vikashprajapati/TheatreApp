@@ -2,11 +2,11 @@
 <layout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
-        <import type="com.example.theatreapp.utils.Helpers"/>
-        <import type="com.example.theatreapp.data.SessionData" />
+        <import type="com.vikash.syncr_core.utils.Helpers"/>
+        <import type="com.vikash.syncr_core.data.SessionData" />
         <variable
             name="message"
-            type="com.example.theatreapp.data.models.Message" />
+            type="com.vikash.syncr_core.data.models.Message" />
     </data>
     <LinearLayout
         android:id="@+id/chat_item_linear_layout"

@@ -7,12 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.example.theatreapp.utils.HomeViewModelFactory
 import com.example.theatreapp.R
-import com.example.theatreapp.data.connections.SocketManager
 import com.example.theatreapp.databinding.FragmentHomeBinding
 import com.example.theatreapp.ui.fragment.BaseFragment
-import io.socket.client.Socket
 
 /**
  * A simple [Fragment] subclass.
@@ -32,10 +29,7 @@ class HomeFragment :
 
     override fun getViewBinding(): FragmentHomeBinding = FragmentHomeBinding.inflate(layoutInflater)
 
-    override fun initViewModel(): HomeFragmentViewModel {
-        var viewModelFactory = HomeViewModelFactory(SocketManager)
-        return ViewModelProvider(this, viewModelFactory).get(HomeFragmentViewModel::class.java)
-    }
+    override fun initViewModel(): HomeFragmentViewModel = ViewModelProvider(this).get(HomeFragmentViewModel::class.java)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

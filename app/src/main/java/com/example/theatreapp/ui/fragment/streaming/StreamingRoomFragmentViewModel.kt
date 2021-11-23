@@ -1,17 +1,16 @@
 package com.example.theatreapp.ui.fragment.streaming
 
-import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import com.example.theatreapp.data.connections.SocketManager
-import com.example.theatreapp.data.models.response.joinroomresponse.ParticipantsItem
-import com.example.theatreapp.data.SessionData
-import com.example.theatreapp.data.models.videoplaybackevents.VideoChanged
-import com.example.theatreapp.data.models.videoplaybackevents.VideoPlayback
-import com.example.theatreapp.data.models.videoplaybackevents.VideoSynced
-import com.example.theatreapp.utils.Event
+import com.vikash.syncr_core.data.connections.SocketManager
+import com.vikash.syncr_core.data.models.response.joinroomresponse.ParticipantsItem
+import com.vikash.syncr_core.data.SessionData
+import com.vikash.syncr_core.data.models.videoplaybackevents.VideoChanged
+import com.vikash.syncr_core.data.models.videoplaybackevents.VideoPlayback
+import com.vikash.syncr_core.data.models.videoplaybackevents.VideoSynced
+import com.vikash.syncr_core.utils.Event
 
 class StreamingRoomFragmentViewModel : ViewModel() {
     // temporarily we are keeping only video url, later we will be needing more video details

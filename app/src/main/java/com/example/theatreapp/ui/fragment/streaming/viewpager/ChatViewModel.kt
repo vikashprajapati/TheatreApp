@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import com.example.theatreapp.data.connections.SocketManager
-import com.example.theatreapp.data.models.Message
-import com.example.theatreapp.utils.Event
+import com.vikash.syncr_core.data.connections.SocketManager
+import com.vikash.syncr_core.data.models.Message
+import com.vikash.syncr_core.utils.Event
 
 class ChatViewModel : ViewModel() {
 	private val _messageEditText = MutableLiveData<String>()
