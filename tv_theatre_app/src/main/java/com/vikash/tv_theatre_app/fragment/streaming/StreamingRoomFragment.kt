@@ -1,23 +1,19 @@
-package com.example.theatreapp.ui.fragment.streaming
+package com.vikash.tv_theatre_app.fragment.streaming
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.example.theatreapp.R
-import com.example.theatreapp.databinding.FragmentStreamingRoomBinding
-import com.example.theatreapp.ui.adapters.StreamingViewPagerAdapter
-import com.example.theatreapp.ui.fragment.BaseFragment
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.vikash.syncr_core.viewmodels.StreamingRoomFragmentViewModel
-import io.socket.client.Socket.EVENT_CONNECT_ERROR
-import io.socket.client.Socket.EVENT_DISCONNECT
+import com.vikash.tv_theatre_app.R
+import com.vikash.tv_theatre_app.databinding.FragmentStreamingRoomBinding
+import com.vikash.tv_theatre_app.fragment.BaseFragment
+import io.socket.client.Socket
 
 /**
  * A simple [Fragment] subclass.
@@ -27,8 +23,6 @@ import io.socket.client.Socket.EVENT_DISCONNECT
 class StreamingRoomFragment :
 	BaseFragment<FragmentStreamingRoomBinding, StreamingRoomFragmentViewModel>() {
 	private var mediaPlayerFragment: MediaPlayerFragment? = null
-	private lateinit var viewPagerAdapter: StreamingViewPagerAdapter
-	private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
 	private val backPressedCallback = object : OnBackPressedCallback(true) {
 		override fun handleOnBackPressed() {
 			isEnabled = false
@@ -66,17 +60,6 @@ class StreamingRoomFragment :
 	override fun setUpViews() {
 		super.setUpViews()
 		addMediaPlayerFragment()
-
-		setupViewPager()
-
-		bottomSheetBehavior = BottomSheetBehavior.from(binding!!.bottomSheetLayout.bottomSheet)
-
-		binding!!.searchChat.setOnClickListener {
-			bottomSheetBehavior.state =
-				if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_HIDDEN)
-					BottomSheetBehavior.STATE_HALF_EXPANDED else
-					BottomSheetBehavior.STATE_HIDDEN
-		}
 	}
 
 	override fun onStart() {
@@ -103,7 +86,7 @@ class StreamingRoomFragment :
 			connectionState.observe(viewLifecycleOwner){
 				val status = it
 
-				if(status == null || status == EVENT_CONNECT_ERROR || status == EVENT_DISCONNECT){
+				if(status == null || status == Socket.EVENT_CONNECT_ERROR || status == Socket.EVENT_DISCONNECT){
 					shortToast(R.string.socket_disconnected)
 					findNavController().popBackStack()
 				}
@@ -121,19 +104,13 @@ class StreamingRoomFragment :
 		}
 	}
 
-	private fun setupViewPager() {
-		viewPagerAdapter = StreamingViewPagerAdapter(parentFragmentManager)
-		binding!!.viewpager.adapter = viewPagerAdapter
-		binding!!.tabLayout.setupWithViewPager(binding!!.viewpager)
-	}
-
 	private fun addMediaPlayerFragment() {
 		mediaPlayerFragment = MediaPlayerFragment.newInstance()
 		val fragmentTransaction: FragmentTransaction = parentFragmentManager.beginTransaction()
 		mediaPlayerFragment?.let {
 			fragmentTransaction.add(
                 R.id.media_player_fragment_container, it,
-                MediaPlayerFragment.TAG
+				MediaPlayerFragment.TAG
             )
 			fragmentTransaction.commit()
 		}

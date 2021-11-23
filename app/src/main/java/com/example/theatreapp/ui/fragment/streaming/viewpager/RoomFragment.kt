@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.vikash.syncr_core.data.SessionData
 import com.example.theatreapp.databinding.FragmentRoomBinding
 import com.example.theatreapp.ui.fragment.BaseFragment
-import com.example.theatreapp.ui.fragment.streaming.StreamingRoomFragmentViewModel
+import com.vikash.syncr_core.viewmodels.StreamingRoomFragmentViewModel
 
 /**
  * A simple [Fragment] subclass.
@@ -38,7 +38,8 @@ class RoomFragment : BaseFragment<FragmentRoomBinding, StreamingRoomFragmentView
 		}
 	}
 
-	override fun initViewModel(): StreamingRoomFragmentViewModel = ViewModelProvider(requireActivity()).get(StreamingRoomFragmentViewModel::class.java)
+	override fun initViewModel(): StreamingRoomFragmentViewModel = ViewModelProvider(requireActivity()).get(
+        StreamingRoomFragmentViewModel::class.java)
 
 	override fun getViewBinding(): FragmentRoomBinding = FragmentRoomBinding.inflate(layoutInflater)
 

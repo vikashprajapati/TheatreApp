@@ -1,4 +1,4 @@
-package com.example.theatreapp.ui.fragment.main
+package com.vikash.syncr_core.viewmodels
 
 import android.util.Log
 import android.view.View
@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import com.example.theatreapp.App
+import com.vikash.syncr_core.SyncrApplication
 import com.vikash.syncr_core.data.connections.SocketManager
 import com.vikash.syncr_core.data.models.response.joinroomresponse.JoinedRoomResponse
 import com.vikash.syncr_core.utils.Event
@@ -40,7 +40,7 @@ class HomeFragmentViewModel() : ViewModel() {
             _connectionState.postValue(Event("Failed to join room"))
             return@Observer;
         }
-        _joinedRoomState.postValue(Event(App.gson.toJson(joinedRoomResponse)))
+        _joinedRoomState.postValue(Event(SyncrApplication.gson.toJson(joinedRoomResponse)))
         clearFields()
     }
 

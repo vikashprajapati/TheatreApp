@@ -1,4 +1,4 @@
-package com.example.theatreapp.ui.fragment.streaming
+package com.vikash.syncr_core.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

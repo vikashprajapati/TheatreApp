@@ -1,4 +1,4 @@
-package com.example.theatreapp.ui.fragment.streaming
+package com.vikash.tv_theatre_app.fragment.streaming
 
 import android.net.Uri
 import android.os.Bundle
@@ -8,17 +8,16 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.theatreapp.R
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
 import com.vikash.syncr_core.constants.VideoPlaybackConstants.Companion.forwardVideo
 import com.vikash.syncr_core.constants.VideoPlaybackConstants.Companion.rewindVideo
 import com.vikash.syncr_core.constants.VideoPlaybackConstants.Companion.videoPaused
 import com.vikash.syncr_core.constants.VideoPlaybackConstants.Companion.videoPlayed
 import com.vikash.syncr_core.data.SessionData
-import com.example.theatreapp.databinding.FragmentMediaPlayerBinding
-import com.example.theatreapp.ui.fragment.BaseFragment
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.vikash.syncr_core.viewmodels.StreamingRoomFragmentViewModel
+import com.vikash.tv_theatre_app.R
+import com.vikash.tv_theatre_app.fragment.BaseFragment
+import com.vikash.tv_theatre_app.databinding.FragmentMediaPlayerBinding
 
 /**
  * A simple [Fragment] subclass.
@@ -47,7 +46,7 @@ class MediaPlayerFragment :
 	}
 
 	override fun initViewModel():
-            StreamingRoomFragmentViewModel = ViewModelProvider(requireActivity())
+			StreamingRoomFragmentViewModel = ViewModelProvider(requireActivity())
 		.get(StreamingRoomFragmentViewModel::class.java)
 
 	override fun getViewBinding(): FragmentMediaPlayerBinding =

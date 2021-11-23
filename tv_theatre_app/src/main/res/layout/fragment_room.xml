@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <import type="com.vikash.syncr_core.data.SessionData"/>
+        <variable
+            name="room"
+            type="com.vikash.syncr_core.data.models.response.joinroomresponse.Room" />
+    </data>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/app_screen_padding"
+        android:background="@color/off_white"
+        tools:context=".ui.fragment.streaming.viewpager.RoomFragment">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingVertical="16dp"
+            android:weightSum="1">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight=".5"
+                android:gravity="start"
+                android:text="@string/room_name_label"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/room_name"
+                android:layout_width="0dp"
+                android:layout_weight=".5"
+                android:text="@{room.name}"
+                android:gravity="end"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingVertical="16dp"
+            android:weightSum="1">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight=".5"
+                android:gravity="start"
+                android:text="@string/host_name_label"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/room_host"
+                android:layout_width="0dp"
+                android:layout_weight=".5"
+                android:text="@{SessionData.INSTANCE.getParticipantName(room.host)}"
+                android:gravity="end"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingVertical="16dp"
+            android:weightSum="1">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight=".5"
+                android:gravity="start"
+                android:text="@string/participant_count_label"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/participant_count"
+                android:layout_width="0dp"
+                android:layout_weight=".5"
+                android:text="@{String.valueOf(room.participants.size())}"
+                android:gravity="end"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

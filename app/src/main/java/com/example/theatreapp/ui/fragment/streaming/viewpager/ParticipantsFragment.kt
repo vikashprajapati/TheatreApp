@@ -11,7 +11,7 @@ import com.example.theatreapp.ui.adapters.ParticipantsRecyclerViewAdapter
 import com.example.theatreapp.databinding.FragmentParticipantsListBinding
 import com.vikash.syncr_core.data.models.response.joinroomresponse.ParticipantsItem
 import com.example.theatreapp.ui.fragment.BaseFragment
-import com.example.theatreapp.ui.fragment.streaming.StreamingRoomFragmentViewModel
+import com.vikash.syncr_core.viewmodels.StreamingRoomFragmentViewModel
 
 /**
  * A fragment representing a list of Items.

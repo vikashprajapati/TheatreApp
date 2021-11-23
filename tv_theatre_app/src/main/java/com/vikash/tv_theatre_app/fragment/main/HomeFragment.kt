@@ -1,4 +1,4 @@
-package com.example.theatreapp.ui.fragment.main
+package com.vikash.tv_theatre_app.fragment.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.example.theatreapp.R
-import com.example.theatreapp.databinding.FragmentHomeBinding
-import com.example.theatreapp.ui.fragment.BaseFragment
 import com.vikash.syncr_core.viewmodels.HomeFragmentViewModel
+import com.vikash.tv_theatre_app.R
+import com.vikash.tv_theatre_app.databinding.FragmentHomeBinding
+import com.vikash.tv_theatre_app.fragment.BaseFragment
 
 /**
  * A simple [Fragment] subclass.
