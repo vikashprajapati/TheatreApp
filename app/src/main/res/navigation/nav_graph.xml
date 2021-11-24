@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/roomFrament"
-        android:name="com.example.theatreapp.ui.fragment.streaming.StreamingRoomFragment"
+        android:name="com.vikash.tv_theatre_app.fragment.streaming.StreamingRoomFragment"
         android:label="fragment_room_frament"
         tools:layout="@layout/fragment_streaming_room" />
 </navigation>

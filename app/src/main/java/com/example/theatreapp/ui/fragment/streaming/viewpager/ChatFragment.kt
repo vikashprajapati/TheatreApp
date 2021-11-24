@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import com.example.theatreapp.data.models.Message
+import com.vikash.syncr_core.data.models.Message
 import com.example.theatreapp.databinding.FragmentChatBinding
 import com.example.theatreapp.ui.adapters.ChatMessagesAdapter
 import com.example.theatreapp.ui.fragment.BaseFragment

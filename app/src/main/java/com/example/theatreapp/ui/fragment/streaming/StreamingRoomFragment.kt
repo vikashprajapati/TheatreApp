@@ -15,6 +15,7 @@ import com.example.theatreapp.databinding.FragmentStreamingRoomBinding
 import com.example.theatreapp.ui.adapters.StreamingViewPagerAdapter
 import com.example.theatreapp.ui.fragment.BaseFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.vikash.syncr_core.viewmodels.StreamingRoomFragmentViewModel
 import io.socket.client.Socket.EVENT_CONNECT_ERROR
 import io.socket.client.Socket.EVENT_DISCONNECT
 

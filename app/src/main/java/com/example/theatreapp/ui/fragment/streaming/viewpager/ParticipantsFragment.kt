@@ -7,13 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import com.example.theatreapp.R
-import com.example.theatreapp.data.SessionData
 import com.example.theatreapp.ui.adapters.ParticipantsRecyclerViewAdapter
 import com.example.theatreapp.databinding.FragmentParticipantsListBinding
-import com.example.theatreapp.data.models.response.joinroomresponse.ParticipantsItem
+import com.vikash.syncr_core.data.models.response.joinroomresponse.ParticipantsItem
 import com.example.theatreapp.ui.fragment.BaseFragment
-import com.example.theatreapp.ui.fragment.streaming.StreamingRoomFragmentViewModel
+import com.vikash.syncr_core.viewmodels.StreamingRoomFragmentViewModel
 
 /**
  * A fragment representing a list of Items.

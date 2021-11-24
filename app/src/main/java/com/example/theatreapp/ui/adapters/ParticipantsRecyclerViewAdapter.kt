@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.theatreapp.databinding.ItemFragmentParticipantBinding
 
-import com.example.theatreapp.data.models.response.joinroomresponse.ParticipantsItem
+import com.vikash.syncr_core.data.models.response.joinroomresponse.ParticipantsItem
 
 /**
  * [RecyclerView.Adapter] that can display a [ParticipantsItem].

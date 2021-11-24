@@ -2,11 +2,10 @@ package com.example.theatreapp.ui.adapters
 
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.theatreapp.data.SessionData
-import com.example.theatreapp.data.models.Message
+import com.vikash.syncr_core.data.SessionData
+import com.vikash.syncr_core.data.models.Message
 import com.example.theatreapp.databinding.ChatItemBinding
 
 class ChatMessagesAdapter(private val messagesList : ArrayList<Message>) : RecyclerView.Adapter<ChatMessagesAdapter.MessageViewHolder>() {
