@@ -1723,6 +1723,7 @@ int drawable edittext_background 0x0
 int drawable ic_arrow_down 0x0
 int drawable ic_clock_black_24dp 0x0
 int drawable ic_dash 0x0
+int drawable ic_fullscreen 0x0
 int drawable ic_keyboard_black_24dp 0x0
 int drawable ic_launcher_background 0x0
 int drawable ic_launcher_foreground 0x0
@@ -1732,6 +1733,7 @@ int drawable ic_mtrl_chip_checked_circle 0x0
 int drawable ic_mtrl_chip_close_circle 0x0
 int drawable ic_search 0x0
 int drawable ic_send 0x0
+int drawable ic_squeeze 0x0
 int drawable ic_sync 0x0
 int drawable material_cursor_drawable 0x0
 int drawable material_ic_calendar_black_24dp 0x0

@@ -22,6 +22,7 @@ class StreamingRoomFragmentViewModel : ViewModel() {
     private val _videoSynced = MutableLiveData<Event<VideoSynced>>()
     private val _participantLeft = MutableLiveData<Event<ParticipantsItem>>()
     private val _participantJoined = MutableLiveData<Event<ParticipantsItem>>()
+    private val _fullScreenLayout = MutableLiveData<Boolean>()
 
     // participants to be changed to livedata of list<participantItem>
     var participants : LiveData<List<ParticipantsItem>> = _participants as LiveData<List<ParticipantsItem>>
@@ -31,6 +32,7 @@ class StreamingRoomFragmentViewModel : ViewModel() {
     var connectionState : LiveData<String> = _connectionState
     var participantLeft : LiveData<Event<ParticipantsItem>> = _participantLeft
     var participantJoined : LiveData<Event<ParticipantsItem>> = _participantJoined
+    var fullScreenLayout : MutableLiveData<Boolean> = _fullScreenLayout
 
     private var participantJoinedObserver = Observer<Event<ParticipantsItem>>{
         val participant = it.getContentIfNotHandledOrReturnNull() ?: return@Observer

@@ -77,6 +77,15 @@
                 android:includeFontPadding="false"
                 android:textColor="@color/primary_color"/>
 
+            <ImageButton
+                android:id="@+id/exo_fullscreen"
+                style="@style/ExoMediaButton.Fullscreen"
+                app:tint="@color/primary_color"/>
+            <ImageButton
+                android:id="@+id/exo_squeeze"
+                style="@style/ExoMediaButton.Smallscreen"
+                app:tint="@color/primary_color"
+                android:visibility="gone"/>
         </LinearLayout>
 
     </LinearLayout>

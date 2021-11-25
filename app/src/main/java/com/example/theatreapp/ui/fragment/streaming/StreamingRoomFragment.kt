@@ -1,9 +1,11 @@
 package com.example.theatreapp.ui.fragment.streaming
 
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -117,6 +119,24 @@ class StreamingRoomFragment :
 			participantJoined.observe(viewLifecycleOwner){
 				val participant = it.getContentIfNotHandledOrReturnNull()?:return@observe
 				shortToast("${participant.name} joined")
+			}
+
+			fullScreenLayout.observe(viewLifecycleOwner){ isFullscreen ->
+				when(isFullscreen){
+					true -> {
+						binding?.mediaPlayerFragmentContainer?.layoutParams?.apply {
+							width = WindowManager.LayoutParams.MATCH_PARENT
+							height = WindowManager.LayoutParams.MATCH_PARENT
+						}
+					}
+
+					false -> {
+						binding?.mediaPlayerFragmentContainer?.layoutParams?.apply {
+							width = WindowManager.LayoutParams.MATCH_PARENT
+							height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240f, resources.displayMetrics).toInt()
+						}
+					}
+				}
 			}
 		}
 	}

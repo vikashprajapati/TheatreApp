@@ -1724,6 +1724,7 @@ drawable edittext_background
 drawable ic_arrow_down
 drawable ic_clock_black_24dp
 drawable ic_dash
+drawable ic_fullscreen
 drawable ic_keyboard_black_24dp
 drawable ic_launcher_background
 drawable ic_launcher_foreground
@@ -1733,6 +1734,7 @@ drawable ic_mtrl_chip_checked_circle
 drawable ic_mtrl_chip_close_circle
 drawable ic_search
 drawable ic_send
+drawable ic_squeeze
 drawable ic_sync
 drawable material_cursor_drawable
 drawable material_ic_calendar_black_24dp

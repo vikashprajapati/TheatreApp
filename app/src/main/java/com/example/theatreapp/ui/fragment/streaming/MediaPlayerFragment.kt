@@ -1,11 +1,14 @@
 package com.example.theatreapp.ui.fragment.streaming
 
+import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ImageButton
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.theatreapp.R
@@ -18,6 +21,7 @@ import com.example.theatreapp.databinding.FragmentMediaPlayerBinding
 import com.example.theatreapp.ui.fragment.BaseFragment
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
+import com.vikash.syncr_core.utils.Event
 import com.vikash.syncr_core.viewmodels.StreamingRoomFragmentViewModel
 
 /**
@@ -34,6 +38,8 @@ class MediaPlayerFragment :
 	private lateinit var pauseButton : ImageButton
 	private lateinit var forwardButton : ImageButton
 	private lateinit var syncButton : ImageButton
+	private lateinit var fullscreenButton : ImageButton
+	private lateinit var squeezeButton : ImageButton
 
 	override fun onCreateView(
 		inflater: LayoutInflater,
@@ -47,8 +53,7 @@ class MediaPlayerFragment :
 	}
 
 	override fun initViewModel():
-            StreamingRoomFragmentViewModel = ViewModelProvider(requireActivity())
-		.get(StreamingRoomFragmentViewModel::class.java)
+            StreamingRoomFragmentViewModel = ViewModelProvider(requireActivity()).get(StreamingRoomFragmentViewModel::class.java)
 
 	override fun getViewBinding(): FragmentMediaPlayerBinding =
 		FragmentMediaPlayerBinding.inflate(layoutInflater)
@@ -67,6 +72,8 @@ class MediaPlayerFragment :
 		rewindButton.setOnClickListener(this)
 		forwardButton.setOnClickListener(this)
 		syncButton.setOnClickListener(this)
+		fullscreenButton.setOnClickListener(this)
+		squeezeButton.setOnClickListener(this)
 	}
 
 	override fun onPause() {
@@ -91,6 +98,8 @@ class MediaPlayerFragment :
 			pauseButton = findViewById(R.id.exo_pause)!!
 			forwardButton = findViewById(R.id.exo_ffwd)!!
 			syncButton = findViewById(R.id.exo_video_sync)!!
+			fullscreenButton = findViewById(R.id.exo_fullscreen)!!
+			squeezeButton = findViewById(R.id.exo_squeeze)!!
 		}
 	}
 
@@ -160,6 +169,26 @@ class MediaPlayerFragment :
 			R.id.exo_video_sync -> {
 				exoplayer.pause()
 				viewModel.sendVideoSyncedEvent(currentTime)
+			}
+
+			R.id.exo_fullscreen -> {
+				viewModel.fullScreenLayout.value = true
+				requireActivity().apply {
+					window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+					requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+				}
+				fullscreenButton.visibility = View.GONE
+				squeezeButton.visibility = View.VISIBLE
+			}
+
+			R.id.exo_squeeze -> {
+				viewModel.fullScreenLayout.value = false
+				requireActivity().apply {
+					window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+					requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+				}
+				fullscreenButton.visibility = View.VISIBLE
+				squeezeButton.visibility = View.GONE
 			}
 		}
 	}

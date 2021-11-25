@@ -15,10 +15,12 @@ drawable button_background
 drawable edittext_background
 drawable ic_arrow_down
 drawable ic_dash
+drawable ic_fullscreen
 drawable ic_launcher_background
 drawable ic_launcher_foreground
 drawable ic_search
 drawable ic_send
+drawable ic_squeeze
 drawable ic_sync
 font trebuc
 string app_name

@@ -43,4 +43,12 @@
         <item name="android:src">@drawable/ic_sync</item>
         <item name="android:contentDescription">@string/exo_controls_video_sync_description</item>
     </style>
+    <style name="ExoMediaButton.Fullscreen">
+        <item name="android:src">@drawable/ic_fullscreen</item>
+        <item name="android:contentDescription">@string/exo_controls_video_fullscreen_description</item>
+    </style>
+    <style name="ExoMediaButton.Smallscreen">
+        <item name="android:src">@drawable/ic_squeeze</item>
+        <item name="android:contentDescription">@string/exo_controls_video_smallscreen_description</item>
+    </style>
 </resources>
