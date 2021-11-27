@@ -13,7 +13,7 @@
         android:theme="@style/Theme.TheatreApp">
         <activity android:name="com.example.theatreapp.ui.activities.MainActivity"
             android:windowSoftInputMode="adjustResize|stateHidden"
-            android:configChanges="orientation"
+            android:configChanges="orientation|screenSize"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
