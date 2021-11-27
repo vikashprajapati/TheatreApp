@@ -20,6 +20,7 @@ import com.vikash.syncr_core.constants.VideoPlaybackConstants.Companion.rewindVi
 import com.vikash.syncr_core.constants.VideoPlaybackConstants.Companion.videoPaused
 import com.vikash.syncr_core.constants.VideoPlaybackConstants.Companion.videoPlayed
 import com.vikash.syncr_core.data.SessionData
+import com.vikash.syncr_core.data.connections.SocketManager.participantJoined
 import com.vikash.syncr_core.viewmodels.StreamingRoomFragmentViewModel
 
 /**
@@ -141,6 +142,12 @@ class MediaPlayerFragment :
 			val videoSyncedData = it.getContentIfNotHandledOrReturnNull()?:return@observe
 			exoplayer.seekTo(videoSyncedData.playbackTimestamp.toLong())
 			exoplayer.play()
+		}
+
+		participantJoined.observe(viewLifecycleOwner){
+			val participant = it.getContentIfNotHandledOrReturnNull()?:return@observe
+			shortToast("${participant.name} joined")
+			viewModel.sendVideoSyncedEvent(exoplayer.currentPosition.toString())
 		}
 	}
 
