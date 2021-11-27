@@ -72,8 +72,13 @@ object SocketManager : SocketService.SocketEventsListener {
         socketService.send(OutgoingEvents.sendVideoPlayback, playbackStatus)
     }
 
-    fun sendVideoJumpEvent(direction: String) {
-        socketService.send(OutgoingEvents.sendVideoChanged, direction)
+    fun sendVideoJumpEvent(direction: String, timeStamp: Long) {
+        val videoJumpEvent = VideoChanged(
+            SessionData.localUser!!.id,
+            timeStamp.toString(),
+            direction
+        )
+        socketService.send(OutgoingEvents.sendVideoChanged, videoJumpEvent)
     }
 
     fun sendVideoSyncEvent(currentTimestamp: String) {

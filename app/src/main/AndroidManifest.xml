@@ -12,7 +12,9 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.TheatreApp">
         <activity android:name="com.example.theatreapp.ui.activities.MainActivity"
-            android:windowSoftInputMode="adjustResize|stateHidden">
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:configChanges="orientation"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,3 +1,3 @@
 package com.vikash.syncr_core.data.models.videoplaybackevents
 
-data class VideoPlayback(val id : String, val playbackStatus : String)
+data class VideoPlayback(val userId : String, val playbackStatus : String)

@@ -8,20 +8,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageButton
-import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.theatreapp.R
+import com.example.theatreapp.databinding.FragmentMediaPlayerBinding
+import com.example.theatreapp.ui.fragment.BaseFragment
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
 import com.vikash.syncr_core.constants.VideoPlaybackConstants.Companion.forwardVideo
 import com.vikash.syncr_core.constants.VideoPlaybackConstants.Companion.rewindVideo
 import com.vikash.syncr_core.constants.VideoPlaybackConstants.Companion.videoPaused
 import com.vikash.syncr_core.constants.VideoPlaybackConstants.Companion.videoPlayed
 import com.vikash.syncr_core.data.SessionData
-import com.example.theatreapp.databinding.FragmentMediaPlayerBinding
-import com.example.theatreapp.ui.fragment.BaseFragment
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.vikash.syncr_core.utils.Event
 import com.vikash.syncr_core.viewmodels.StreamingRoomFragmentViewModel
 
 /**
@@ -110,15 +108,14 @@ class MediaPlayerFragment :
 			when(videoPlaybackData.playbackStatus){
 				videoPlayed -> {
 					exoplayer.play()
-					if(!videoPlaybackData.id.equals(SessionData.localUser?.id))
-						shortToast("${SessionData.getParticipantName(videoPlaybackData.id)} played video")
+					if(!videoPlaybackData.userId.equals(SessionData.localUser?.id))
+						shortToast("${SessionData.getParticipantName(videoPlaybackData.userId)} played video")
 				}
 
 				videoPaused -> {
 					exoplayer.pause()
-
-					if(!videoPlaybackData.id.equals(SessionData.localUser?.id))
-						shortToast("${SessionData.getParticipantName(videoPlaybackData.id)} paused video")
+					if(!videoPlaybackData.userId.equals(SessionData.localUser?.id))
+						shortToast("${SessionData.getParticipantName(videoPlaybackData.userId)} paused video")
 				}
 			}
 		}
@@ -127,15 +124,15 @@ class MediaPlayerFragment :
 			val videoChangedData = it.getContentIfNotHandledOrReturnNull()?:return@observe
 			when(videoChangedData.playbackDirection){
 				forwardVideo -> {
-					exoplayer.seekForward()
-					if(!videoChangedData.id.equals(SessionData.localUser?.id))
-					shortToast("${SessionData.getParticipantName(videoChangedData.id)} seeked forward")
+					exoplayer.seekTo(videoChangedData.timeStamp.toLong())
+					if(!videoChangedData.userId.equals(SessionData.localUser?.id))
+					shortToast("${SessionData.getParticipantName(videoChangedData.userId)} seeked forward")
 				}
 
 				rewindVideo -> {
-					exoplayer.seekBack()
-					if(!videoChangedData.id.equals(SessionData.localUser?.id))
-					shortToast("${SessionData.getParticipantName(videoChangedData.id)}  seeked backward")
+					exoplayer.seekTo(videoChangedData.timeStamp.toLong())
+					if(!videoChangedData.userId.equals(SessionData.localUser?.id))
+					shortToast("${SessionData.getParticipantName(videoChangedData.userId)} seeked backward")
 				}
 			}
 		}
@@ -159,11 +156,13 @@ class MediaPlayerFragment :
 			}
 
 			R.id.exo_rew -> {
-				viewModel.sendVideoJumpEvent(rewindVideo)
+				val timeStamp = exoplayer.currentPosition - 5000
+				viewModel.sendVideoJumpEvent(rewindVideo, timeStamp)
 			}
 
 			R.id.exo_ffwd -> {
-				viewModel.sendVideoJumpEvent(forwardVideo)
+				val timeStamp = exoplayer.currentPosition + 5000
+				viewModel.sendVideoJumpEvent(forwardVideo, timeStamp)
 			}
 
 			R.id.exo_video_sync -> {
