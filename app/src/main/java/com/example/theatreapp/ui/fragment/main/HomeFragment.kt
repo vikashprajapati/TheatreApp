@@ -25,6 +25,9 @@ class HomeFragment :
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
+        binding?.lifecycleOwner = this@HomeFragment
+        binding?.viewModel = viewModel
         return binding?.root
     }
 
@@ -35,8 +38,7 @@ class HomeFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding?.lifecycleOwner = this@HomeFragment
-        binding?.viewModel = viewModel
+
     }
 
     override fun observeData() {

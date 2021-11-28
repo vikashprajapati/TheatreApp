@@ -40,12 +40,6 @@ class MediaPlayerFragment :
 	private lateinit var fullscreenButton : ImageButton
 	private lateinit var squeezeButton : ImageButton
 
-	override fun onCreateView(
-		inflater: LayoutInflater,
-		container: ViewGroup?,
-		savedInstanceState: Bundle?
-	): View? = binding?.root
-
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		setupMediaPlayer()

@@ -20,18 +20,12 @@ abstract class BaseFragment<VBinding : ViewBinding, VModel : androidx.lifecycle.
     protected var binding : VBinding? = null
     protected abstract fun getViewBinding() : VBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
-
-        init()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        init()
         return binding?.root
     }
 
@@ -43,12 +37,9 @@ abstract class BaseFragment<VBinding : ViewBinding, VModel : androidx.lifecycle.
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpViews()
-    }
-
-    override fun onStart() {
-        super.onStart()
         observeData()
     }
+
 
     open fun setUpViews() {}
 
