@@ -22,6 +22,7 @@ class StreamingRoomFragmentViewModel : ViewModel() {
     private val _videoSynced = MutableLiveData<Event<VideoSynced>>()
     private val _participantLeft = MutableLiveData<Event<ParticipantsItem>>()
     private val _participantJoined = MutableLiveData<Event<ParticipantsItem>>()
+    private val _participantArrived = MutableLiveData<Event<ParticipantsItem>>()
     private val _fullScreenLayout = MutableLiveData<Boolean>()
 
     // participants to be changed to livedata of list<participantItem>
@@ -33,12 +34,14 @@ class StreamingRoomFragmentViewModel : ViewModel() {
     var participantLeft : LiveData<Event<ParticipantsItem>> = _participantLeft
     var participantJoined : LiveData<Event<ParticipantsItem>> = _participantJoined
     var fullScreenLayout : MutableLiveData<Boolean> = _fullScreenLayout
+    var participantArrived : LiveData<Event<ParticipantsItem>> = _participantArrived
 
     private var participantJoinedObserver = Observer<Event<ParticipantsItem>>{
         val participant = it.getContentIfNotHandledOrReturnNull() ?: return@Observer
         // participant added previously in SessionData
         _participants.postValue(SessionData.currentRoom?.participants)
         _participantJoined.postValue(Event(participant))
+        _participantArrived.postValue(Event(participant))
     }
 
     private var videoPlaybackObserver = Observer<Event<VideoPlayback>>{

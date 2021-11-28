@@ -138,9 +138,8 @@ class MediaPlayerFragment :
 			exoplayer.play()
 		}
 
-		participantJoined.observe(viewLifecycleOwner){
+		viewModel.participantArrived.observe(viewLifecycleOwner){
 			val participant = it.getContentIfNotHandledOrReturnNull()?:return@observe
-			shortToast("${participant.name} joined")
 			viewModel.sendVideoSyncedEvent(exoplayer.currentPosition.toString())
 		}
 	}
