@@ -10,6 +10,8 @@
 .DS_Store
 /build
 /captures
+/syncr-core/build
+/tv_theatre_app/build
 .externalNativeBuild
 .cxx
 local.properties
