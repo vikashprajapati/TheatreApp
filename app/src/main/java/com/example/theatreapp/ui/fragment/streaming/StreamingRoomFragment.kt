@@ -36,6 +36,7 @@ class StreamingRoomFragment :
 			isEnabled = false
 			// disconnect socket and return to previous fragment
 			notifyAndDisconnectSocket()
+			findNavController().popBackStack()
 		}
 	}
 
@@ -48,12 +49,6 @@ class StreamingRoomFragment :
 		viewModel.leaveRoom()
 	}
 
-	override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-		return binding!!.root
-	}
 
 	override fun initViewModel(): StreamingRoomFragmentViewModel =
 		ViewModelProvider(requireActivity()).get(StreamingRoomFragmentViewModel::class.java)
@@ -61,9 +56,6 @@ class StreamingRoomFragment :
 	override fun getViewBinding(): FragmentStreamingRoomBinding =
 		FragmentStreamingRoomBinding.inflate(layoutInflater)
 
-	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-		super.onViewCreated(view, savedInstanceState)
-	}
 
 	override fun setUpViews() {
 		super.setUpViews()
