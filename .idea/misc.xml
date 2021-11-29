@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/paliy/OfficeProjects/TheatreApp/app/src/main/res/layout/fragment_home.xml" value="0.1" />
+        <entry key="..\:/Users/paliy/OfficeProjects/TheatreApp/app/src/main/res/layout/fragment_streaming_room.xml" value="0.1" />
         <entry key="..\:/Users/vikash/.gradle/caches/transforms-3/b0e32d9c7da6315f09b2fd9efdcb8596/transformed/jetified-exoplayer-ui-2.16.1/res/layout/exo_player_control_view.xml" value="0.1" />
         <entry key="..\:/Users/vikash/Documents/projects/TheatreApp/app/src/main/res/layout/activity_main.xml" value="0.14540059347181009" />
         <entry key="..\:/Users/vikash/Documents/projects/TheatreApp/app/src/main/res/layout/app_toolbar.xml" value="0.17552083333333332" />
