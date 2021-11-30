@@ -28,13 +28,10 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return binding?.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        super.onCreateView(inflater, container, savedInstanceState)
         binding?.lifecycleOwner = this@ChatFragment
         binding?.viewModel = viewModel
+        return binding?.root
     }
 
     override fun initViewModel(): ChatViewModel = ViewModelProvider(this).get(ChatViewModel::class.java)

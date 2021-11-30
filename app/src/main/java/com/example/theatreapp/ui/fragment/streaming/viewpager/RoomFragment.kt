@@ -17,15 +17,15 @@ import com.vikash.syncr_core.viewmodels.StreamingRoomFragmentViewModel
  * create an instance of this fragment.
  */
 class RoomFragment : BaseFragment<FragmentRoomBinding, StreamingRoomFragmentViewModel>() {
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-	}
 
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?
-	): View? = binding?.root
-
+	): View? {
+		super.onCreateView(inflater, container, savedInstanceState)
+		binding?.lifecycleOwner = this@RoomFragment
+		return binding?.root
+	}
 	override fun setUpViews() {
 		super.setUpViews()
 		binding?.room = SessionData.currentRoom
@@ -39,7 +39,7 @@ class RoomFragment : BaseFragment<FragmentRoomBinding, StreamingRoomFragmentView
 	}
 
 	override fun initViewModel(): StreamingRoomFragmentViewModel = ViewModelProvider(requireActivity()).get(
-        StreamingRoomFragmentViewModel::class.java)
+		StreamingRoomFragmentViewModel::class.java)
 
 	override fun getViewBinding(): FragmentRoomBinding = FragmentRoomBinding.inflate(layoutInflater)
 

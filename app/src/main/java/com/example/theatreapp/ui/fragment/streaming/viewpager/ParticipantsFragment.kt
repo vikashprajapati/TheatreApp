@@ -33,11 +33,9 @@ class ParticipantsFragment : BaseFragment<FragmentParticipantsListBinding, Strea
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
+        binding?.lifecycleOwner = this@ParticipantsFragment
         return binding?.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
     }
 
     override fun setUpViews() {
