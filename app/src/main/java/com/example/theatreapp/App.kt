@@ -9,7 +9,7 @@ import com.google.gson.Gson
 
 class App : Application(), Application.ActivityLifecycleCallbacks {
 
-    private val TAG = App.javaClass.canonicalName
+    private val TAG = App::class.java.canonicalName
     private var activityCount = 0
 
     companion object{

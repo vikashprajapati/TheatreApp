@@ -15,6 +15,7 @@ import com.vikash.syncr_core.constants.VideoPlaybackConstants.Companion.rewindVi
 import com.vikash.syncr_core.constants.VideoPlaybackConstants.Companion.videoPaused
 import com.vikash.syncr_core.constants.VideoPlaybackConstants.Companion.videoPlayed
 import com.vikash.syncr_core.data.SessionData
+import com.vikash.syncr_core.viewmodels.StreamingRoomFragmentViewModel
 import com.vikash.tv_theatre_app.R
 import com.vikash.tv_theatre_app.fragment.BaseFragment
 import com.vikash.tv_theatre_app.databinding.FragmentMediaPlayerBinding
@@ -33,12 +34,6 @@ class MediaPlayerFragment :
 	private lateinit var pauseButton : ImageButton
 	private lateinit var forwardButton : ImageButton
 	private lateinit var syncButton : ImageButton
-
-	override fun onCreateView(
-		inflater: LayoutInflater,
-		container: ViewGroup?,
-		savedInstanceState: Bundle?
-	): View? = binding?.root
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
@@ -100,15 +95,10 @@ class MediaPlayerFragment :
 			when(videoPlaybackData.playbackStatus){
 				videoPlayed -> {
 					exoplayer.play()
-					if(!videoPlaybackData.id.equals(SessionData.localUser?.id))
-						shortToast("${SessionData.getParticipantName(videoPlaybackData.id)} played video")
 				}
 
 				videoPaused -> {
 					exoplayer.pause()
-
-					if(!videoPlaybackData.id.equals(SessionData.localUser?.id))
-						shortToast("${SessionData.getParticipantName(videoPlaybackData.id)} paused video")
 				}
 			}
 		}
@@ -117,15 +107,11 @@ class MediaPlayerFragment :
 			val videoChangedData = it.getContentIfNotHandledOrReturnNull()?:return@observe
 			when(videoChangedData.playbackDirection){
 				forwardVideo -> {
-					exoplayer.seekForward()
-					if(!videoChangedData.id.equals(SessionData.localUser?.id))
-					shortToast("${SessionData.getParticipantName(videoChangedData.id)} seeked forward")
+					exoplayer.seekTo(videoChangedData.timeStamp.toLong())
 				}
 
 				rewindVideo -> {
-					exoplayer.seekBack()
-					if(!videoChangedData.id.equals(SessionData.localUser?.id))
-					shortToast("${SessionData.getParticipantName(videoChangedData.id)}  seeked backward")
+					exoplayer.seekTo(videoChangedData.timeStamp.toLong())
 				}
 			}
 		}
@@ -149,11 +135,13 @@ class MediaPlayerFragment :
 			}
 
 			R.id.exo_rew -> {
-				viewModel.sendVideoJumpEvent(rewindVideo)
+				val timeStamp = exoplayer.currentPosition - 5000
+				viewModel.sendVideoJumpEvent(rewindVideo, timeStamp)
 			}
 
 			R.id.exo_ffwd -> {
-				viewModel.sendVideoJumpEvent(forwardVideo)
+				val timeStamp = exoplayer.currentPosition + 5000
+				viewModel.sendVideoJumpEvent(forwardVideo, timeStamp)
 			}
 
 			R.id.exo_video_sync -> {

@@ -19,12 +19,15 @@ import com.vikash.tv_theatre_app.fragment.BaseFragment
  */
 class HomeFragment :
     BaseFragment<FragmentHomeBinding, HomeFragmentViewModel>(){
-    private val TAG = HomeFragment.javaClass.canonicalName
+    private val TAG = HomeFragment::class.java.canonicalName
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
+        binding?.lifecycleOwner = this@HomeFragment
+        binding?.viewModel = viewModel
         return binding?.root
     }
 
@@ -32,12 +35,6 @@ class HomeFragment :
 
     override fun initViewModel(): HomeFragmentViewModel = ViewModelProvider(this).get(
         HomeFragmentViewModel::class.java)
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding?.lifecycleOwner = this@HomeFragment
-        binding?.viewModel = viewModel
-    }
 
     override fun observeData() {
         super.observeData()
