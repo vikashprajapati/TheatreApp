@@ -45,6 +45,19 @@ class StreamingRoomFragment :
 		requireActivity().onBackPressedDispatcher.addCallback(this, backPressedCallback)
 	}
 
+	override fun onCreateView(
+		inflater: LayoutInflater,
+		container: ViewGroup?,
+		savedInstanceState: Bundle?
+	): View? {
+		super.onCreateView(inflater, container, savedInstanceState)
+		binding?.let{
+			it.viewModel = viewModel
+			it.lifecycleOwner = this@StreamingRoomFragment
+		}
+		return binding?.root
+	}
+
 	private fun notifyAndDisconnectSocket() {
 		viewModel.leaveRoom()
 	}
@@ -65,7 +78,7 @@ class StreamingRoomFragment :
 
 		bottomSheetBehavior = BottomSheetBehavior.from(binding!!.bottomSheetLayout.bottomSheet)
 
-		binding!!.searchChat.setOnClickListener {
+		binding!!.searchButton.setOnClickListener {
 			bottomSheetBehavior.state =
 				if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_HIDDEN)
 					BottomSheetBehavior.STATE_HALF_EXPANDED else
