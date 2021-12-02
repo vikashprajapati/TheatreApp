@@ -49,6 +49,7 @@
                     style="@style/EditText.Style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@={viewModel.searchEditText}"
                     android:hint="@string/enter_search_hint"/>
             </LinearLayout>
 

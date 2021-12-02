@@ -1,5 +1,6 @@
 package com.example.theatreapp.ui.fragment.streaming
 
+import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -24,16 +25,15 @@ class SearchFragment : BaseBottomSheetFragment<FragmentSearchBinding, SearchBott
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding?.let {
-            it.viewModel = viewModel
-            it.lifecycleOwner = this@SearchFragment
-        }
+        binding?.lifecycleOwner = this@SearchFragment
+        binding?.viewModel = viewModel
+
         return binding?.root
     }
 
     override fun observeData() {
         super.observeData()
-        viewModel.apply {
+        binding?.viewModel?.apply {
             invalidInput.observe(viewLifecycleOwner){
                 val msg = it.getContentIfNotHandledOrReturnNull()?:return@observe
                 shortToast(R.string.search_invalid_input)
@@ -41,13 +41,9 @@ class SearchFragment : BaseBottomSheetFragment<FragmentSearchBinding, SearchBott
         }
     }
 
-    override fun initViewModel(): SearchBottomSheetViewModel {
-        return ViewModelProvider(this@SearchFragment).get(SearchBottomSheetViewModel::class.java)
-    }
+    override fun initViewModel(): SearchBottomSheetViewModel = ViewModelProvider(this).get(SearchBottomSheetViewModel::class.java)
 
-    override fun getViewBinding(): FragmentSearchBinding {
-        return FragmentSearchBinding.inflate(layoutInflater)
-    }
+    override fun getViewBinding(): FragmentSearchBinding = FragmentSearchBinding.inflate(layoutInflater)
 
     companion object {
         @JvmStatic

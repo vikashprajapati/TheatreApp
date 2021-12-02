@@ -19,10 +19,6 @@ import com.example.theatreapp.ui.fragment.BaseFragment
 class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>() {
     private val chatAdapter = ChatMessagesAdapter(arrayListOf())
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
