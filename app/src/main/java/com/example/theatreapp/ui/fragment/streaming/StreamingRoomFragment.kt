@@ -35,7 +35,7 @@ class StreamingRoomFragment :
 		override fun handleOnBackPressed() {
 			isEnabled = false
 			// disconnect socket and return to previous fragment
-			notifyAndDisconnectSocket()
+			viewModel.leaveRoom()
 			findNavController().popBackStack()
 		}
 	}
@@ -58,11 +58,6 @@ class StreamingRoomFragment :
 		return binding?.root
 	}
 
-	private fun notifyAndDisconnectSocket() {
-		viewModel.leaveRoom()
-	}
-
-
 	override fun initViewModel(): StreamingRoomFragmentViewModel =
 		ViewModelProvider(requireActivity()).get(StreamingRoomFragmentViewModel::class.java)
 
@@ -76,17 +71,12 @@ class StreamingRoomFragment :
 
 		setupViewPager()
 
-		bottomSheetBehavior = BottomSheetBehavior.from(binding!!.bottomSheetLayout.bottomSheet)
-
 		binding!!.searchButton.setOnClickListener {
-			findNavController().navigate(R.id.action_roomFrament_to_searchFragment)
+			val bundle = Bundle()
+			bundle.putInt("height", viewModel.mediaPlayerFragmentViewHeight.value!!)
+			findNavController().navigate(R.id.action_roomFrament_to_searchFragment, bundle)
 		}
 	}
-
-	/*private fun launchSearchBottomSheet(){
-		val searchFragment = SearchFragment()
-		searchFragment.show(parentFragmentManager, SearchFragment.TAG)
-	}*/
 
 	override fun onStart() {
 		super.onStart()

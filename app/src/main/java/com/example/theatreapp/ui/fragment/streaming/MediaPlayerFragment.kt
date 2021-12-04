@@ -3,10 +3,7 @@ package com.example.theatreapp.ui.fragment.streaming
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -39,6 +36,22 @@ class MediaPlayerFragment :
 	private lateinit var syncButton : ImageButton
 	private lateinit var fullscreenButton : ImageButton
 	private lateinit var squeezeButton : ImageButton
+
+	private val layoutChangeListener : ViewTreeObserver.OnGlobalLayoutListener = ViewTreeObserver.OnGlobalLayoutListener{
+		val height = view?.height
+		viewModel.mediaPlayerFragmentViewHeight.postValue(height)
+	}
+
+	override fun onCreateView(
+		inflater: LayoutInflater,
+		container: ViewGroup?,
+		savedInstanceState: Bundle?
+	): View? {
+		super.onCreateView(inflater, container, savedInstanceState)
+		val view = binding?.root
+		binding?.root?.viewTreeObserver?.addOnGlobalLayoutListener(layoutChangeListener)
+		return binding?.root
+	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
@@ -190,6 +203,11 @@ class MediaPlayerFragment :
 				squeezeButton.visibility = View.GONE
 			}
 		}
+	}
+
+	override fun onDestroyView() {
+		super.onDestroyView()
+		binding?.root?.viewTreeObserver?.removeOnGlobalLayoutListener(layoutChangeListener)
 	}
 
 	companion object {

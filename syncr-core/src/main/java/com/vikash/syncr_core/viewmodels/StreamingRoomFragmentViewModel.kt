@@ -24,19 +24,26 @@ class StreamingRoomFragmentViewModel : ViewModel() {
     private val _participantJoined = MutableLiveData<Event<ParticipantsItem>>()
     private val _participantArrived = MutableLiveData<Event<ParticipantsItem>>()
     private val _fullScreenLayout = MutableLiveData<Boolean>()
+    private var _mediaPlayerFragmentViewHeight = MutableLiveData<Int>()
 
     // participants to be changed to livedata of list<participantItem>
-    var participants : LiveData<List<ParticipantsItem>> = _participants as LiveData<List<ParticipantsItem>>
-    var videoPlayback : LiveData<Event<VideoPlayback>> = _videoPlayback
-    var videoChanged : LiveData<Event<VideoChanged>> = _videoChanged
-    var videoSynced : LiveData<Event<VideoSynced>> = _videoSynced
-    var connectionState : LiveData<String> = _connectionState
-    var participantLeft : LiveData<Event<ParticipantsItem>> = _participantLeft
-    var participantJoined : LiveData<Event<ParticipantsItem>> = _participantJoined
-    var fullScreenLayout : MutableLiveData<Boolean> = _fullScreenLayout
-    var participantArrived : LiveData<Event<ParticipantsItem>> = _participantArrived
+    var participants: LiveData<List<ParticipantsItem>> =
+        _participants as LiveData<List<ParticipantsItem>>
+    var videoPlayback: LiveData<Event<VideoPlayback>> = _videoPlayback
+    var videoChanged: LiveData<Event<VideoChanged>> = _videoChanged
+    var videoSynced: LiveData<Event<VideoSynced>> = _videoSynced
+    var connectionState: LiveData<String> = _connectionState
+    var participantLeft: LiveData<Event<ParticipantsItem>> = _participantLeft
+    var participantJoined: LiveData<Event<ParticipantsItem>> = _participantJoined
+    var fullScreenLayout: MutableLiveData<Boolean> = _fullScreenLayout
+    var participantArrived: LiveData<Event<ParticipantsItem>> = _participantArrived
+    var mediaPlayerFragmentViewHeight: MutableLiveData<Int>
+        get() = _mediaPlayerFragmentViewHeight
+        set(value) {
+            _mediaPlayerFragmentViewHeight = value
+        }
 
-    private var participantJoinedObserver = Observer<Event<ParticipantsItem>>{
+    private var participantJoinedObserver = Observer<Event<ParticipantsItem>> {
         val participant = it.getContentIfNotHandledOrReturnNull() ?: return@Observer
         // participant added previously in SessionData
         _participants.postValue(SessionData.currentRoom?.participants)
@@ -44,27 +51,27 @@ class StreamingRoomFragmentViewModel : ViewModel() {
         _participantArrived.postValue(Event(participant))
     }
 
-    private var videoPlaybackObserver = Observer<Event<VideoPlayback>>{
+    private var videoPlaybackObserver = Observer<Event<VideoPlayback>> {
         _videoPlayback.postValue(it)
     }
 
-    private var videoChangedObserver = Observer<Event<VideoChanged>>{
+    private var videoChangedObserver = Observer<Event<VideoChanged>> {
         _videoChanged.postValue(it)
     }
 
-    private var videoSyncedObserver = Observer<Event<VideoSynced>>{
+    private var videoSyncedObserver = Observer<Event<VideoSynced>> {
         _videoSynced.postValue(it)
     }
 
-    private var participantLeftObserver = Observer<Event<ParticipantsItem>>{
+    private var participantLeftObserver = Observer<Event<ParticipantsItem>> {
         _participantLeft.postValue(it)
         _participants.postValue(SessionData.currentRoom?.participants)
     }
 
-    private var connectivityObserver = Observer<String>{
+    private var connectivityObserver = Observer<String> {
         var status = it
 
-        if(status !== io.socket.client.Socket.EVENT_CONNECT) {
+        if (status !== io.socket.client.Socket.EVENT_CONNECT) {
             SocketManager.stopListeningToServer()
             _connectionState.postValue(status)
         }
@@ -91,19 +98,19 @@ class StreamingRoomFragmentViewModel : ViewModel() {
         SocketManager.participantJoined.removeObserver(participantJoinedObserver)
     }
 
-    fun sendVideoPlaybackEvent(playbackStatus : String) {
+    fun sendVideoPlaybackEvent(playbackStatus: String) {
         SocketManager.sendVideoStartedEvent(playbackStatus)
     }
 
-    fun sendVideoJumpEvent(direction: String, timeStamp: Long){
+    fun sendVideoJumpEvent(direction: String, timeStamp: Long) {
         SocketManager.sendVideoJumpEvent(direction, timeStamp)
     }
 
-    fun sendVideoSyncedEvent(currentTimestamp : String){
+    fun sendVideoSyncedEvent(currentTimestamp: String) {
         SocketManager.sendVideoSyncEvent(currentTimestamp)
     }
 
-    fun leaveRoom(){
+    fun leaveRoom() {
         SocketManager.stopListeningToServer()
     }
 }
