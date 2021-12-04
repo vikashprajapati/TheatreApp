@@ -19,5 +19,13 @@
         android:id="@+id/roomFrament"
         android:name="com.example.theatreapp.ui.fragment.streaming.StreamingRoomFragment"
         android:label="fragment_room_frament"
-        tools:layout="@layout/fragment_streaming_room" />
+        tools:layout="@layout/fragment_streaming_room" >
+        <action
+            android:id="@+id/action_roomFrament_to_searchFragment"
+            app:destination="@id/searchFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/searchFragment"
+        android:name="com.example.theatreapp.ui.fragment.streaming.SearchFragment"
+        android:label="SearchFragment" />
 </navigation>

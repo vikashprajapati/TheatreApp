@@ -79,12 +79,14 @@ class StreamingRoomFragment :
 		bottomSheetBehavior = BottomSheetBehavior.from(binding!!.bottomSheetLayout.bottomSheet)
 
 		binding!!.searchButton.setOnClickListener {
-			bottomSheetBehavior.state =
-				if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_HIDDEN)
-					BottomSheetBehavior.STATE_HALF_EXPANDED else
-					BottomSheetBehavior.STATE_HIDDEN
+			findNavController().navigate(R.id.action_roomFrament_to_searchFragment)
 		}
 	}
+
+	/*private fun launchSearchBottomSheet(){
+		val searchFragment = SearchFragment()
+		searchFragment.show(parentFragmentManager, SearchFragment.TAG)
+	}*/
 
 	override fun onStart() {
 		super.onStart()

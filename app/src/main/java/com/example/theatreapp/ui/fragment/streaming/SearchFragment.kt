@@ -46,6 +46,8 @@ class SearchFragment : BaseBottomSheetFragment<FragmentSearchBinding, SearchBott
     override fun getViewBinding(): FragmentSearchBinding = FragmentSearchBinding.inflate(layoutInflater)
 
     companion object {
+        val TAG: String = SearchFragment::class.java.canonicalName
+
         @JvmStatic
         fun newInstance() =
             SearchFragment()
