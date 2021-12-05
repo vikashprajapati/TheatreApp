@@ -7,6 +7,14 @@ import androidx.lifecycle.ViewModel
 class SearchBottomSheetViewModel : ViewModel() {
     private val _searchEditText = MutableLiveData<String>()
     private val _invalidInput = MutableLiveData<com.vikash.syncr_core.utils.Event<String>>()
+    private var _youtubeDataAccessPermission : Boolean = false
+
+    var youtubeDataAccessPermission : Boolean
+        get() = _youtubeDataAccessPermission
+        set(value) {
+            _youtubeDataAccessPermission = value
+        }
+
     var searchEditText : MutableLiveData<String>
         get() = _searchEditText
         set(data) {
@@ -20,6 +28,6 @@ class SearchBottomSheetViewModel : ViewModel() {
             return
         }
 
-        // make an api call here
+
     }
 }

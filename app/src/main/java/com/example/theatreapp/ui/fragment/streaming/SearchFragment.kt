@@ -1,5 +1,6 @@
 package com.example.theatreapp.ui.fragment.streaming
 
+import android.Manifest
 import android.app.Activity
 import android.graphics.Point
 import android.os.Build
@@ -12,8 +13,27 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.theatreapp.R
 import com.example.theatreapp.databinding.FragmentSearchBinding
 import com.example.theatreapp.ui.fragment.BaseBottomSheetFragment
+import com.vikash.syncr_core.googleservices.AuthService
+import com.vikash.syncr_core.googleservices.YoutubeApiAuthListener
 import com.vikash.syncr_core.viewmodels.SearchBottomSheetViewModel
+import pub.devrel.easypermissions.EasyPermissions
 import kotlin.math.roundToInt
+import android.content.SharedPreferences
+
+import android.accounts.AccountManager
+import android.app.Activity.RESULT_OK
+import android.app.Dialog
+import android.content.Context
+
+import android.content.Intent
+import com.vikash.syncr_core.googleservices.AuthService.Companion.REQUEST_ACCOUNT_PICKER
+import com.vikash.syncr_core.googleservices.AuthService.Companion.REQUEST_AUTHORIZATION
+import com.vikash.syncr_core.googleservices.AuthService.Companion.REQUEST_GOOGLE_PLAY_SERVICES
+import com.google.android.gms.common.GoogleApiAvailability
+
+
+
+
 
 /**
  * A simple [Fragment] subclass.
@@ -21,7 +41,9 @@ import kotlin.math.roundToInt
  * create an instance of this fragment.
  */
 class SearchFragment :
-    BaseBottomSheetFragment<FragmentSearchBinding, SearchBottomSheetViewModel>() {
+    BaseBottomSheetFragment<FragmentSearchBinding, SearchBottomSheetViewModel>(),
+    YoutubeApiAuthListener
+{
     private var playerHeight: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,6 +109,80 @@ class SearchFragment :
 
     override fun getViewBinding(): FragmentSearchBinding =
         FragmentSearchBinding.inflate(layoutInflater)
+
+    override fun showGooglePlayServicesAvailabilityErrorDialog(statusCode: Int) {
+        val apiAvailability: GoogleApiAvailability = GoogleApiAvailability.getInstance()
+        val dialog: Dialog = apiAvailability.getErrorDialog(
+            this@SearchFragment,
+            statusCode,
+            REQUEST_GOOGLE_PLAY_SERVICES
+        )!!
+        dialog.show()
+    }
+
+    override fun youtubeDataPermissionAvailable(mCredential: com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential) {
+        viewModel.youtubeDataAccessPermission = true
+    }
+
+    override fun getPermissions() {
+        EasyPermissions.requestPermissions(
+            this,
+            "This app needs to access your Google account (via Contacts).",
+            AuthService.REQUEST_PERMISSION_GET_ACCOUNTS,
+            Manifest.permission.GET_ACCOUNTS
+        )
+    }
+
+    /**
+     * Called when an activity launched here (specifically, AccountPicker
+     * and authorization) exits, giving you the requestCode you started it with,
+     * the resultCode it returned, and any additional data from it.
+     * @param requestCode code indicating which activity result is incoming.
+     * @param resultCode code indicating the result of the incoming
+     * activity result.
+     * @param data Intent (containing result data) returned by incoming
+     * activity result.
+     */
+    /*override fun onActivityResult(
+        requestCode: Int, resultCode: Int, data: Intent?
+    ) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            REQUEST_GOOGLE_PLAY_SERVICES -> if (resultCode != RESULT_OK) {
+                mOutputText.setText(
+                    "This app requires Google Play Services. Please install " +
+                            "Google Play Services on your device and relaunch this app."
+                )
+            } else {
+                viewModel.youtubeDataAccessPermission = true
+            }
+            REQUEST_ACCOUNT_PICKER -> if (resultCode == RESULT_OK && data != null && data.extras != null) {
+                val accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
+                if (accountName != null) {
+                    val settings: SharedPreferences = getPreferences(Context.MODE_PRIVATE)
+                    val editor = settings.edit()
+                    editor.putString(PREF_ACCOUNT_NAME, accountName)
+                    editor.apply()
+                    mCredential.setSelectedAccountName(accountName)
+                    getResultsFromApi()
+                }
+            }
+            REQUEST_AUTHORIZATION -> if (resultCode == RESULT_OK) {
+                getResultsFromApi()
+            }
+        }
+    }*/
+
+    override fun networkError() {
+        shortToast(R.string.network_error)
+    }
+
+    override fun launchIntentForPermissions(mCredential: com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential) {
+        startActivityForResult(
+            mCredential.newChooseAccountIntent(),
+            AuthService.REQUEST_ACCOUNT_PICKER
+        )
+    }
 
     companion object {
         val TAG: String = SearchFragment::class.java.canonicalName
