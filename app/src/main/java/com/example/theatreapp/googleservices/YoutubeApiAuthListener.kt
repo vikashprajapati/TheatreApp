@@ -1,4 +1,4 @@
-package com.vikash.syncr_core.googleservices
+package com.example.theatreapp.googleservices
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 

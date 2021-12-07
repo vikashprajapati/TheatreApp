@@ -1,9 +1,8 @@
-package com.vikash.syncr_core.googleservices
+package com.example.theatreapp.googleservices
 
 import android.Manifest
 import android.content.Context
 import com.google.android.gms.common.ConnectionResult
-
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.util.ExponentialBackOff
@@ -19,10 +18,10 @@ class AuthService(val context : Context, val listener : YoutubeApiAuthListener) 
         context, listOf(YouTubeScopes.YOUTUBE_READONLY)
     ).setBackOff(ExponentialBackOff());
 
-    private fun getResultsFromApi() {
+    public fun getAccountPermission() {
         if (!isGooglePlayServicesAvailable()) {
             acquireGooglePlayServices()
-        } else if (mCredential.getSelectedAccountName() == null) {
+        } else if (mCredential.selectedAccountName == null) {
             chooseAccount()
         }else {
             listener.youtubeDataPermissionAvailable(mCredential)

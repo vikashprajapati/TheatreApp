@@ -2,6 +2,7 @@ package com.example.theatreapp.ui.fragment.streaming
 
 import android.Manifest
 import android.app.Activity
+import android.app.Dialog
 import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
@@ -13,26 +14,14 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.theatreapp.R
 import com.example.theatreapp.databinding.FragmentSearchBinding
 import com.example.theatreapp.ui.fragment.BaseBottomSheetFragment
-import com.vikash.syncr_core.googleservices.AuthService
-import com.vikash.syncr_core.googleservices.YoutubeApiAuthListener
+import com.google.android.gms.common.GoogleApiAvailability
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import com.example.theatreapp.googleservices.AuthService
+import com.example.theatreapp.googleservices.AuthService.Companion.REQUEST_GOOGLE_PLAY_SERVICES
+import com.example.theatreapp.googleservices.YoutubeApiAuthListener
 import com.vikash.syncr_core.viewmodels.SearchBottomSheetViewModel
 import pub.devrel.easypermissions.EasyPermissions
 import kotlin.math.roundToInt
-import android.content.SharedPreferences
-
-import android.accounts.AccountManager
-import android.app.Activity.RESULT_OK
-import android.app.Dialog
-import android.content.Context
-
-import android.content.Intent
-import com.vikash.syncr_core.googleservices.AuthService.Companion.REQUEST_ACCOUNT_PICKER
-import com.vikash.syncr_core.googleservices.AuthService.Companion.REQUEST_AUTHORIZATION
-import com.vikash.syncr_core.googleservices.AuthService.Companion.REQUEST_GOOGLE_PLAY_SERVICES
-import com.google.android.gms.common.GoogleApiAvailability
-
-
-
 
 
 /**
@@ -44,10 +33,13 @@ class SearchFragment :
     BaseBottomSheetFragment<FragmentSearchBinding, SearchBottomSheetViewModel>(),
     YoutubeApiAuthListener
 {
+    private lateinit var authService : AuthService
     private var playerHeight: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         playerHeight = arguments?.getInt("height", 0)!!
+
+        authService = AuthService(requireContext(), this)
     }
 
     override fun onCreateView(
@@ -64,6 +56,11 @@ class SearchFragment :
         )
 
         return binding?.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        authService.getAccountPermission()
     }
 
     private val Activity.displayMetrics: DisplayMetrics
@@ -120,7 +117,7 @@ class SearchFragment :
         dialog.show()
     }
 
-    override fun youtubeDataPermissionAvailable(mCredential: com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential) {
+    override fun youtubeDataPermissionAvailable(mCredential: GoogleAccountCredential) {
         viewModel.youtubeDataAccessPermission = true
     }
 
