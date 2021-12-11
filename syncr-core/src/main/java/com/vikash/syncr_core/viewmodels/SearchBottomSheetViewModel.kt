@@ -3,17 +3,14 @@ package com.vikash.syncr_core.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.vikash.syncr_core.data.repository.YoutubeRepository
+import kotlinx.coroutines.launch
 
 class SearchBottomSheetViewModel : ViewModel() {
     private val _searchEditText = MutableLiveData<String>()
     private val _invalidInput = MutableLiveData<com.vikash.syncr_core.utils.Event<String>>()
-    private var _youtubeDataAccessPermission : Boolean = false
 
-    var youtubeDataAccessPermission : Boolean
-        get() = _youtubeDataAccessPermission
-        set(value) {
-            _youtubeDataAccessPermission = value
-        }
 
     var searchEditText : MutableLiveData<String>
         get() = _searchEditText
@@ -28,6 +25,13 @@ class SearchBottomSheetViewModel : ViewModel() {
             return
         }
 
+        getSearchResults()
+    }
 
+    fun getSearchResults() {
+        val youtubeRepository = YoutubeRepository()
+        viewModelScope.launch(){
+            val response = youtubeRepository.search(_searchEditText.value!!)
+        }
     }
 }
