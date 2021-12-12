@@ -1,18 +1,13 @@
 package com.vikash.syncr_core.data.repository
 
+import android.accounts.NetworkErrorException
+import com.vikash.syncr_core.network.NetworkDataSource
 import com.vikash.syncr_core.network.YoutubeApi
-import java.lang.Exception
+import kotlin.Exception
 
-class YoutubeRepository {
-    val youtubeApi = YoutubeApi()
+class YoutubeRepository(private val networkDataSource: NetworkDataSource) {
 
-    suspend fun search(searchQuery : String) : String{
-        try {
-            return youtubeApi.searchVideo(searchQuery)
-        }catch (exception : Exception){
-
-        }
-
-        return ""
+    suspend fun search(searchQuery : String) : Result<List<String>> {
+        return networkDataSource.getSearchResults(searchQuery)
     }
 }

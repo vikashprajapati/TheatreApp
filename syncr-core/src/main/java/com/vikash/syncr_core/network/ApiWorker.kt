@@ -7,6 +7,7 @@ import io.ktor.client.features.json.*
 import io.ktor.client.features.logging.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.http.cio.*
 
 class ApiWorker{
     private val _client = HttpClient(CIO) {
@@ -28,6 +29,5 @@ class ApiWorker{
             level = LogLevel.HEADERS
         }
     }
-
     val httpClient : HttpClient get() = _client
 }

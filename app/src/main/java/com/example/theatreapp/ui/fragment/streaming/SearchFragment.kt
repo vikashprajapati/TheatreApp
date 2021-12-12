@@ -1,8 +1,6 @@
 package com.example.theatreapp.ui.fragment.streaming
 
-import android.Manifest
 import android.app.Activity
-import android.app.Dialog
 import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
@@ -14,36 +12,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.theatreapp.R
 import com.example.theatreapp.databinding.FragmentSearchBinding
 import com.example.theatreapp.ui.fragment.BaseBottomSheetFragment
-import com.google.android.gms.common.GoogleApiAvailability
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
-import com.example.theatreapp.googleservices.AuthService
-import com.example.theatreapp.googleservices.AuthService.Companion.REQUEST_GOOGLE_PLAY_SERVICES
-import com.example.theatreapp.googleservices.YoutubeApiAuthListener
 import com.vikash.syncr_core.viewmodels.SearchBottomSheetViewModel
-import pub.devrel.easypermissions.EasyPermissions
 import kotlin.math.roundToInt
-import com.google.android.gms.common.ConnectionResult
-
-import android.net.NetworkInfo
-
-import androidx.core.content.ContextCompat.getSystemService
-
-import android.net.ConnectivityManager
-
-import androidx.annotation.NonNull
-
-import android.content.SharedPreferences
-
-import android.accounts.AccountManager
-
-import android.content.Intent
-
-import androidx.core.app.ActivityCompat.startActivityForResult
-
-import pub.devrel.easypermissions.AfterPermissionGranted
-
-
-
 
 
 /**
