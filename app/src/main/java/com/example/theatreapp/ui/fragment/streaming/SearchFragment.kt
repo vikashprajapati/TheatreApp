@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.theatreapp.R
 import com.example.theatreapp.databinding.FragmentSearchBinding
+import com.example.theatreapp.ui.adapters.ChatMessagesAdapter
+import com.example.theatreapp.ui.adapters.YoutubeSearchResultsAdapter
 import com.example.theatreapp.ui.fragment.BaseBottomSheetFragment
 import com.vikash.syncr_core.viewmodels.SearchBottomSheetViewModel
 import kotlin.math.roundToInt
@@ -24,6 +26,7 @@ import kotlin.math.roundToInt
 class SearchFragment :
     BaseBottomSheetFragment<FragmentSearchBinding, SearchBottomSheetViewModel>()
 {
+    private val searchResultsAdapter = YoutubeSearchResultsAdapter(arrayListOf())
     private var playerHeight: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,7 +92,15 @@ class SearchFragment :
             
             searchResults.observe(viewLifecycleOwner){
                 Log.i(TAG, "observeData: $it")
+                searchResultsAdapter.updateSearchResultList(it)
             }
+        }
+    }
+
+    override fun setUpViews() {
+        super.setUpViews()
+        binding?.recyclerView.apply {
+            this?.adapter = searchResultsAdapter
         }
     }
 
