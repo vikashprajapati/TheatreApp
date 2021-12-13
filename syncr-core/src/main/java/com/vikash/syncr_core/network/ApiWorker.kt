@@ -21,7 +21,10 @@ class ApiWorker{
         }
         // Json
         install(JsonFeature) {
-            serializer = GsonSerializer()
+            serializer = GsonSerializer(){
+                setPrettyPrinting()
+                disableHtmlEscaping()
+            }
         }
         //Now you see response logs inside terminal
         install(Logging) {

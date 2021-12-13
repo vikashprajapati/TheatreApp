@@ -81,6 +81,15 @@ class SearchFragment :
                 val msg = it.getContentIfNotHandledOrReturnNull() ?: return@observe
                 shortToast(R.string.search_invalid_input)
             }
+            
+            searchError.observe(viewLifecycleOwner){
+                val msg = it.getContentIfNotHandledOrReturnNull()?: return@observe
+                shortToast(msg)
+            }
+            
+            searchResults.observe(viewLifecycleOwner){
+                Log.i(TAG, "observeData: $it")
+            }
         }
     }
 
