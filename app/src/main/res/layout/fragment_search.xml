@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="@id/dash_icon"
-                app:layout_constraintBottom_toTopOf="@id/recyclerView"
+                app:layout_constraintBottom_toTopOf="@id/separator"
                 android:elevation="12dp">
                 <LinearLayout
                     android:layout_width="0dp"
@@ -60,13 +60,22 @@
                     style="@style/AppIconButton"/>
             </LinearLayout>
 
+            <View
+                android:id="@+id/separator"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                app:layout_constraintTop_toBottomOf="@id/search_input"
+                app:layout_constraintBottom_toTopOf="@id/recyclerView"
+                android:layout_marginVertical="8dp"
+                android:background="@color/charcoal_grey"/>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/search_input"
+                app:layout_constraintTop_toBottomOf="@id/separator"
                 android:paddingVertical="16dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 />

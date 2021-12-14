@@ -3,6 +3,7 @@ package com.example.theatreapp.ui.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.theatreapp.databinding.SearchResultItemBinding
 import com.vikash.syncr_core.data.models.response.youtube.searchResults.ItemsItem
 
@@ -31,6 +32,10 @@ class YoutubeSearchResultsAdapter(
     class YoutubeItemViewHolder(private val searchItem : SearchResultItemBinding) : RecyclerView.ViewHolder(searchItem.root) {
         fun bind(videoItem: ItemsItem?){
             searchItem.video = videoItem
+            Glide.with(searchItem.root)
+                .load(videoItem?.snippet?.thumbnails?.medium?.url)
+                .fitCenter()
+                .into(searchItem.videoThumbnail)
         }
     }
 }
