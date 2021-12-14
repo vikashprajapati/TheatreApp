@@ -6,9 +6,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.theatreapp.databinding.SearchResultItemBinding
 import com.vikash.syncr_core.data.models.response.youtube.searchResults.ItemsItem
+import com.vikash.syncr_core.utils.SearchResultAdapterListener
 
 class YoutubeSearchResultsAdapter(
-    private var searchResultList : List<ItemsItem?>?
+    private var searchResultList : List<ItemsItem?>?,
+    private var listener : SearchResultAdapterListener
     ) : RecyclerView.Adapter<YoutubeSearchResultsAdapter.YoutubeItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): YoutubeItemViewHolder {
@@ -20,6 +22,9 @@ class YoutubeSearchResultsAdapter(
     override fun onBindViewHolder(holder: YoutubeItemViewHolder, position: Int) {
         val video = searchResultList?.get(position)
         holder.bind(video)
+        holder.itemView.setOnClickListener{
+            listener.videoSelected(video)
+        }
     }
 
     override fun getItemCount(): Int = searchResultList?.size?:0

@@ -18,6 +18,7 @@ import com.vikash.syncr_core.constants.VideoPlaybackConstants.Companion.videoPau
 import com.vikash.syncr_core.constants.VideoPlaybackConstants.Companion.videoPlayed
 import com.vikash.syncr_core.data.SessionData
 import com.vikash.syncr_core.data.connections.SocketManager.participantJoined
+import com.vikash.syncr_core.data.models.response.youtube.searchResults.ItemsItem
 import com.vikash.syncr_core.viewmodels.StreamingRoomFragmentViewModel
 
 /**
@@ -107,6 +108,10 @@ class MediaPlayerFragment :
 			fullscreenButton = findViewById(R.id.exo_fullscreen)!!
 			squeezeButton = findViewById(R.id.exo_squeeze)!!
 		}
+	}
+
+	fun changeVideo(videoItem: ItemsItem?){
+
 	}
 
 	override fun observeData() {

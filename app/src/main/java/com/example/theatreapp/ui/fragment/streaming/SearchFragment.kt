@@ -11,9 +11,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.theatreapp.R
 import com.example.theatreapp.databinding.FragmentSearchBinding
-import com.example.theatreapp.ui.adapters.ChatMessagesAdapter
+import com.example.theatreapp.ui.activities.MainActivity
 import com.example.theatreapp.ui.adapters.YoutubeSearchResultsAdapter
 import com.example.theatreapp.ui.fragment.BaseBottomSheetFragment
+import com.vikash.syncr_core.data.models.response.youtube.searchResults.ItemsItem
+import com.vikash.syncr_core.utils.SearchResultAdapterListener
 import com.vikash.syncr_core.viewmodels.SearchBottomSheetViewModel
 import kotlin.math.roundToInt
 
@@ -24,9 +26,9 @@ import kotlin.math.roundToInt
  * create an instance of this fragment.
  */
 class SearchFragment :
-    BaseBottomSheetFragment<FragmentSearchBinding, SearchBottomSheetViewModel>()
-{
-    private val searchResultsAdapter = YoutubeSearchResultsAdapter(arrayListOf())
+    BaseBottomSheetFragment<FragmentSearchBinding, SearchBottomSheetViewModel>(),
+    SearchResultAdapterListener {
+    private val searchResultsAdapter = YoutubeSearchResultsAdapter(arrayListOf(), this)
     private var playerHeight: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,6 +111,11 @@ class SearchFragment :
 
     override fun getViewBinding(): FragmentSearchBinding =
         FragmentSearchBinding.inflate(layoutInflater)
+
+    override fun videoSelected(videoItem: ItemsItem?) {
+        var mainActivity = activity as MainActivity
+        mainActivity.notifyMediaPlayerFragmentToChangeVideo(videoItem)
+    }
 
     companion object {
         val TAG: String = SearchFragment::class.java.canonicalName
