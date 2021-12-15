@@ -15,8 +15,10 @@ import com.example.theatreapp.ui.activities.MainActivity
 import com.example.theatreapp.ui.adapters.YoutubeSearchResultsAdapter
 import com.example.theatreapp.ui.fragment.BaseBottomSheetFragment
 import com.vikash.syncr_core.data.models.response.youtube.searchResults.ItemsItem
+import com.vikash.syncr_core.utils.NewVideoSelectedEvent
 import com.vikash.syncr_core.utils.SearchResultAdapterListener
 import com.vikash.syncr_core.viewmodels.SearchBottomSheetViewModel
+import org.greenrobot.eventbus.EventBus
 import kotlin.math.roundToInt
 
 
@@ -113,8 +115,7 @@ class SearchFragment :
         FragmentSearchBinding.inflate(layoutInflater)
 
     override fun videoSelected(videoItem: ItemsItem?) {
-        var mainActivity = activity as MainActivity
-        mainActivity.notifyMediaPlayerFragmentToChangeVideo(videoItem)
+        EventBus.getDefault().post(videoItem?.let { NewVideoSelectedEvent(it) })
     }
 
     companion object {

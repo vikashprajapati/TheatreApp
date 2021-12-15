@@ -3,6 +3,7 @@ package com.example.theatreapp.ui.fragment.streaming
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
@@ -19,7 +20,11 @@ import com.vikash.syncr_core.constants.VideoPlaybackConstants.Companion.videoPla
 import com.vikash.syncr_core.data.SessionData
 import com.vikash.syncr_core.data.connections.SocketManager.participantJoined
 import com.vikash.syncr_core.data.models.response.youtube.searchResults.ItemsItem
+import com.vikash.syncr_core.utils.NewVideoSelectedEvent
 import com.vikash.syncr_core.viewmodels.StreamingRoomFragmentViewModel
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  * A simple [Fragment] subclass.
@@ -67,9 +72,10 @@ class MediaPlayerFragment :
 
 	override fun onStart() {
 		super.onStart()
+		EventBus.getDefault().register(this)
+
 		exoplayer.setMediaItem(MediaItem.fromUri(Uri.parse("asset:///videoplayback.mp4")))
 		exoplayer.prepare()
-
 		setupPlayerControlButtonsListener()
 	}
 
@@ -91,6 +97,13 @@ class MediaPlayerFragment :
 	override fun onStop() {
 		super.onStop()
 		exoplayer.stop()
+		EventBus.getDefault().unregister(this)
+	}
+
+	@Subscribe(threadMode = ThreadMode.MAIN)
+	fun onVideoChangedEvent(newVideoSelectedEvent: NewVideoSelectedEvent){
+		val newVideo = newVideoSelectedEvent.video
+		Log.i(TAG, "onVideoChangedEvent: ")
 	}
 
 	private fun setupMediaPlayer() {

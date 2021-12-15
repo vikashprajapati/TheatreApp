@@ -40,7 +40,6 @@ abstract class BaseFragment<VBinding : ViewBinding, VModel : androidx.lifecycle.
         observeData()
     }
 
-
     open fun setUpViews() {}
 
     open fun observeData() {}
