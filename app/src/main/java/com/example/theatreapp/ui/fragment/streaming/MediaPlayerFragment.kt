@@ -26,6 +26,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import android.util.SparseArray
+import androidx.core.util.forEach
 import com.vikash.youtube_extractor.VideoMeta
 import com.vikash.youtube_extractor.YouTubeExtractor
 import com.vikash.youtube_extractor.YtFile
@@ -70,7 +71,7 @@ class MediaPlayerFragment :
 	}
 
 	override fun initViewModel():
-            StreamingRoomFragmentViewModel = ViewModelProvider(requireActivity()).get(StreamingRoomFragmentViewModel::class.java)
+			StreamingRoomFragmentViewModel = ViewModelProvider(requireActivity()).get(StreamingRoomFragmentViewModel::class.java)
 
 	override fun getViewBinding(): FragmentMediaPlayerBinding =
 		FragmentMediaPlayerBinding.inflate(layoutInflater)
@@ -109,6 +110,36 @@ class MediaPlayerFragment :
 	fun onVideoChangedEvent(newVideoSelectedEvent: NewVideoSelectedEvent){
 		val newVideo = newVideoSelectedEvent.video
 		Log.i(TAG, "onVideoChangedEvent: ")
+
+		object : YouTubeExtractor(context) {
+			override fun onExtractionComplete(ytFiles: SparseArray<YtFile>?, vMeta: VideoMeta?) {
+				if (ytFiles != null) {
+					var videoUrl = ""
+					ytFiles.forEach{key, ytFile ->
+						Log.i(TAG, "onExtractionComplete: $key \n $ytFile \n\n")
+						if(
+							ytFile.format.ext.equals("mp4")
+							&& ytFile.format.audioBitrate > 0
+							&& ytFile.format.height > 0
+						){
+							videoUrl = ytFile.url
+						}
+					}
+
+					if(videoUrl.isNullOrEmpty()){
+						requireActivity().runOnUiThread {
+							shortToast("Can't play video")
+						}
+					}else{
+						exoplayer.apply {
+							setMediaItem(MediaItem.fromUri(videoUrl))
+							prepare()
+							play()
+						}
+					}
+				}
+			}
+		}.extract(newVideo.id?.videoId)
 	}
 
 	private fun setupMediaPlayer() {
@@ -126,19 +157,6 @@ class MediaPlayerFragment :
 			fullscreenButton = findViewById(R.id.exo_fullscreen)!!
 			squeezeButton = findViewById(R.id.exo_squeeze)!!
 		}
-	}
-
-	fun changeVideo(videoItem: ItemsItem?){
-		val youtubeLink = "http://youtube.com/watch?v=xxxx"
-
-		object : YouTubeExtractor(context) {
-			override fun onExtractionComplete(ytFiles: SparseArray<YtFile>?, vMeta: VideoMeta?) {
-				if (ytFiles != null) {
-					val itag = 22
-					val downloadUrl: String = ytFiles[itag].getUrl()
-				}
-			}
-		}.extract(youtubeLink)
 	}
 
 	override fun observeData() {
@@ -166,13 +184,13 @@ class MediaPlayerFragment :
 				forwardVideo -> {
 					exoplayer.seekTo(videoChangedData.timeStamp.toLong())
 					if(!videoChangedData.userId.equals(SessionData.localUser?.id))
-					shortToast("${SessionData.getParticipantName(videoChangedData.userId)} seeked forward")
+						shortToast("${SessionData.getParticipantName(videoChangedData.userId)} seeked forward")
 				}
 
 				rewindVideo -> {
 					exoplayer.seekTo(videoChangedData.timeStamp.toLong())
 					if(!videoChangedData.userId.equals(SessionData.localUser?.id))
-					shortToast("${SessionData.getParticipantName(videoChangedData.userId)} seeked backward")
+						shortToast("${SessionData.getParticipantName(videoChangedData.userId)} seeked backward")
 				}
 			}
 		}

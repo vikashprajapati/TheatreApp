@@ -24,7 +24,7 @@ class YoutubeApi {
                         append("x-rapidapi-key", "8ed9b5613amshe1b718e52a08c07p170155jsnd3b6c5af6a16")
                     }
                     parameter("q", searchQuery)
-                    parameter("maxResults", 12)
+                    parameter("maxResults", 50)
                     parameter("order", "date")
                     parameter("part", "snippet,id")
                 }
