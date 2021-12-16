@@ -40,6 +40,7 @@ android {
 dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation project(path: ':syncr-core')
+    implementation project(path: ':youtube-extractor')
     def nav_version = "2.3.5"
     def youtube_player_version = "10.0.5"
     def exoplayer_version = "2.16.1"

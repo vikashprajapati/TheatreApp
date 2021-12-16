@@ -25,6 +25,11 @@ import com.vikash.syncr_core.viewmodels.StreamingRoomFragmentViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import android.util.SparseArray
+import com.vikash.youtube_extractor.VideoMeta
+import com.vikash.youtube_extractor.YouTubeExtractor
+import com.vikash.youtube_extractor.YtFile
+
 
 /**
  * A simple [Fragment] subclass.
@@ -124,7 +129,16 @@ class MediaPlayerFragment :
 	}
 
 	fun changeVideo(videoItem: ItemsItem?){
+		val youtubeLink = "http://youtube.com/watch?v=xxxx"
 
+		object : YouTubeExtractor(context) {
+			override fun onExtractionComplete(ytFiles: SparseArray<YtFile>?, vMeta: VideoMeta?) {
+				if (ytFiles != null) {
+					val itag = 22
+					val downloadUrl: String = ytFiles[itag].getUrl()
+				}
+			}
+		}.extract(youtubeLink)
 	}
 
 	override fun observeData() {

@@ -9,6 +9,7 @@
 /.idea/assetWizardSettings.xml
 .DS_Store
 /build
+/youtube-extractor/build
 /captures
 /syncr-core/build
 /tv_theatre_app/build
