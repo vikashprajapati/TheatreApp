@@ -27,6 +27,7 @@ object SocketManager : SocketService.SocketEventsListener {
     private var _participantJoined = MutableLiveData<Event<ParticipantsItem>>()
     private var _participantLeft = MutableLiveData<Event<ParticipantsItem>>()
     private var _onMessage = MutableLiveData<Event<Message>>()
+    private var _onNewVideo = MutableLiveData<Event<String>>()
 
     val connectionStatus : LiveData<String> get() = _connectionStatus
     val joinedRoomStatus : LiveData<Event<JoinedRoomResponse>> get() = _joinedRoomStatus
@@ -36,6 +37,7 @@ object SocketManager : SocketService.SocketEventsListener {
     val changedVideo : LiveData<Event<VideoChanged>> get() = _changedVideo
     val syncedVideo : LiveData<Event<VideoSynced>> get() = _syncedVideo
     val onMessage : LiveData<Event<Message>> get() = _onMessage
+    val onNewVideo : LiveData<Event<String>> get() = _onNewVideo
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Outgoing Socket Events                                                                                                           //
@@ -85,6 +87,10 @@ object SocketManager : SocketService.SocketEventsListener {
         socketService.send(OutgoingEvents.sendVideoSynced, currentTimestamp)
     }
 
+    fun sendNewVideoSelectedEvent(videoUrl: String) {
+        socketService.send(OutgoingEvents.sendNewVideoUrl, videoUrl)
+    }
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Helper methods                                                                                                                   //
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -131,5 +137,9 @@ object SocketManager : SocketService.SocketEventsListener {
 
     override fun onMessage(message: Message) {
         _onMessage.postValue(Event(message))
+    }
+
+    override fun newVideoSelectedEvent(videoUrl: String) {
+        _onNewVideo.postValue(Event(videoUrl))
     }
 }

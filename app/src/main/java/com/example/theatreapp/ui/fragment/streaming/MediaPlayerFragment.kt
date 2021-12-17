@@ -1,5 +1,6 @@
 package com.example.theatreapp.ui.fragment.streaming
 
+import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
@@ -106,6 +107,7 @@ class MediaPlayerFragment :
 		EventBus.getDefault().unregister(this)
 	}
 
+	@SuppressLint("StaticFieldLeak")
 	@Subscribe(threadMode = ThreadMode.MAIN)
 	fun onVideoChangedEvent(newVideoSelectedEvent: NewVideoSelectedEvent){
 		val newVideo = newVideoSelectedEvent.video
@@ -131,11 +133,7 @@ class MediaPlayerFragment :
 							shortToast("Can't play video")
 						}
 					}else{
-						exoplayer.apply {
-							setMediaItem(MediaItem.fromUri(videoUrl))
-							prepare()
-							play()
-						}
+						viewModel.sendNewVideoEvent(videoUrl)
 					}
 				}
 			}
@@ -204,6 +202,15 @@ class MediaPlayerFragment :
 		viewModel.participantArrived.observe(viewLifecycleOwner){
 			val participant = it.getContentIfNotHandledOrReturnNull()?:return@observe
 			viewModel.sendVideoSyncedEvent(exoplayer.currentPosition.toString())
+		}
+
+		viewModel.newVideoSelected.observe(viewLifecycleOwner){
+			val videoUrl = it.getContentIfNotHandledOrReturnNull()?:return@observe
+			exoplayer.apply {
+				setMediaItem(MediaItem.fromUri(videoUrl))
+				prepare()
+				play()
+			}
 		}
 	}
 

@@ -13,6 +13,8 @@ interface SocketConstants {
                 get() = "video changed"
             val onVideoSynced : String
                 get() = "video synced"
+            val onNewVideoSelected : String
+                get() = "new video played"
             val onParticipantJoined : String
                 get() = "participant joined"
             val onParticipantLeft : String
@@ -34,6 +36,8 @@ interface SocketConstants {
                 get() = "video synced"
             val sendLeaveRoom : String
                 get() = "leave room"
+            val sendNewVideoUrl : String
+                get() = "new video selected"
         }
     }
 }

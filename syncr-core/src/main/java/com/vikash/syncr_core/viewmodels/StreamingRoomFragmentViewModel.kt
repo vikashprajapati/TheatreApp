@@ -25,6 +25,7 @@ class StreamingRoomFragmentViewModel : ViewModel() {
     private val _participantArrived = MutableLiveData<Event<ParticipantsItem>>()
     private val _fullScreenLayout = MutableLiveData<Boolean>()
     private var _mediaPlayerFragmentViewHeight = MutableLiveData<Int>()
+    private var _newVideo = MutableLiveData<Event<String>>()
 
     // participants to be changed to livedata of list<participantItem>
     var participants: LiveData<List<ParticipantsItem>> =
@@ -37,6 +38,7 @@ class StreamingRoomFragmentViewModel : ViewModel() {
     var participantJoined: LiveData<Event<ParticipantsItem>> = _participantJoined
     var fullScreenLayout: MutableLiveData<Boolean> = _fullScreenLayout
     var participantArrived: LiveData<Event<ParticipantsItem>> = _participantArrived
+    var newVideoSelected: LiveData<Event<String>> = _newVideo
     var mediaPlayerFragmentViewHeight: MutableLiveData<Int>
         get() = _mediaPlayerFragmentViewHeight
         set(value) {
@@ -49,6 +51,10 @@ class StreamingRoomFragmentViewModel : ViewModel() {
         _participants.postValue(SessionData.currentRoom?.participants)
         _participantJoined.postValue(Event(participant))
         _participantArrived.postValue(Event(participant))
+    }
+
+    private var newVideoSelectedObserver = Observer<Event<String>> {
+        _newVideo.postValue(it)
     }
 
     private var videoPlaybackObserver = Observer<Event<VideoPlayback>> {
@@ -86,6 +92,7 @@ class StreamingRoomFragmentViewModel : ViewModel() {
         SocketManager.changedVideo.observeForever(videoChangedObserver)
         SocketManager.syncedVideo.observeForever(videoSyncedObserver)
         SocketManager.participantLeft.observeForever(participantLeftObserver)
+        SocketManager.onNewVideo.observeForever(newVideoSelectedObserver)
     }
 
     override fun onCleared() {
@@ -108,6 +115,10 @@ class StreamingRoomFragmentViewModel : ViewModel() {
 
     fun sendVideoSyncedEvent(currentTimestamp: String) {
         SocketManager.sendVideoSyncEvent(currentTimestamp)
+    }
+
+    fun sendNewVideoEvent(videoUrl : String){
+        SocketManager.sendNewVideoSelectedEvent(videoUrl)
     }
 
     fun leaveRoom() {

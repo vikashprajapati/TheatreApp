@@ -73,6 +73,9 @@ class SocketService{
         }.on(IncomingEvents.onMessage){
             val message = SyncrApplication.gson.fromJson<Message>(it[0] as String, Message::class.java)
             listener?.onMessage(message)
+        }.on(IncomingEvents.onNewVideoSelected){
+            val videoUrl = it[0] as String
+            listener?.newVideoSelectedEvent(videoUrl)
         }
 
         socket.connect()
@@ -91,6 +94,7 @@ class SocketService{
         fun playbackEvent(videoPlayback: VideoPlayback)
         fun videoJumpEvent(videoChanged: VideoChanged)
         fun syncVideoEvent(videoSynced: VideoSynced)
+        fun newVideoSelectedEvent(videoUrl: String)
         fun newParticipantJoinedEvent(participantsItem: ParticipantsItem)
         fun connectionStatus(eventConnect: String)
         fun joinRoomResponse(joinedRoomResponse: JoinedRoomResponse)
