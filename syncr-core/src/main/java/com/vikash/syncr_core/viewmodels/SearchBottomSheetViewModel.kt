@@ -1,6 +1,8 @@
 package com.vikash.syncr_core.viewmodels
 
 import android.util.Log
+import android.view.View
+import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,8 +14,7 @@ import com.vikash.syncr_core.network.NetworkDataSource
 import com.vikash.syncr_core.network.YoutubeApi
 import com.vikash.syncr_core.utils.Event
 import io.ktor.http.cio.*
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class SearchBottomSheetViewModel : ViewModel() {
     private final val TAG = SearchBottomSheetViewModel::class.java.canonicalName
@@ -25,11 +26,16 @@ class SearchBottomSheetViewModel : ViewModel() {
 
     val searchResults : LiveData<List<ItemsItem?>?> get() = _searchResults
     val searchError : LiveData<Event<String>> get() = _searchError
+    val loading = MutableLiveData<Int>()
     var searchEditText : MutableLiveData<String>
         get() = _searchEditText
         set(data) {
             _searchEditText.value = data.value
         }
+
+    init {
+        loading.postValue(View.GONE)
+    }
 
     val invalidInput : LiveData<Event<String>> get() = _invalidInput
 
@@ -43,8 +49,11 @@ class SearchBottomSheetViewModel : ViewModel() {
     }
 
     private fun getSearchResults() {
+        loading.postValue(View.VISIBLE)
         viewModelScope.launch(){
             val response = youtubeRepository.search(_searchEditText.value!!)
+
+            loading.postValue(View.GONE)
             processSearchResponse(response)
         }
     }
