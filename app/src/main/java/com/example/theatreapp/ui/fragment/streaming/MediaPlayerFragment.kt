@@ -28,6 +28,12 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import android.util.SparseArray
 import androidx.core.util.forEach
+import com.danikula.videocache.HttpProxyCacheServer
+import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.upstream.DataSource
+import com.google.android.exoplayer2.upstream.DefaultDataSource
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.exoplayer2.util.Util
 import com.vikash.youtube_extractor.VideoMeta
 import com.vikash.youtube_extractor.YouTubeExtractor
 import com.vikash.youtube_extractor.YtFile
@@ -206,9 +212,14 @@ class MediaPlayerFragment :
 
 		viewModel.newVideoSelected.observe(viewLifecycleOwner){
 			val videoUrl = it.getContentIfNotHandledOrReturnNull()?:return@observe
+			val proxyServer = HttpProxyCacheServer.Builder(context).maxCacheSize(1024 * 1024 * 1024).build();
+			val proxyUrl = proxyServer.getProxyUrl(videoUrl)
+			val dataSourceFactory = DefaultDataSourceFactory(
+				requireContext(),
+				Util.getUserAgent(requireContext(), requireActivity().applicationContext.packageName)
+			)
 			exoplayer.apply {
-				setMediaItem(MediaItem.fromUri(videoUrl))
-				prepare()
+				prepare(ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.parse(proxyUrl)))
 				play()
 			}
 		}
