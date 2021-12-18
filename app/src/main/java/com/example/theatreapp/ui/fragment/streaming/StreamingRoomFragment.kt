@@ -17,9 +17,13 @@ import com.example.theatreapp.databinding.FragmentStreamingRoomBinding
 import com.example.theatreapp.ui.adapters.StreamingViewPagerAdapter
 import com.example.theatreapp.ui.fragment.BaseFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.vikash.syncr_core.utils.NewVideoSelectedEvent
 import com.vikash.syncr_core.viewmodels.StreamingRoomFragmentViewModel
 import io.socket.client.Socket.EVENT_CONNECT_ERROR
 import io.socket.client.Socket.EVENT_DISCONNECT
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  * A simple [Fragment] subclass.
@@ -81,11 +85,19 @@ class StreamingRoomFragment :
 	override fun onStart() {
 		super.onStart()
 //        addYoutubePlayerFragment
+		EventBus.getDefault().register(this)
+	}
+
+	@Subscribe(threadMode = ThreadMode.MAIN)
+	fun updateVideoDetails(videoSelectedEvent: NewVideoSelectedEvent){
+		val newVideoTitle = videoSelectedEvent.video.snippet?.title
+		binding?.videoTitleTextView?.text = newVideoTitle
 	}
 
 	override fun onStop() {
 		super.onStop()
 		mediaPlayerFragment?.onStop()
+		EventBus.getDefault().unregister(this)
 	}
 
 	override fun onDestroyView() {
