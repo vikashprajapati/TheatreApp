@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vikash.syncr_core.data.models.response.youtube.searchResults.ItemsItem
 import com.vikash.syncr_core.data.models.response.youtube.searchResults.SearchResponse
+import com.vikash.syncr_core.data.models.response.youtube.searchResults.VideosItem
+import com.vikash.syncr_core.data.models.response.youtube.searchResults.YoutubeRefinedSearchResponse
 import com.vikash.syncr_core.data.repository.YoutubeRepository
 import com.vikash.syncr_core.network.NetworkDataSource
 import com.vikash.syncr_core.network.YoutubeApi
@@ -21,10 +23,12 @@ class SearchBottomSheetViewModel : ViewModel() {
     private val _searchEditText = MutableLiveData<String>()
     private val _invalidInput = MutableLiveData<Event<String>>()
     private val _searchResults = MutableLiveData<List<ItemsItem?>?>()
+    private val _refinedSearchResults = MutableLiveData<List<VideosItem?>?>()
     private val _searchError = MutableLiveData<Event<String>>()
     private val youtubeRepository = YoutubeRepository(NetworkDataSource(YoutubeApi()))
 
     val searchResults : LiveData<List<ItemsItem?>?> get() = _searchResults
+    val refinedSearchResults : LiveData<List<VideosItem?>?> get() = _refinedSearchResults
     val searchError : LiveData<Event<String>> get() = _searchError
     val loading = MutableLiveData<Int>()
     var searchEditText : MutableLiveData<String>
@@ -45,7 +49,7 @@ class SearchBottomSheetViewModel : ViewModel() {
             return
         }
 
-        getSearchResults()
+        getRefinedSearchResults()
     }
 
     private fun getSearchResults() {
@@ -62,6 +66,26 @@ class SearchBottomSheetViewModel : ViewModel() {
         Log.i(TAG, "processSearchResponse: $searchResponse")
         if(searchResponse.isSuccess){
             _searchResults.postValue(searchResponse.getOrNull()?.items)
+        }else{
+            _searchError.postValue(Event("Unable to retrieve search results"))
+        }
+    }
+
+    private fun getRefinedSearchResults(){
+        loading.postValue(View.VISIBLE)
+        viewModelScope.launch(){
+            val response = youtubeRepository.refinedSearch(_searchEditText.value!!)
+
+            loading.postValue(View.GONE)
+            processRefinedSearchResponse(response)
+        }
+    }
+
+    private fun processRefinedSearchResponse(searchResponse: Result<YoutubeRefinedSearchResponse>){
+        Log.i(TAG, "processSearchResponse: $searchResponse")
+        if(searchResponse.isSuccess){
+            _refinedSearchResults
+                .postValue(searchResponse?.getOrNull()?.items!!)
         }else{
             _searchError.postValue(Event("Unable to retrieve search results"))
         }

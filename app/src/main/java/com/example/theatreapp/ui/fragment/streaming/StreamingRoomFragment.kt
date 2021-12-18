@@ -90,7 +90,7 @@ class StreamingRoomFragment :
 
 	@Subscribe(threadMode = ThreadMode.MAIN)
 	fun updateVideoDetails(videoSelectedEvent: NewVideoSelectedEvent){
-		val newVideoTitle = videoSelectedEvent.video.snippet?.title
+		val newVideoTitle = videoSelectedEvent.video?.title
 		binding?.videoTitleTextView?.text = newVideoTitle
 	}
 

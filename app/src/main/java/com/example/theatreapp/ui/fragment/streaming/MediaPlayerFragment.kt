@@ -143,7 +143,7 @@ class MediaPlayerFragment :
 					}
 				}
 			}
-		}.extract(newVideo.id?.videoId)
+		}.extract(newVideo.url)
 	}
 
 	private fun setupMediaPlayer() {

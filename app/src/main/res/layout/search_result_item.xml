@@ -3,7 +3,7 @@
     <data>
         <variable
             name="video"
-            type="com.vikash.syncr_core.data.models.response.youtube.searchResults.ItemsItem" />
+            type="com.vikash.syncr_core.data.models.response.youtube.searchResults.VideosItem" />
     </data>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
@@ -34,14 +34,14 @@
                     android:maxLines="2"
                     android:ellipsize="end"
                     android:textColor="@color/secondary_color"
-                    android:text="@{video.snippet.title}"/>
+                    android:text="@{video.title}"/>
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/video_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="3"
                     android:ellipsize="end"
-                    android:text="@{video.snippet.description}"/>
+                    android:text="@{video.descriptionShort}"/>
             </LinearLayout>
         </LinearLayout>
         <View

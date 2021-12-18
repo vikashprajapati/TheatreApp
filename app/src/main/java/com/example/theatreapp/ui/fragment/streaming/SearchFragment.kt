@@ -11,10 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.theatreapp.R
 import com.example.theatreapp.databinding.FragmentSearchBinding
-import com.example.theatreapp.ui.activities.MainActivity
 import com.example.theatreapp.ui.adapters.YoutubeSearchResultsAdapter
 import com.example.theatreapp.ui.fragment.BaseBottomSheetFragment
-import com.vikash.syncr_core.data.models.response.youtube.searchResults.ItemsItem
+import com.vikash.syncr_core.data.models.response.youtube.searchResults.VideosItem
 import com.vikash.syncr_core.utils.NewVideoSelectedEvent
 import com.vikash.syncr_core.utils.SearchResultAdapterListener
 import com.vikash.syncr_core.viewmodels.SearchBottomSheetViewModel
@@ -94,7 +93,12 @@ class SearchFragment :
                 shortToast(msg)
             }
             
-            searchResults.observe(viewLifecycleOwner){
+            /*searchResults.observe(viewLifecycleOwner){
+                Log.i(TAG, "observeData: $it")
+                searchResultsAdapter.updateSearchResultList(it)
+            }*/
+
+            refinedSearchResults.observe(viewLifecycleOwner){
                 Log.i(TAG, "observeData: $it")
                 searchResultsAdapter.updateSearchResultList(it)
             }
@@ -114,7 +118,7 @@ class SearchFragment :
     override fun getViewBinding(): FragmentSearchBinding =
         FragmentSearchBinding.inflate(layoutInflater)
 
-    override fun videoSelected(videoItem: ItemsItem?) {
+    override fun videoSelected(videoItem: VideosItem?) {
         EventBus.getDefault().post(videoItem?.let { NewVideoSelectedEvent(it) })
     }
 

@@ -5,11 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.theatreapp.databinding.SearchResultItemBinding
-import com.vikash.syncr_core.data.models.response.youtube.searchResults.ItemsItem
+import com.vikash.syncr_core.data.models.response.youtube.searchResults.VideosItem
 import com.vikash.syncr_core.utils.SearchResultAdapterListener
 
 class YoutubeSearchResultsAdapter(
-    private var searchResultList : List<ItemsItem?>?,
+    private var searchResultList : List<VideosItem?>?,
     private var listener : SearchResultAdapterListener
     ) : RecyclerView.Adapter<YoutubeSearchResultsAdapter.YoutubeItemViewHolder>() {
 
@@ -29,16 +29,20 @@ class YoutubeSearchResultsAdapter(
 
     override fun getItemCount(): Int = searchResultList?.size?:0
 
-    fun updateSearchResultList(searchResultList: List<ItemsItem?>?){
+    fun updateSearchResultList(searchResultList: List<VideosItem?>?){
         this.searchResultList = searchResultList
         notifyDataSetChanged()
     }
 
     class YoutubeItemViewHolder(private val searchItem : SearchResultItemBinding) : RecyclerView.ViewHolder(searchItem.root) {
-        fun bind(videoItem: ItemsItem?){
+        fun bind(videoItem: VideosItem?){
             searchItem.video = videoItem
+//            Glide.with(searchItem.root)
+//                .load(videoItem?.snippet?.thumbnails?.medium?.url)
+//                .fitCenter()
+//                .into(searchItem.videoThumbnail)
             Glide.with(searchItem.root)
-                .load(videoItem?.snippet?.thumbnails?.medium?.url)
+                .load(videoItem?.bestThumbnail?.url)
                 .fitCenter()
                 .into(searchItem.videoThumbnail)
         }
