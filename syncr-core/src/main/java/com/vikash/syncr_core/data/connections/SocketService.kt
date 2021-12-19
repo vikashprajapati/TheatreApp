@@ -5,6 +5,7 @@ import com.vikash.syncr_core.constants.SocketConstants.IncomingEvents
 import com.vikash.syncr_core.data.models.Message
 import com.vikash.syncr_core.data.models.response.joinroomresponse.JoinedRoomResponse
 import com.vikash.syncr_core.data.models.response.joinroomresponse.ParticipantsItem
+import com.vikash.syncr_core.data.models.videoplaybackevents.NewVideoSelected
 import com.vikash.syncr_core.data.models.videoplaybackevents.VideoChanged
 import com.vikash.syncr_core.data.models.videoplaybackevents.VideoPlayback
 import com.vikash.syncr_core.data.models.videoplaybackevents.VideoSynced
@@ -74,8 +75,8 @@ class SocketService{
             val message = SyncrApplication.gson.fromJson<Message>(it[0] as String, Message::class.java)
             listener?.onMessage(message)
         }.on(IncomingEvents.onNewVideoSelected){
-            val videoUrl = it[0] as String
-            listener?.newVideoSelectedEvent(videoUrl)
+            val videoDetails = SyncrApplication.gson.fromJson<NewVideoSelected>(it[0] as String, NewVideoSelected::class.java)
+            listener?.newVideoSelectedEvent(videoDetails)
         }
 
         socket.connect()
@@ -94,7 +95,7 @@ class SocketService{
         fun playbackEvent(videoPlayback: VideoPlayback)
         fun videoJumpEvent(videoChanged: VideoChanged)
         fun syncVideoEvent(videoSynced: VideoSynced)
-        fun newVideoSelectedEvent(videoUrl: String)
+        fun newVideoSelectedEvent(videoDetails: NewVideoSelected)
         fun newParticipantJoinedEvent(participantsItem: ParticipantsItem)
         fun connectionStatus(eventConnect: String)
         fun joinRoomResponse(joinedRoomResponse: JoinedRoomResponse)

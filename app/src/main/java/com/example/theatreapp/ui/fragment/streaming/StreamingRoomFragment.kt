@@ -18,6 +18,7 @@ import com.example.theatreapp.ui.adapters.StreamingViewPagerAdapter
 import com.example.theatreapp.ui.fragment.BaseFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.vikash.syncr_core.utils.NewVideoSelectedEvent
+import com.vikash.syncr_core.utils.UpdateVideoTitleEvent
 import com.vikash.syncr_core.viewmodels.StreamingRoomFragmentViewModel
 import io.socket.client.Socket.EVENT_CONNECT_ERROR
 import io.socket.client.Socket.EVENT_DISCONNECT
@@ -89,9 +90,8 @@ class StreamingRoomFragment :
 	}
 
 	@Subscribe(threadMode = ThreadMode.MAIN)
-	fun updateVideoDetails(videoSelectedEvent: NewVideoSelectedEvent){
-		val newVideoTitle = videoSelectedEvent.video?.title
-		binding?.videoTitleTextView?.text = newVideoTitle
+	fun updateVideoDetails(updateVideoTitleEvent: UpdateVideoTitleEvent){
+		binding?.videoTitleTextView?.text = updateVideoTitleEvent.videoTitle
 	}
 
 	override fun onStop() {

@@ -34,6 +34,8 @@ import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import com.vikash.syncr_core.data.models.videoplaybackevents.NewVideoSelected
+import com.vikash.syncr_core.utils.UpdateVideoTitleEvent
 import com.vikash.youtube_extractor.VideoMeta
 import com.vikash.youtube_extractor.YouTubeExtractor
 import com.vikash.youtube_extractor.YtFile
@@ -139,7 +141,7 @@ class MediaPlayerFragment :
 							shortToast("Can't play video")
 						}
 					}else{
-						viewModel.sendNewVideoEvent(videoUrl)
+						viewModel.sendNewVideoEvent(NewVideoSelected(videoUrl, newVideo.title!!))
 					}
 				}
 			}
@@ -211,9 +213,10 @@ class MediaPlayerFragment :
 		}
 
 		viewModel.newVideoSelected.observe(viewLifecycleOwner){
-			val videoUrl = it.getContentIfNotHandledOrReturnNull()?:return@observe
+			val videoDetails = it.getContentIfNotHandledOrReturnNull()?:return@observe
+			EventBus.getDefault().post(UpdateVideoTitleEvent(videoDetails.videoTitle))
 			val proxyServer = HttpProxyCacheServer.Builder(context).maxCacheSize(1024 * 1024 * 1024).build();
-			val proxyUrl = proxyServer.getProxyUrl(videoUrl)
+			val proxyUrl = proxyServer.getProxyUrl(videoDetails.videoUrl)
 			val dataSourceFactory = DefaultDataSourceFactory(
 				requireContext(),
 				Util.getUserAgent(requireContext(), requireActivity().applicationContext.packageName)

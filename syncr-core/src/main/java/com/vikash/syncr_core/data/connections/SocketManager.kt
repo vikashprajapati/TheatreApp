@@ -10,6 +10,7 @@ import com.vikash.syncr_core.data.models.requests.Room
 import com.vikash.syncr_core.data.models.requests.User
 import com.vikash.syncr_core.data.models.response.joinroomresponse.JoinedRoomResponse
 import com.vikash.syncr_core.data.models.response.joinroomresponse.ParticipantsItem
+import com.vikash.syncr_core.data.models.videoplaybackevents.NewVideoSelected
 import com.vikash.syncr_core.data.models.videoplaybackevents.VideoChanged
 import com.vikash.syncr_core.data.models.videoplaybackevents.VideoPlayback
 import com.vikash.syncr_core.data.models.videoplaybackevents.VideoSynced
@@ -27,7 +28,7 @@ object SocketManager : SocketService.SocketEventsListener {
     private var _participantJoined = MutableLiveData<Event<ParticipantsItem>>()
     private var _participantLeft = MutableLiveData<Event<ParticipantsItem>>()
     private var _onMessage = MutableLiveData<Event<Message>>()
-    private var _onNewVideo = MutableLiveData<Event<String>>()
+    private var _onNewVideo = MutableLiveData<Event<NewVideoSelected>>()
 
     val connectionStatus : LiveData<String> get() = _connectionStatus
     val joinedRoomStatus : LiveData<Event<JoinedRoomResponse>> get() = _joinedRoomStatus
@@ -37,7 +38,7 @@ object SocketManager : SocketService.SocketEventsListener {
     val changedVideo : LiveData<Event<VideoChanged>> get() = _changedVideo
     val syncedVideo : LiveData<Event<VideoSynced>> get() = _syncedVideo
     val onMessage : LiveData<Event<Message>> get() = _onMessage
-    val onNewVideo : LiveData<Event<String>> get() = _onNewVideo
+    val onNewVideo : LiveData<Event<NewVideoSelected>> get() = _onNewVideo
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Outgoing Socket Events                                                                                                           //
@@ -87,8 +88,8 @@ object SocketManager : SocketService.SocketEventsListener {
         socketService.send(OutgoingEvents.sendVideoSynced, currentTimestamp)
     }
 
-    fun sendNewVideoSelectedEvent(videoUrl: String) {
-        socketService.send(OutgoingEvents.sendNewVideoUrl, videoUrl)
+    fun sendNewVideoSelectedEvent(videoDetails: NewVideoSelected) {
+        socketService.send(OutgoingEvents.sendNewVideoUrl, videoDetails)
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -139,7 +140,7 @@ object SocketManager : SocketService.SocketEventsListener {
         _onMessage.postValue(Event(message))
     }
 
-    override fun newVideoSelectedEvent(videoUrl: String) {
-        _onNewVideo.postValue(Event(videoUrl))
+    override fun newVideoSelectedEvent(videoDetails: NewVideoSelected) {
+        _onNewVideo.postValue(Event(videoDetails))
     }
 }

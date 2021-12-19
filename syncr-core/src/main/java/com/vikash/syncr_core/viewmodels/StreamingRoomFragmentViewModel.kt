@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.vikash.syncr_core.data.connections.SocketManager
 import com.vikash.syncr_core.data.models.response.joinroomresponse.ParticipantsItem
 import com.vikash.syncr_core.data.SessionData
+import com.vikash.syncr_core.data.models.videoplaybackevents.NewVideoSelected
 import com.vikash.syncr_core.data.models.videoplaybackevents.VideoChanged
 import com.vikash.syncr_core.data.models.videoplaybackevents.VideoPlayback
 import com.vikash.syncr_core.data.models.videoplaybackevents.VideoSynced
@@ -25,7 +26,7 @@ class StreamingRoomFragmentViewModel : ViewModel() {
     private val _participantArrived = MutableLiveData<Event<ParticipantsItem>>()
     private val _fullScreenLayout = MutableLiveData<Boolean>()
     private var _mediaPlayerFragmentViewHeight = MutableLiveData<Int>()
-    private var _newVideo = MutableLiveData<Event<String>>()
+    private var _newVideo = MutableLiveData<Event<NewVideoSelected>>()
 
     // participants to be changed to livedata of list<participantItem>
     var participants: LiveData<List<ParticipantsItem>> =
@@ -38,7 +39,7 @@ class StreamingRoomFragmentViewModel : ViewModel() {
     var participantJoined: LiveData<Event<ParticipantsItem>> = _participantJoined
     var fullScreenLayout: MutableLiveData<Boolean> = _fullScreenLayout
     var participantArrived: LiveData<Event<ParticipantsItem>> = _participantArrived
-    var newVideoSelected: LiveData<Event<String>> = _newVideo
+    var newVideoSelected: LiveData<Event<NewVideoSelected>> = _newVideo
     var mediaPlayerFragmentViewHeight: MutableLiveData<Int>
         get() = _mediaPlayerFragmentViewHeight
         set(value) {
@@ -53,7 +54,7 @@ class StreamingRoomFragmentViewModel : ViewModel() {
         _participantArrived.postValue(Event(participant))
     }
 
-    private var newVideoSelectedObserver = Observer<Event<String>> {
+    private var newVideoSelectedObserver = Observer<Event<NewVideoSelected>> {
         _newVideo.postValue(it)
     }
 
@@ -117,8 +118,8 @@ class StreamingRoomFragmentViewModel : ViewModel() {
         SocketManager.sendVideoSyncEvent(currentTimestamp)
     }
 
-    fun sendNewVideoEvent(videoUrl : String){
-        SocketManager.sendNewVideoSelectedEvent(videoUrl)
+    fun sendNewVideoEvent(videoDetails : NewVideoSelected){
+        SocketManager.sendNewVideoSelectedEvent(videoDetails)
     }
 
     fun leaveRoom() {
