@@ -41,7 +41,5 @@ App built with Kotlin and Android Jetpack Components.
 <br>
 
 ## What's Next
-- Player control events will be broadcasted to let other people in the room know who sent which event.
-- Streaming screen UI will be updated to include information regarding the current room.
-- In upcoming build youtube player will be included with search functionality.
+- Considering round trip delay of data packets into syncronization events
 - Setting up lean back mode in tv
