@@ -1,12 +1,15 @@
 package com.example.theatreapp.ui.fragment.streaming
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
+import android.util.SparseArray
 import android.view.*
+import androidx.core.util.forEach
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.theatreapp.R
@@ -14,10 +17,12 @@ import com.example.theatreapp.databinding.FragmentSearchBinding
 import com.example.theatreapp.ui.adapters.YoutubeSearchResultsAdapter
 import com.example.theatreapp.ui.fragment.BaseBottomSheetFragment
 import com.vikash.syncr_core.data.models.response.youtube.searchResults.VideosItem
-import com.vikash.syncr_core.utils.NewVideoSelectedEvent
+import com.vikash.syncr_core.data.models.videoplaybackevents.NewVideoSelected
 import com.vikash.syncr_core.utils.SearchResultAdapterListener
-import com.vikash.syncr_core.viewmodels.SearchBottomSheetViewModel
-import org.greenrobot.eventbus.EventBus
+import com.vikash.syncr_core.viewmodels.SearchFragmentViewModel
+import com.vikash.youtube_extractor.VideoMeta
+import com.vikash.youtube_extractor.YouTubeExtractor
+import com.vikash.youtube_extractor.YtFile
 import kotlin.math.roundToInt
 
 
@@ -27,7 +32,7 @@ import kotlin.math.roundToInt
  * create an instance of this fragment.
  */
 class SearchFragment :
-    BaseBottomSheetFragment<FragmentSearchBinding, SearchBottomSheetViewModel>(),
+    BaseBottomSheetFragment<FragmentSearchBinding, SearchFragmentViewModel>(),
     SearchResultAdapterListener {
     private val searchResultsAdapter = YoutubeSearchResultsAdapter(arrayListOf(), this)
     private var playerHeight: Int = 0
@@ -87,12 +92,12 @@ class SearchFragment :
                 val msg = it.getContentIfNotHandledOrReturnNull() ?: return@observe
                 shortToast(R.string.search_invalid_input)
             }
-            
+
             searchError.observe(viewLifecycleOwner){
                 val msg = it.getContentIfNotHandledOrReturnNull()?: return@observe
                 shortToast(msg)
             }
-            
+
             /*searchResults.observe(viewLifecycleOwner){
                 Log.i(TAG, "observeData: $it")
                 searchResultsAdapter.updateSearchResultList(it)
@@ -112,14 +117,42 @@ class SearchFragment :
         }
     }
 
-    override fun initViewModel(): SearchBottomSheetViewModel =
-        ViewModelProvider(this).get(SearchBottomSheetViewModel::class.java)
+    override fun initViewModel(): SearchFragmentViewModel =
+        ViewModelProvider(this).get(SearchFragmentViewModel::class.java)
 
     override fun getViewBinding(): FragmentSearchBinding =
         FragmentSearchBinding.inflate(layoutInflater)
 
+    @SuppressLint("StaticFieldLeak")
     override fun videoSelected(videoItem: VideosItem?) {
-        EventBus.getDefault().post(videoItem?.let { NewVideoSelectedEvent(it) })
+        val newVideo = videoItem
+        Log.i(MediaPlayerFragment.TAG, "onVideoChangedEvent: ")
+
+        object : YouTubeExtractor(context) {
+            override fun onExtractionComplete(ytFiles: SparseArray<YtFile>?, vMeta: VideoMeta?) {
+                if (ytFiles != null) {
+                    var videoUrl = ""
+                    ytFiles.forEach{key, ytFile ->
+                        Log.i(MediaPlayerFragment.TAG, "onExtractionComplete: $key \n $ytFile \n\n")
+                        if(
+                            ytFile.format.ext.equals("mp4")
+                            && ytFile.format.audioBitrate > 0
+                            && ytFile.format.height > 0
+                        ){
+                            videoUrl = ytFile.url
+                        }
+                    }
+
+                    if(videoUrl.isNullOrEmpty()){
+                        requireActivity().runOnUiThread {
+                            shortToast("Can't play video")
+                        }
+                    }else{
+                        viewModel.sendNewVideoEvent(NewVideoSelected(videoUrl, newVideo?.title!!))
+                    }
+                }
+            }
+        }.extract(newVideo?.url)
     }
 
     companion object {

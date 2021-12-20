@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.vikash.syncr_core.viewmodels.SearchBottomSheetViewModel" />
+            type="com.vikash.syncr_core.viewmodels.SearchFragmentViewModel" />
     </data>
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/bottomSheet"

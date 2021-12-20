@@ -87,8 +87,6 @@ class MediaPlayerFragment :
 
 	override fun onStart() {
 		super.onStart()
-		EventBus.getDefault().register(this)
-
 		exoplayer.setMediaItem(MediaItem.fromUri(Uri.parse("asset:///videoplayback.mp4")))
 		exoplayer.prepare()
 		setupPlayerControlButtonsListener()
@@ -112,41 +110,8 @@ class MediaPlayerFragment :
 	override fun onStop() {
 		super.onStop()
 		exoplayer.stop()
-		EventBus.getDefault().unregister(this)
 	}
 
-	@SuppressLint("StaticFieldLeak")
-	@Subscribe(threadMode = ThreadMode.MAIN)
-	fun onVideoChangedEvent(newVideoSelectedEvent: NewVideoSelectedEvent){
-		val newVideo = newVideoSelectedEvent.video
-		Log.i(TAG, "onVideoChangedEvent: ")
-
-		object : YouTubeExtractor(context) {
-			override fun onExtractionComplete(ytFiles: SparseArray<YtFile>?, vMeta: VideoMeta?) {
-				if (ytFiles != null) {
-					var videoUrl = ""
-					ytFiles.forEach{key, ytFile ->
-						Log.i(TAG, "onExtractionComplete: $key \n $ytFile \n\n")
-						if(
-							ytFile.format.ext.equals("mp4")
-							&& ytFile.format.audioBitrate > 0
-							&& ytFile.format.height > 0
-						){
-							videoUrl = ytFile.url
-						}
-					}
-
-					if(videoUrl.isNullOrEmpty()){
-						requireActivity().runOnUiThread {
-							shortToast("Can't play video")
-						}
-					}else{
-						viewModel.sendNewVideoEvent(NewVideoSelected(videoUrl, newVideo.title!!))
-					}
-				}
-			}
-		}.extract(newVideo.url)
-	}
 
 	private fun setupMediaPlayer() {
 		// setup player
