@@ -51,4 +51,11 @@
         <item name="android:src">@drawable/ic_squeeze</item>
         <item name="android:contentDescription">@string/exo_controls_video_smallscreen_description</item>
     </style>
+
+    <style name="SliderStyle" parent="Widget.MaterialComponents.Slider">
+        <item name="android:value">500</item>
+        <item name="android:valueFrom">0</item>
+        <item name="android:valueTo">1000</item>
+        <item name="android:stepSize">1</item>
+    </style>
 </resources>
