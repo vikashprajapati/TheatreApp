@@ -15,11 +15,11 @@ class HomeFragmentViewModel() : ViewModel() {
     private val TAG = HomeFragmentViewModel::class.java.canonicalName
     private var _room = MutableLiveData<String>()
     private var _user = MutableLiveData<String>()
-    private var _joinedRoomState = MutableLiveData<Event<String>>()
+    private var _joinedRoomState = MutableLiveData<Event<JoinedRoomResponse>>()
     private var _connectionState = MutableLiveData<Event<String>>()
     val loading = MutableLiveData<Int>()
     val connectionState : LiveData<Event<String>> get() = _connectionState
-    val joinRoomState : LiveData<Event<String>> get() = _joinedRoomState
+    val joinRoomState : LiveData<Event<JoinedRoomResponse>> get() = _joinedRoomState
 
     private var connectivityObserver = Observer<String>{
         val status = it
@@ -40,7 +40,7 @@ class HomeFragmentViewModel() : ViewModel() {
             _connectionState.postValue(Event("Failed to join room"))
             return@Observer;
         }
-        _joinedRoomState.postValue(Event(SyncrApplication.gson.toJson(joinedRoomResponse)))
+        _joinedRoomState.postValue(Event(joinedRoomResponse))
         clearFields()
     }
 

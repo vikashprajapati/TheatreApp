@@ -1,12 +1,13 @@
 package com.example.theatreapp.ui.fragment.streaming
 
-import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.util.SparseArray
 import android.view.*
 import android.widget.ImageButton
+import androidx.core.util.forEach
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.theatreapp.R
@@ -19,19 +20,10 @@ import com.vikash.syncr_core.constants.VideoPlaybackConstants.Companion.rewindVi
 import com.vikash.syncr_core.constants.VideoPlaybackConstants.Companion.videoPaused
 import com.vikash.syncr_core.constants.VideoPlaybackConstants.Companion.videoPlayed
 import com.vikash.syncr_core.data.SessionData
-import com.vikash.syncr_core.data.connections.SocketManager.participantJoined
-import com.vikash.syncr_core.data.models.response.youtube.searchResults.ItemsItem
-import com.vikash.syncr_core.utils.NewVideoSelectedEvent
 import com.vikash.syncr_core.viewmodels.StreamingRoomFragmentViewModel
 import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
-import android.util.SparseArray
-import androidx.core.util.forEach
 import com.danikula.videocache.HttpProxyCacheServer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.upstream.DataSource
-import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.vikash.syncr_core.data.models.videoplaybackevents.NewVideoSelected
@@ -87,9 +79,37 @@ class MediaPlayerFragment :
 
 	override fun onStart() {
 		super.onStart()
-		exoplayer.setMediaItem(MediaItem.fromUri(Uri.parse("asset:///videoplayback.mp4")))
-		exoplayer.prepare()
+		playVideo()
 		setupPlayerControlButtonsListener()
+	}
+
+	private fun playVideo() {
+		object : YouTubeExtractor(context) {
+			override fun onExtractionComplete(ytFiles: SparseArray<YtFile>?, vMeta: VideoMeta?) {
+				if (ytFiles != null) {
+					var videoUrl = ""
+					ytFiles.forEach{key, ytFile ->
+						Log.i(MediaPlayerFragment.TAG, "onExtractionComplete: $key \n $ytFile \n\n")
+						if(
+							ytFile.format.ext.equals("mp4")
+							&& ytFile.format.audioBitrate > 0
+							&& ytFile.format.height > 0
+						){
+							videoUrl = ytFile.url
+						}
+					}
+
+					if(videoUrl.isNullOrEmpty()){
+						requireActivity().runOnUiThread {
+							shortToast("Can't play video")
+						}
+					}else{
+						exoplayer.setMediaItem(MediaItem.fromUri(Uri.parse(videoUrl)))
+						exoplayer.prepare()
+					}
+				}
+			}
+		}.extract(viewModel.activeVideoUrl.value)
 	}
 
 	private fun setupPlayerControlButtonsListener() {

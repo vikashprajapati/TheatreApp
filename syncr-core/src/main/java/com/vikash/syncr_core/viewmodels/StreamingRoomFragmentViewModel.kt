@@ -15,7 +15,7 @@ import com.vikash.syncr_core.utils.Event
 
 class StreamingRoomFragmentViewModel : ViewModel() {
     // temporarily we are keeping only video url, later we will be needing more video details
-    private val activeVideoUrl = MutableLiveData<String>()
+    private val _activeVideoUrl = MutableLiveData<String>()
     private var _connectionState = MutableLiveData<String>()
     private val _participants = MutableLiveData<MutableList<ParticipantsItem>>()
     private val _videoPlayback = MutableLiveData<Event<VideoPlayback>>()
@@ -29,6 +29,11 @@ class StreamingRoomFragmentViewModel : ViewModel() {
 
     private var _mediaPlayerFragmentViewHeight = MutableLiveData<Int>()
     // participants to be changed to livedata of list<participantItem>
+    var activeVideoUrl : MutableLiveData<String>
+        get() = _activeVideoUrl
+        set(url) {
+            _activeVideoUrl.postValue(url.value)
+        }
     var participants: LiveData<List<ParticipantsItem>> =
         _participants as LiveData<List<ParticipantsItem>>
     var videoPlayback: LiveData<Event<VideoPlayback>> = _videoPlayback
