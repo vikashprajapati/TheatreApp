@@ -26,7 +26,6 @@ import com.danikula.videocache.HttpProxyCacheServer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
-import com.vikash.syncr_core.data.models.videoplaybackevents.NewVideoSelected
 import com.vikash.syncr_core.utils.UpdateVideoTitleEvent
 import com.vikash.youtube_extractor.VideoMeta
 import com.vikash.youtube_extractor.YouTubeExtractor
@@ -50,6 +49,8 @@ class MediaPlayerFragment :
 	private lateinit var fullscreenButton : ImageButton
 	private lateinit var squeezeButton : ImageButton
 
+	private lateinit var dataSourceFactory : DefaultDataSourceFactory
+
 	private val layoutChangeListener : ViewTreeObserver.OnGlobalLayoutListener = ViewTreeObserver.OnGlobalLayoutListener{
 		val height = view?.height
 		viewModel.mediaPlayerFragmentViewHeight.postValue(height)
@@ -63,6 +64,12 @@ class MediaPlayerFragment :
 		super.onCreateView(inflater, container, savedInstanceState)
 		val view = binding?.root
 		binding?.root?.viewTreeObserver?.addOnGlobalLayoutListener(layoutChangeListener)
+
+		dataSourceFactory = DefaultDataSourceFactory(
+			requireContext(),
+			Util.getUserAgent(requireContext(), requireActivity().applicationContext.packageName)
+		)
+
 		return binding?.root
 	}
 
@@ -104,8 +111,11 @@ class MediaPlayerFragment :
 							shortToast("Can't play video")
 						}
 					}else{
-						exoplayer.setMediaItem(MediaItem.fromUri(Uri.parse(videoUrl)))
-						exoplayer.prepare()
+						exoplayer.prepare(
+							ProgressiveMediaSource
+								.Factory(dataSourceFactory)
+								.createMediaSource(Uri.parse(getProxyUrl(videoUrl)))
+						)
 					}
 				}
 			}
@@ -200,17 +210,23 @@ class MediaPlayerFragment :
 		viewModel.newVideoSelected.observe(viewLifecycleOwner){
 			val videoDetails = it.getContentIfNotHandledOrReturnNull()?:return@observe
 			EventBus.getDefault().post(UpdateVideoTitleEvent(videoDetails.videoTitle))
-			val proxyServer = HttpProxyCacheServer.Builder(context).maxCacheSize(1024 * 1024 * 1024).build();
-			val proxyUrl = proxyServer.getProxyUrl(videoDetails.videoUrl)
-			val dataSourceFactory = DefaultDataSourceFactory(
-				requireContext(),
-				Util.getUserAgent(requireContext(), requireActivity().applicationContext.packageName)
-			)
+
 			exoplayer.apply {
-				prepare(ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.parse(proxyUrl)))
+				prepare(
+					ProgressiveMediaSource
+						.Factory(dataSourceFactory)
+						.createMediaSource(
+							Uri.parse(getProxyUrl(videoDetails.videoUrl))
+						)
+				)
 				play()
 			}
 		}
+	}
+
+	private fun getProxyUrl(videoUrl: String): String? {
+		val proxyServer = HttpProxyCacheServer.Builder(context).maxCacheSize(1024 * 1024 * 1024).build();
+		return proxyServer.getProxyUrl(videoUrl)
 	}
 
 	override fun onClick(button: View?) {

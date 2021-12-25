@@ -13,7 +13,7 @@
 /captures
 /syncr-core/build
 /tv_theatre_app/build
-.idea
+.idea/deploymentTargetDropDown.xml
 .externalNativeBuild
 .cxx
 local.properties
