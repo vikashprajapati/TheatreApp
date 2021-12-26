@@ -23,6 +23,7 @@ import com.vikash.syncr_core.data.SessionData
 import com.vikash.syncr_core.viewmodels.StreamingRoomFragmentViewModel
 import org.greenrobot.eventbus.EventBus
 import com.danikula.videocache.HttpProxyCacheServer
+import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
@@ -54,6 +55,13 @@ class MediaPlayerFragment :
 	private val layoutChangeListener : ViewTreeObserver.OnGlobalLayoutListener = ViewTreeObserver.OnGlobalLayoutListener{
 		val height = view?.height
 		viewModel.mediaPlayerFragmentViewHeight.postValue(height)
+	}
+
+	private val playbackListener = object : Player.Listener{
+		override fun onPlaybackStateChanged(playbackState: Int) {
+			super.onPlaybackStateChanged(playbackState)
+			binding?.progressBar?.visibility = if(playbackState == Player.STATE_BUFFERING) View.VISIBLE else View.GONE
+		}
 	}
 
 	override fun onCreateView(
@@ -130,6 +138,7 @@ class MediaPlayerFragment :
 		syncButton.setOnClickListener(this)
 		fullscreenButton.setOnClickListener(this)
 		squeezeButton.setOnClickListener(this)
+		exoplayer.addListener(playbackListener)
 	}
 
 	override fun onPause() {
@@ -138,8 +147,9 @@ class MediaPlayerFragment :
 	}
 
 	override fun onStop() {
-		super.onStop()
+		exoplayer.removeListener(playbackListener)
 		exoplayer.stop()
+		super.onStop()
 	}
 
 
