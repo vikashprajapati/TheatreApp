@@ -38,6 +38,8 @@ interface SocketConstants {
                 get() = "leave room"
             val sendNewVideoUrl : String
                 get() = "new video selected"
+            val sendBufferingStatus : String
+                get() = "video buffering status"
         }
     }
 }

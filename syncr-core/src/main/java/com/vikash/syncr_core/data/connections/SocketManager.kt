@@ -92,6 +92,10 @@ object SocketManager : SocketService.SocketEventsListener {
         socketService.send(OutgoingEvents.sendNewVideoUrl, videoDetails)
     }
 
+    fun sendVideoBufferingEvent(isBuffering : Boolean) {
+        socketService.send(OutgoingEvents.sendBufferingStatus, isBuffering)
+    }
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Helper methods                                                                                                                   //
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

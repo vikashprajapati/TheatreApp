@@ -60,7 +60,13 @@ class MediaPlayerFragment :
 	private val playbackListener = object : Player.Listener{
 		override fun onPlaybackStateChanged(playbackState: Int) {
 			super.onPlaybackStateChanged(playbackState)
-			binding?.progressBar?.visibility = if(playbackState == Player.STATE_BUFFERING) View.VISIBLE else View.GONE
+			binding?.progressBar?.visibility = if(playbackState == Player.STATE_BUFFERING){
+				viewModel.sendVideoBufferingEvent(true)
+				View.VISIBLE
+			} else {
+				viewModel.sendVideoBufferingEvent(false)
+				View.GONE
+			}
 		}
 	}
 

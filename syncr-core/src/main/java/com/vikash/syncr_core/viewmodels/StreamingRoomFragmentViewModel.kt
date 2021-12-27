@@ -124,6 +124,10 @@ class StreamingRoomFragmentViewModel : ViewModel() {
         SocketManager.sendVideoSyncEvent(currentTimestamp)
     }
 
+    fun sendVideoBufferingEvent(bufferingStatus : Boolean){
+        SocketManager.sendVideoBufferingEvent(bufferingStatus)
+    }
+
     fun leaveRoom() {
         SocketManager.stopListeningToServer()
     }
