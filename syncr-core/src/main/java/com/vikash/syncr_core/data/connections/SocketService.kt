@@ -96,6 +96,7 @@ class SocketService{
         fun videoJumpEvent(videoChanged: VideoChanged)
         fun syncVideoEvent(videoSynced: VideoSynced)
         fun newVideoSelectedEvent(videoDetails: NewVideoSelected)
+        fun bufferingEvent(bufferingStatus : Boolean)
         fun newParticipantJoinedEvent(participantsItem: ParticipantsItem)
         fun connectionStatus(eventConnect: String)
         fun joinRoomResponse(joinedRoomResponse: JoinedRoomResponse)

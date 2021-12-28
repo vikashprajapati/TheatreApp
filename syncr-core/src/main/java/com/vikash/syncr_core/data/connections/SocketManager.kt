@@ -29,6 +29,7 @@ object SocketManager : SocketService.SocketEventsListener {
     private var _participantLeft = MutableLiveData<Event<ParticipantsItem>>()
     private var _onMessage = MutableLiveData<Event<Message>>()
     private var _onNewVideo = MutableLiveData<Event<NewVideoSelected>>()
+    private var _bufferingStatus = MutableLiveData<Boolean>()
 
     val connectionStatus : LiveData<String> get() = _connectionStatus
     val joinedRoomStatus : LiveData<Event<JoinedRoomResponse>> get() = _joinedRoomStatus
@@ -39,6 +40,7 @@ object SocketManager : SocketService.SocketEventsListener {
     val syncedVideo : LiveData<Event<VideoSynced>> get() = _syncedVideo
     val onMessage : LiveData<Event<Message>> get() = _onMessage
     val onNewVideo : LiveData<Event<NewVideoSelected>> get() = _onNewVideo
+    val bufferingStatus : LiveData<Boolean> get() = _bufferingStatus
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Outgoing Socket Events                                                                                                           //
@@ -146,5 +148,9 @@ object SocketManager : SocketService.SocketEventsListener {
 
     override fun newVideoSelectedEvent(videoDetails: NewVideoSelected) {
         _onNewVideo.postValue(Event(videoDetails))
+    }
+
+    override fun bufferingEvent(bufferingStatus: Boolean) {
+        _bufferingStatus.postValue(bufferingStatus)
     }
 }

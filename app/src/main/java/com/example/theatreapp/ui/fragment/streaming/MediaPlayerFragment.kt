@@ -238,6 +238,19 @@ class MediaPlayerFragment :
 				play()
 			}
 		}
+
+		viewModel.bufferingStatus.observe(viewLifecycleOwner){
+			when(it){
+				true -> {
+					exoplayer.pause()
+					binding?.progressBar?.visibility = View.VISIBLE
+				}
+				false -> {
+					exoplayer.play()
+					binding?.progressBar?.visibility = View.GONE
+				}
+			}
+		}
 	}
 
 	private fun getProxyUrl(videoUrl: String): String? {

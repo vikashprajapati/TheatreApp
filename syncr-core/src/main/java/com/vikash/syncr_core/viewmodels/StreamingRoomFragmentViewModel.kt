@@ -26,6 +26,7 @@ class StreamingRoomFragmentViewModel : ViewModel() {
     private val _participantArrived = MutableLiveData<Event<ParticipantsItem>>()
     private val _fullScreenLayout = MutableLiveData<Boolean>()
     private var _newVideo = MutableLiveData<Event<NewVideoSelected>>()
+    private val _bufferingStatus = MutableLiveData<Boolean>()
 
     private var _mediaPlayerFragmentViewHeight = MutableLiveData<Int>()
     // participants to be changed to livedata of list<participantItem>
@@ -45,6 +46,7 @@ class StreamingRoomFragmentViewModel : ViewModel() {
     var fullScreenLayout: MutableLiveData<Boolean> = _fullScreenLayout
     var participantArrived: LiveData<Event<ParticipantsItem>> = _participantArrived
     var newVideoSelected: LiveData<Event<NewVideoSelected>> = _newVideo
+    var bufferingStatus : LiveData<Boolean> = _bufferingStatus
 
     var mediaPlayerFragmentViewHeight: MutableLiveData<Int>
         get() = _mediaPlayerFragmentViewHeight
@@ -62,6 +64,10 @@ class StreamingRoomFragmentViewModel : ViewModel() {
         _participants.postValue(SessionData.currentRoom?.participants)
         _participantJoined.postValue(Event(participant))
         _participantArrived.postValue(Event(participant))
+    }
+
+    private var bufferingStatusObserver = Observer<Boolean>{
+        _bufferingStatus.postValue(it)
     }
 
     private var videoPlaybackObserver = Observer<Event<VideoPlayback>> {
@@ -100,6 +106,7 @@ class StreamingRoomFragmentViewModel : ViewModel() {
         SocketManager.syncedVideo.observeForever(videoSyncedObserver)
         SocketManager.participantLeft.observeForever(participantLeftObserver)
         SocketManager.onNewVideo.observeForever(newVideoSelectedObserver)
+        SocketManager.bufferingStatus.observeForever(bufferingStatusObserver)
     }
 
     override fun onCleared() {
@@ -110,6 +117,7 @@ class StreamingRoomFragmentViewModel : ViewModel() {
         SocketManager.syncedVideo.removeObserver(videoSyncedObserver)
         SocketManager.participantLeft.removeObserver(participantLeftObserver)
         SocketManager.participantJoined.removeObserver(participantJoinedObserver)
+        SocketManager.bufferingStatus.removeObserver(bufferingStatusObserver)
     }
 
     fun sendVideoPlaybackEvent(playbackStatus: String) {
