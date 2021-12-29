@@ -66,6 +66,7 @@ object SocketManager : SocketService.SocketEventsListener {
 
     private fun sendLeaveRoom(){
         socketService.send(OutgoingEvents.sendLeaveRoom, "")
+        socketService.disconnect()
     }
 
     fun sendChatMessage(msg : String){
