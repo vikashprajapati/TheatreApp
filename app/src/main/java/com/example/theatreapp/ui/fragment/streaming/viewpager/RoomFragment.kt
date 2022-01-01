@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.vikash.syncr_core.data.SessionData
 import com.example.theatreapp.databinding.FragmentRoomBinding
 import com.example.theatreapp.ui.fragment.BaseFragment
+import com.google.android.material.slider.Slider
 import com.vikash.syncr_core.viewmodels.StreamingRoomFragmentViewModel
 
 /**
@@ -29,6 +30,15 @@ class RoomFragment : BaseFragment<FragmentRoomBinding, StreamingRoomFragmentView
 	override fun setUpViews() {
 		super.setUpViews()
 		binding?.room = SessionData.currentRoom
+		binding?.synchronizationSlider?.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+			override fun onStartTrackingTouch(slider: Slider) {
+				// Responds to when slider's touch event is being started
+			}
+
+			override fun onStopTrackingTouch(slider: Slider) {
+				viewModel.videoSyncSlider.postValue(slider.value)
+			}
+		})
 	}
 
 	override fun observeData() {

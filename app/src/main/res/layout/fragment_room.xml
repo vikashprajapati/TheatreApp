@@ -26,6 +26,7 @@
                 android:text="@string/sync_slider_label"
                 />
             <com.google.android.material.slider.Slider
+                android:id="@+id/synchronization_slider"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/SliderStyle"

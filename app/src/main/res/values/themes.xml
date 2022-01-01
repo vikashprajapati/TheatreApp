@@ -53,9 +53,9 @@
     </style>
 
     <style name="SliderStyle" parent="Widget.MaterialComponents.Slider">
-        <item name="android:value">500</item>
-        <item name="android:valueFrom">0</item>
-        <item name="android:valueTo">1000</item>
+        <item name="android:value">0</item>
+        <item name="android:valueFrom">-2000</item>
+        <item name="android:valueTo">2000</item>
         <item name="android:stepSize">1</item>
     </style>
 </resources>

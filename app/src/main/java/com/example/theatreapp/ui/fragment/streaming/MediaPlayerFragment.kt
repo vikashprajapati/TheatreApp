@@ -251,6 +251,10 @@ class MediaPlayerFragment :
 				}
 			}
 		}
+
+		viewModel.videoSyncSlider.observe(viewLifecycleOwner){
+			exoplayer.seekTo((exoplayer.currentPosition + it).toLong())
+		}
 	}
 
 	private fun getProxyUrl(videoUrl: String): String? {

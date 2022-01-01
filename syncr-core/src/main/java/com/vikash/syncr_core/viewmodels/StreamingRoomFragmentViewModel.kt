@@ -47,6 +47,7 @@ class StreamingRoomFragmentViewModel : ViewModel() {
     var participantArrived: LiveData<Event<ParticipantsItem>> = _participantArrived
     var newVideoSelected: LiveData<Event<NewVideoSelected>> = _newVideo
     var bufferingStatus : LiveData<Boolean> = _bufferingStatus
+    var videoSyncSlider = MutableLiveData<Float>(0.0F)
 
     var mediaPlayerFragmentViewHeight: MutableLiveData<Int>
         get() = _mediaPlayerFragmentViewHeight
