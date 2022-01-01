@@ -47,6 +47,10 @@ class HomeFragmentViewModel() : ViewModel() {
     init{
         loading.value = View.GONE
         clearFields()
+        initObservers()
+    }
+
+    fun initObservers(){
         SocketManager.connectionStatus.observeForever(connectivityObserver)
         SocketManager.joinedRoomStatus.observeForever(joinedRoomObserver)
     }

@@ -54,7 +54,6 @@ class HomeFragment :
             joinRoomState.observe(viewLifecycleOwner, {
                 // navigate to streaming room fragment
                 val roomDetails = it.getContentIfNotHandledOrReturnNull()?:return@observe
-                removeObservers()
                 val bundle = bundleOf("videoUrl" to roomDetails.room.currentVideoUrl)
                 findNavController().navigate(R.id.action_homeFragment_to_roomFrament, bundle)
             })
