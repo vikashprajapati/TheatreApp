@@ -85,7 +85,6 @@ class StreamingRoomFragment :
 
 	override fun onStart() {
 		super.onStart()
-//        addYoutubePlayerFragment
 		EventBus.getDefault().register(this)
 	}
 
@@ -166,17 +165,6 @@ class StreamingRoomFragment :
             )
 			fragmentTransaction.commit()
 		}
-	}
-
-	private fun addYoutubePlayerFragment() {
-		val youtubePlayerFragment = YoutubePlayerFragment.newInstance("", "")
-		parentFragmentManager.beginTransaction()
-			.add(
-                R.id.media_player_fragment_container,
-                youtubePlayerFragment,
-                youtubePlayerFragment.tag
-            )
-			.commit()
 	}
 
 	companion object {
