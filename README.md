@@ -14,12 +14,14 @@ multiple corners of your room for playing audio and enjoying video on one of the
 <p align="center">
     <img src="assets/homepage-light.jpg" height="400">
     <img src="assets/streaming-light.jpg" height="400">
+    <img src="assets/search-light.jpg" height="400">
 </p>
 <br>
 <p>Night Theme</p>
 <p align="center">
     <img src="assets/homepage-night.jpg" height="400">
     <img src="assets/streaming-night.jpg" height="400">
+    <img src="assets/search-night.jpg" height="400">
 </p>
 <br>
 
