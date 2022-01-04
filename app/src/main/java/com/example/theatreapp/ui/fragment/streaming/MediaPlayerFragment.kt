@@ -90,6 +90,7 @@ class MediaPlayerFragment :
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		setupMediaPlayer()
+		loadVideoUrl()
 	}
 
 	override fun initViewModel():
@@ -100,11 +101,11 @@ class MediaPlayerFragment :
 
 	override fun onStart() {
 		super.onStart()
-		playVideo()
+		exoplayer.play()
 		setupPlayerControlButtonsListener()
 	}
 
-	private fun playVideo() {
+	private fun loadVideoUrl() {
 		object : YouTubeExtractor(context) {
 			override fun onExtractionComplete(ytFiles: SparseArray<YtFile>?, vMeta: VideoMeta?) {
 				if (ytFiles != null) {
@@ -154,7 +155,7 @@ class MediaPlayerFragment :
 
 	override fun onStop() {
 		exoplayer.removeListener(playbackListener)
-		exoplayer.stop()
+//		exoplayer.stop()
 		super.onStop()
 	}
 

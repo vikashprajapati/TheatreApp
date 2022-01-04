@@ -56,7 +56,9 @@ class StreamingRoomFragmentViewModel : ViewModel() {
         }
 
     private var newVideoSelectedObserver = Observer<Event<NewVideoSelected>> {
-        _newVideo.postValue(it)
+        val videoDetails = it.getContentIfNotHandledOrReturnNull()?:return@Observer
+        _newVideo.postValue(Event(videoDetails))
+        _activeVideoUrl.postValue(videoDetails.videoUrl)
     }
 
     private var participantJoinedObserver = Observer<Event<ParticipantsItem>> {

@@ -95,7 +95,6 @@ class StreamingRoomFragment :
 
 	override fun onStop() {
 		super.onStop()
-		mediaPlayerFragment?.onStop()
 		EventBus.getDefault().unregister(this)
 	}
 
