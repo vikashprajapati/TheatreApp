@@ -127,7 +127,7 @@ class SearchFragment :
     override fun videoSelected(videoItem: VideosItem?) {
         val newVideo = videoItem
         Log.i(MediaPlayerFragment.TAG, "onVideoChangedEvent: ")
-
+        binding?.progressBar?.visibility = View.VISIBLE
         object : YouTubeExtractor(context) {
             override fun onExtractionComplete(ytFiles: SparseArray<YtFile>?, vMeta: VideoMeta?) {
                 if (ytFiles != null) {
@@ -148,6 +148,7 @@ class SearchFragment :
                             shortToast("Can't play video")
                         }
                     }else{
+                        binding?.progressBar?.visibility = View.GONE
                         viewModel.sendNewVideoEvent(NewVideoSelected(videoUrl, newVideo?.title!!))
                     }
                 }
