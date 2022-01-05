@@ -56,6 +56,6 @@
         <item name="android:value">0</item>
         <item name="android:valueFrom">-2000</item>
         <item name="android:valueTo">2000</item>
-        <item name="android:stepSize">1</item>
+        <item name="android:stepSize">5</item>
     </style>
 </resources>

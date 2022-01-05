@@ -155,7 +155,6 @@ class MediaPlayerFragment :
 
 	override fun onStop() {
 		exoplayer.removeListener(playbackListener)
-//		exoplayer.stop()
 		super.onStop()
 	}
 
@@ -309,6 +308,11 @@ class MediaPlayerFragment :
 				squeezeButton.visibility = View.GONE
 			}
 		}
+	}
+
+	override fun onDestroy() {
+		exoplayer.stop()
+		super.onDestroy()
 	}
 
 	override fun onDestroyView() {
