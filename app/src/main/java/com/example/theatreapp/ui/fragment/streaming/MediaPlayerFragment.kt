@@ -7,9 +7,11 @@ import android.util.Log
 import android.util.SparseArray
 import android.view.*
 import android.widget.ImageButton
+import androidx.activity.OnBackPressedCallback
 import androidx.core.util.forEach
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.theatreapp.R
 import com.example.theatreapp.databinding.FragmentMediaPlayerBinding
 import com.example.theatreapp.ui.fragment.BaseFragment
@@ -70,6 +72,20 @@ class MediaPlayerFragment :
 		}
 	}
 
+	private val backPressedCallback = object : OnBackPressedCallback(true) {
+		override fun handleOnBackPressed() {
+			isEnabled = false
+			exoplayer.stop()
+			exoplayer.release()
+			findNavController().popBackStack()
+		}
+	}
+
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		requireActivity().onBackPressedDispatcher.addCallback(this, backPressedCallback)
+	}
+
 	override fun onCreateView(
 		inflater: LayoutInflater,
 		container: ViewGroup?,
@@ -83,7 +99,6 @@ class MediaPlayerFragment :
 			requireContext(),
 			Util.getUserAgent(requireContext(), requireActivity().applicationContext.packageName)
 		)
-
 		return binding?.root
 	}
 
@@ -308,11 +323,6 @@ class MediaPlayerFragment :
 				squeezeButton.visibility = View.GONE
 			}
 		}
-	}
-
-	override fun onDestroy() {
-		exoplayer.stop()
-		super.onDestroy()
 	}
 
 	override fun onDestroyView() {
