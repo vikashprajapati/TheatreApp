@@ -78,7 +78,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/user_name_hint_text"
-                        android:text="@={viewModel.user}"/>
+                        android:text="@={viewModel.user}"
+                        android:maxLines="1"
+                        />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/room_name"
@@ -87,7 +89,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:hint="@string/room_name_hint_text"
-                        android:text="@={viewModel.room}"/>
+                        android:text="@={viewModel.room}"
+                        android:maxLines="1"
+                        />
 
                     <androidx.appcompat.widget.AppCompatButton
                         style="@style/AppBlockButton"
@@ -95,6 +99,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="24dp"
                         android:onClick="@{() -> viewModel.validateInput()}"
+                        android:hapticFeedbackEnabled="true"
                         android:text="@string/join_room_button" />
                 </LinearLayout>
 

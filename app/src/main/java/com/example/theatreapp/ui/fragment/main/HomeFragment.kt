@@ -48,7 +48,7 @@ class HomeFragment :
 
             connectionState.observe(viewLifecycleOwner){
                 val msg = it.getContentIfNotHandledOrReturnNull()?:return@observe
-                shortToast(msg.toString())
+                shortToast(msg)
             }
 
             joinRoomState.observe(viewLifecycleOwner, {

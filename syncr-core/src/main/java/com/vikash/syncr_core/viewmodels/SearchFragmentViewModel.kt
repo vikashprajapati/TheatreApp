@@ -7,8 +7,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vikash.syncr_core.data.connections.SocketManager
-import com.vikash.syncr_core.data.models.response.youtube.searchResults.ItemsItem
-import com.vikash.syncr_core.data.models.response.youtube.searchResults.SearchResponse
 import com.vikash.syncr_core.data.models.response.youtube.searchResults.VideosItem
 import com.vikash.syncr_core.data.models.response.youtube.searchResults.YoutubeRefinedSearchResponse
 import com.vikash.syncr_core.data.models.videoplaybackevents.NewVideoSelected
@@ -22,13 +20,11 @@ class SearchFragmentViewModel : ViewModel() {
     private final val TAG = SearchFragmentViewModel::class.java.canonicalName
     private val _searchEditText = MutableLiveData<String>()
     private val _invalidInput = MutableLiveData<Event<String>>()
-    private val _searchResults = MutableLiveData<List<ItemsItem?>?>()
-    private val _refinedSearchResults = MutableLiveData<List<VideosItem?>?>()
+    private val _searchResults = MutableLiveData<List<VideosItem?>?>()
     private val _searchError = MutableLiveData<Event<String>>()
     private val youtubeRepository = YoutubeRepository(NetworkDataSource(YoutubeApi()))
 
-    val searchResults : LiveData<List<ItemsItem?>?> get() = _searchResults
-    val refinedSearchResults : LiveData<List<VideosItem?>?> get() = _refinedSearchResults
+    val searchResults : LiveData<List<VideosItem?>?> get() = _searchResults
     val searchError : LiveData<Event<String>> get() = _searchError
     val loading = MutableLiveData<Int>()
     var searchEditText : MutableLiveData<String>
@@ -50,10 +46,10 @@ class SearchFragmentViewModel : ViewModel() {
             return
         }
 
-        getRefinedSearchResults()
+        getSearchResults()
     }
 
-    private fun getSearchResults() {
+    private fun getSearchResults(){
         loading.postValue(View.VISIBLE)
         viewModelScope.launch(){
             val response = youtubeRepository.search(_searchEditText.value!!)
@@ -63,29 +59,10 @@ class SearchFragmentViewModel : ViewModel() {
         }
     }
 
-    private fun processSearchResponse(searchResponse: Result<SearchResponse>){
+    private fun processSearchResponse(searchResponse: Result<YoutubeRefinedSearchResponse>){
         Log.i(TAG, "processSearchResponse: $searchResponse")
         if(searchResponse.isSuccess){
-            _searchResults.postValue(searchResponse.getOrNull()?.items)
-        }else{
-            _searchError.postValue(Event("Unable to retrieve search results"))
-        }
-    }
-
-    private fun getRefinedSearchResults(){
-        loading.postValue(View.VISIBLE)
-        viewModelScope.launch(){
-            val response = youtubeRepository.refinedSearch(_searchEditText.value!!)
-
-            loading.postValue(View.GONE)
-            processRefinedSearchResponse(response)
-        }
-    }
-
-    private fun processRefinedSearchResponse(searchResponse: Result<YoutubeRefinedSearchResponse>){
-        Log.i(TAG, "processSearchResponse: $searchResponse")
-        if(searchResponse.isSuccess){
-            _refinedSearchResults
+            _searchResults
                 .postValue(searchResponse?.getOrNull()?.items!!)
         }else{
             _searchError.postValue(Event("Unable to retrieve search results"))

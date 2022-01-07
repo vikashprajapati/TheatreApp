@@ -103,7 +103,7 @@ class SearchFragment :
                 searchResultsAdapter.updateSearchResultList(it)
             }*/
 
-            refinedSearchResults.observe(viewLifecycleOwner){
+            searchResults.observe(viewLifecycleOwner){
                 Log.i(TAG, "observeData: $it")
                 searchResultsAdapter.updateSearchResultList(it)
             }
