@@ -49,9 +49,10 @@ class SearchFragment :
         binding?.lifecycleOwner = this@SearchFragment
         binding?.viewModel = viewModel
 
+        val statusBarHeight = requireActivity().getStatusHeight
         binding?.root?.layoutParams = ViewGroup.LayoutParams(
             requireActivity().displayMetrics.widthPixels,
-            requireActivity().displayMetrics.heightPixels - playerHeight
+            requireActivity().displayMetrics.heightPixels - playerHeight - statusBarHeight as Int
         )
 
         return binding?.root
@@ -82,6 +83,13 @@ class SearchFragment :
             }
 
             return point
+        }
+
+    private val Activity.getStatusHeight : Int
+        get() = resources.run {
+            val id = getIdentifier("status_bar_height", "dimen", "android")
+            if(id > 0) return getDimension(id).toInt()
+            return  0
         }
 
     override fun observeData() {
