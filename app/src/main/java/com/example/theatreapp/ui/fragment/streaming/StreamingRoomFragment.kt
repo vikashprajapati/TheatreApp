@@ -150,6 +150,7 @@ class StreamingRoomFragment :
 
 	private fun setupViewPager() {
 		viewPagerAdapter = StreamingViewPagerAdapter(parentFragmentManager)
+
 		binding!!.viewpager.adapter = viewPagerAdapter
 		binding!!.tabLayout.setupWithViewPager(binding!!.viewpager)
 	}
