@@ -1,5 +1,6 @@
-include ':app'
 rootProject.name = "TheatreApp"
+include ':app'
 include ':tv_theatre_app'
 include ':syncr-core'
 include ':youtube-extractor'
+include ':neumorphic-ui'

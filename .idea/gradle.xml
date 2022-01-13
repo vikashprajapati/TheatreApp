@@ -12,6 +12,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/neumorphic-ui" />
             <option value="$PROJECT_DIR$/syncr-core" />
             <option value="$PROJECT_DIR$/tv_theatre_app" />
             <option value="$PROJECT_DIR$/youtube-extractor" />
