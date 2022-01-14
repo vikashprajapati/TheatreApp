@@ -17,10 +17,10 @@ class MainActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-//        setContent {
-//            LoginForm()
-//        }
+//        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        setContent {
+            LoginForm()
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean = findNavController(R.id.navHostfragment).navigateUp()
