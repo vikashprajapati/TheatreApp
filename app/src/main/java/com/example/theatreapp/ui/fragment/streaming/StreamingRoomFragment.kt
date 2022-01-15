@@ -34,7 +34,6 @@ class StreamingRoomFragment :
 	BaseFragment<FragmentStreamingRoomBinding, StreamingRoomFragmentViewModel>() {
 	private var mediaPlayerFragment: MediaPlayerFragment? = null
 	private lateinit var viewPagerAdapter: StreamingViewPagerAdapter
-	private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
 	private val backPressedCallback = object : OnBackPressedCallback(true) {
 		override fun handleOnBackPressed() {
 			isEnabled = false
@@ -42,11 +41,6 @@ class StreamingRoomFragment :
 			viewModel.leaveRoom()
 			findNavController().popBackStack()
 		}
-	}
-
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-		requireActivity().onBackPressedDispatcher.addCallback(this, backPressedCallback)
 	}
 
 	override fun onCreateView(
@@ -76,16 +70,19 @@ class StreamingRoomFragment :
 
 		setupViewPager()
 
-		binding!!.searchButton.setOnClickListener {
-			val bundle = Bundle()
-			bundle.putInt("height", viewModel.mediaPlayerFragmentViewHeight.value!!)
-			findNavController().navigate(R.id.action_roomFrament_to_searchFragment, bundle)
+		binding?.let{
+			it.searchButton.setOnClickListener {
+				val bundle = Bundle()
+				bundle.putInt("height", viewModel.mediaPlayerFragmentViewHeight.value!!)
+				findNavController().navigate(R.id.action_roomFrament_to_searchFragment, bundle)
+			}
 		}
 	}
 
 	override fun onStart() {
 		super.onStart()
 		EventBus.getDefault().register(this)
+		requireActivity().onBackPressedDispatcher.addCallback(this, backPressedCallback)
 	}
 
 	@Subscribe(threadMode = ThreadMode.MAIN)
@@ -96,11 +93,6 @@ class StreamingRoomFragment :
 	override fun onStop() {
 		super.onStop()
 		EventBus.getDefault().unregister(this)
-	}
-
-	override fun onDestroyView() {
-		super.onDestroyView()
-
 		// backPressedCallback is not lifecycle aware so we need to unregister callback manually
 		backPressedCallback.isEnabled = false
 		backPressedCallback.remove()
@@ -150,20 +142,21 @@ class StreamingRoomFragment :
 
 	private fun setupViewPager() {
 		viewPagerAdapter = StreamingViewPagerAdapter(parentFragmentManager)
-
-		binding!!.viewpager.adapter = viewPagerAdapter
-		binding!!.tabLayout.setupWithViewPager(binding!!.viewpager)
+		binding?.apply {
+			viewpager.adapter = viewPagerAdapter
+			tabLayout.setupWithViewPager(viewpager)
+		}
 	}
 
 	private fun addMediaPlayerFragment() {
 		mediaPlayerFragment = MediaPlayerFragment.newInstance()
 		val fragmentTransaction: FragmentTransaction = parentFragmentManager.beginTransaction()
-		mediaPlayerFragment?.let {
+		mediaPlayerFragment?.apply {
 			fragmentTransaction.add(
-                R.id.media_player_fragment_container, it,
-                MediaPlayerFragment.TAG
-            )
-			fragmentTransaction.commit()
+				R.id.media_player_fragment_container,
+				this,
+				MediaPlayerFragment.TAG
+			).commit()
 		}
 	}
 

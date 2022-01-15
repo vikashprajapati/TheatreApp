@@ -22,20 +22,18 @@ class HomeFragment :
     BaseFragment<FragmentHomeBinding, HomeFragmentViewModel>(){
     private val TAG = HomeFragment::class.java.canonicalName
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        binding?.lifecycleOwner = this@HomeFragment
-        binding?.viewModel = viewModel
-        return binding?.root
+    override fun getViewBinding(): FragmentHomeBinding =
+        FragmentHomeBinding.inflate(layoutInflater)
+
+    override fun initViewModel(): HomeFragmentViewModel =
+        ViewModelProvider(this)[HomeFragmentViewModel::class.java]
+
+    override fun setUpViews() {
+        binding?.apply{
+            viewModel = viewModel
+            lifecycleOwner = this@HomeFragment
+        }
     }
-
-    override fun getViewBinding(): FragmentHomeBinding = FragmentHomeBinding.inflate(layoutInflater)
-
-    override fun initViewModel(): HomeFragmentViewModel = ViewModelProvider(this).get(
-        HomeFragmentViewModel::class.java)
 
     override fun observeData() {
         super.observeData()

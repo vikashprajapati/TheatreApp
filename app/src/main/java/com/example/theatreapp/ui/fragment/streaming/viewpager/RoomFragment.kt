@@ -29,16 +29,18 @@ class RoomFragment : BaseFragment<FragmentRoomBinding, StreamingRoomFragmentView
 	}
 	override fun setUpViews() {
 		super.setUpViews()
-		binding?.room = SessionData.currentRoom
-		binding?.synchronizationSlider?.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
-			override fun onStartTrackingTouch(slider: Slider) {
-				// Responds to when slider's touch event is being started
-			}
+		binding?.apply {
+			room = SessionData.currentRoom
+			synchronizationSlider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+				override fun onStartTrackingTouch(slider: Slider) {
+					// Responds to when slider's touch event is being started
+				}
 
-			override fun onStopTrackingTouch(slider: Slider) {
-				viewModel.videoSyncSlider.postValue(slider.value)
-			}
-		})
+				override fun onStopTrackingTouch(slider: Slider) {
+					viewModel.videoSyncSlider.postValue(slider.value)
+				}
+			})
+		}
 	}
 
 	override fun observeData() {
@@ -48,10 +50,12 @@ class RoomFragment : BaseFragment<FragmentRoomBinding, StreamingRoomFragmentView
 		}
 	}
 
-	override fun initViewModel(): StreamingRoomFragmentViewModel = ViewModelProvider(requireActivity()).get(
+	override fun initViewModel(): StreamingRoomFragmentViewModel =
+		ViewModelProvider(requireActivity()).get(
 		StreamingRoomFragmentViewModel::class.java)
 
-	override fun getViewBinding(): FragmentRoomBinding = FragmentRoomBinding.inflate(layoutInflater)
+	override fun getViewBinding(): FragmentRoomBinding =
+		FragmentRoomBinding.inflate(layoutInflater)
 
 	companion object {
 		/**
