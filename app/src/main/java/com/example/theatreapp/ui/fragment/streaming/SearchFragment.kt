@@ -46,8 +46,10 @@ class SearchFragment :
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding?.lifecycleOwner = this@SearchFragment
-        binding?.viewModel = viewModel
+        binding?.apply {
+            lifecycleOwner = this@SearchFragment
+            this.viewModel = viewModel
+        }
 
         val statusBarHeight = requireActivity().getStatusHeight
         binding?.root?.layoutParams = ViewGroup.LayoutParams(
@@ -120,8 +122,10 @@ class SearchFragment :
 
     override fun setUpViews() {
         super.setUpViews()
-        binding?.recyclerView.apply {
-            this?.adapter = searchResultsAdapter
+        binding?.apply {
+            recyclerView.apply {
+                this.adapter = searchResultsAdapter
+            }
         }
     }
 

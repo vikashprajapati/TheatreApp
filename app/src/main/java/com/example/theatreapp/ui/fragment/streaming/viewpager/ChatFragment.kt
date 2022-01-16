@@ -25,8 +25,10 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>() {
     ): View? {
         // Inflate the layout for this fragment
         super.onCreateView(inflater, container, savedInstanceState)
-        binding?.lifecycleOwner = this@ChatFragment
-        binding?.viewModel = viewModel
+        binding?.apply {
+            lifecycleOwner = this@ChatFragment
+            this.viewModel = viewModel
+        }
         return binding?.root
     }
 
@@ -35,7 +37,6 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>() {
     override fun getViewBinding(): FragmentChatBinding = FragmentChatBinding.inflate(layoutInflater)
 
     override fun observeData() {
-        super.observeData()
         viewModel.messageList.observe(viewLifecycleOwner){
             chatAdapter.updateMessageList(it as ArrayList<Message>)
         }
@@ -43,8 +44,8 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>() {
 
     override fun setUpViews() {
         super.setUpViews()
-        binding?.messageRecyclerView.apply {
-            this?.adapter = chatAdapter
+        binding?.apply {
+            messageRecyclerView.adapter = chatAdapter
         }
     }
 
