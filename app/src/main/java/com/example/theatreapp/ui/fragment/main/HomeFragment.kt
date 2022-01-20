@@ -1,15 +1,12 @@
 package com.example.theatreapp.ui.fragment.main
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.theatreapp.R
 import com.example.theatreapp.databinding.FragmentHomeBinding
+import com.example.theatreapp.ui.composables.LoginForm
 import com.example.theatreapp.ui.fragment.BaseFragment
 import com.vikash.syncr_core.viewmodels.HomeFragmentViewModel
 
@@ -23,16 +20,18 @@ class HomeFragment :
     private val TAG = HomeFragment::class.java.canonicalName
 
     override fun getViewBinding(): FragmentHomeBinding =
-        FragmentHomeBinding.inflate(layoutInflater)
+        FragmentHomeBinding.inflate(layoutInflater).apply {
+            composeContainer.setContent {
+                LoginForm()
+            }
+        }
 
     override fun initViewModel(): HomeFragmentViewModel =
         ViewModelProvider(this)[HomeFragmentViewModel::class.java]
 
     override fun setUpViews() {
-        binding?.apply{
-            viewModel = viewModel
-            lifecycleOwner = this@HomeFragment
-        }
+        binding?.viewModel = viewModel
+        binding?.lifecycleOwner = this@HomeFragment
     }
 
     override fun observeData() {
@@ -69,3 +68,4 @@ class HomeFragment :
         fun newInstance() = HomeFragment()
     }
 }
+

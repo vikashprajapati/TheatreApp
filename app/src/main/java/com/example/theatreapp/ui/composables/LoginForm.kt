@@ -4,23 +4,25 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import com.example.theatreapp.R
+import com.vikash.syncr_core.viewmodels.HomeFragmentViewModel
 
 @Preview
 @Composable
-fun LoginForm(){
+fun LoginForm(viewModel: HomeFragmentViewModel = HomeFragmentViewModel()){
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -72,10 +74,11 @@ fun LoginForm(){
                     focusedLabelColor = colorResource(id = R.color.secondary_color)
                 )
 
-                /*var username by remember { mutableStateOf("") }*/
+//                var userName by remember { mutableStateOf("") }
+                val userName by viewModel.user.observeAsState("")
                 TextField(
-                    value = "",
-                    onValueChange = {},
+                    value = userName,
+                    onValueChange = {viewModel.user.value = it},
                     label = {
                         Text(text = "UserName")
                     },
@@ -83,12 +86,15 @@ fun LoginForm(){
                     colors = textFieldStyles,
                     modifier = Modifier.padding(bottom = 24.dp),
                     trailingIcon = {
-
+                        painterResource(id = R.drawable.ic_person)
                     }
                 )
 
-                TextField(value = "",
-                    onValueChange = {},
+//                var roomName by remember { mutableStateOf("") }
+                val roomName by viewModel.room.observeAsState("")
+                TextField(
+                    value = roomName,
+                    onValueChange = {viewModel.room.value = it},
                     label = {
                         Text(text = "RoomName")
                     },
@@ -101,9 +107,7 @@ fun LoginForm(){
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = colorResource(id = R.color.primary_color)
                     ),
-                    onClick = {
-
-                    },
+                    onClick = { viewModel.validateInput() },
                     modifier = Modifier
                         .fillMaxWidth()
                         .requiredHeight(56.dp),

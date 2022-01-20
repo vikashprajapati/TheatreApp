@@ -13,8 +13,8 @@ import com.vikash.syncr_core.utils.Event
 
 class HomeFragmentViewModel() : ViewModel() {
     private val TAG = HomeFragmentViewModel::class.java.canonicalName
-    private var _room = MutableLiveData<String>()
-    private var _user = MutableLiveData<String>()
+    private var _room = MutableLiveData<String>("")
+    private var _user = MutableLiveData<String>("")
     private var _joinedRoomState = MutableLiveData<Event<JoinedRoomResponse>>()
     private var _connectionState = MutableLiveData<Event<String>>()
     val loading = MutableLiveData<Int>()
@@ -82,6 +82,7 @@ class HomeFragmentViewModel() : ViewModel() {
     var invalidInput = MutableLiveData<Event<String>>()
 
     fun validateInput() {
+        Log.i(TAG, "validateInput: user: ${user.value} && room: ${room.value}")
         if (_room.value.isNullOrEmpty() || _user.value.isNullOrEmpty())
             invalidInput.value = Event("Invalid Input")
         else{
