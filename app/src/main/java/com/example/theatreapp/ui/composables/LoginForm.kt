@@ -4,8 +4,7 @@ import android.view.View
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +19,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.theatreapp.R
 import com.vikash.syncr_core.viewmodels.HomeFragmentViewModel
+
+
+
 
 @Preview
 @Composable
@@ -59,7 +61,7 @@ fun LoginForm(viewModel: HomeFragmentViewModel = HomeFragmentViewModel()){
             backgroundColor = colorResource(id = R.color.off_white),
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier
-                .size(300.dp),
+                .width(300.dp),
             elevation = 16.dp
         ){
             Column(
@@ -101,8 +103,25 @@ fun LoginForm(viewModel: HomeFragmentViewModel = HomeFragmentViewModel()){
                     },
                     shape = RoundedCornerShape(12.dp),
                     colors = textFieldStyles,
-                    modifier = Modifier.padding(bottom = 48.dp)
+                    modifier = Modifier.padding(bottom = 24.dp)
                 )
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 24.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                )  {
+                    Text(text = "LAN Mode")
+                    var checkedState by remember { mutableStateOf(false)}
+                    Switch(
+                        checked = checkedState,
+                        onCheckedChange = {checkedState = it},
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = colorResource(id = R.color.primary_color)
+                        )
+                    )
+                }
 
                 Button(
                     colors = ButtonDefaults.buttonColors(
