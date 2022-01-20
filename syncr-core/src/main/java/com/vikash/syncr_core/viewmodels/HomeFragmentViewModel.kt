@@ -17,7 +17,7 @@ class HomeFragmentViewModel() : ViewModel() {
     private var _user = MutableLiveData<String>("")
     private var _joinedRoomState = MutableLiveData<Event<JoinedRoomResponse>>()
     private var _connectionState = MutableLiveData<Event<String>>()
-    val loading = MutableLiveData<Int>()
+    val loading = MutableLiveData<Int>(View.GONE)
     val connectionState : LiveData<Event<String>> get() = _connectionState
     val joinRoomState : LiveData<Event<JoinedRoomResponse>> get() = _joinedRoomState
 

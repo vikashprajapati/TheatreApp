@@ -1,10 +1,11 @@
 package com.example.theatreapp.ui.composables
 
-import androidx.compose.foundation.background
+import android.view.View
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,7 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
+import androidx.compose.ui.window.Dialog
 import com.example.theatreapp.R
 import com.vikash.syncr_core.viewmodels.HomeFragmentViewModel
 
@@ -107,7 +108,9 @@ fun LoginForm(viewModel: HomeFragmentViewModel = HomeFragmentViewModel()){
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = colorResource(id = R.color.primary_color)
                     ),
-                    onClick = { viewModel.validateInput() },
+                    onClick = {
+                        viewModel.validateInput()
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .requiredHeight(56.dp),
@@ -119,6 +122,19 @@ fun LoginForm(viewModel: HomeFragmentViewModel = HomeFragmentViewModel()){
                     )
                 }
             }
+        }
+    }
+
+    val visibility by viewModel.loading.observeAsState(View.GONE)
+    if(visibility ==  View.VISIBLE){
+        Dialog(onDismissRequest = {}, ) {
+            CircularProgressIndicator(
+                strokeWidth = 4.dp,
+                color = colorResource(id = R.color.primary_color),
+                modifier = Modifier
+                    .size(48.dp)
+
+            )
         }
     }
 }
