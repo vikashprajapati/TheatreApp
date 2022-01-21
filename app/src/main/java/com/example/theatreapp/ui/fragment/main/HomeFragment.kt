@@ -29,32 +29,26 @@ class HomeFragment :
     override fun initViewModel(): HomeFragmentViewModel =
         ViewModelProvider(this)[HomeFragmentViewModel::class.java]
 
-    override fun setUpViews() {
-        binding?.viewModel = viewModel
-        binding?.lifecycleOwner = this@HomeFragment
-    }
-
     override fun observeData() {
-        super.observeData()
-        binding?.viewModel!!.apply {
-            invalidInput.observe(viewLifecycleOwner, { event ->
-                event?.getContentIfNotHandledOrReturnNull()?.let {
-                    shortToast(R.string.invalid_details_text)
-                }
-            })
-
-            connectionState.observe(viewLifecycleOwner){
-                val msg = it.getContentIfNotHandledOrReturnNull()?:return@observe
-                shortToast(msg)
-            }
-
-            joinRoomState.observe(viewLifecycleOwner, {
-                // navigate to streaming room fragment
-                val roomDetails = it.getContentIfNotHandledOrReturnNull()?:return@observe
-                val bundle = bundleOf("videoUrl" to roomDetails.room.currentVideoUrl)
-                findNavController().navigate(R.id.action_homeFragment_to_roomFrament, bundle)
-            })
-        }
+//        binding?.viewModel!!.apply {
+//            invalidInput.observe(viewLifecycleOwner, { event ->
+//                event?.getContentIfNotHandledOrReturnNull()?.let {
+//                    shortToast(R.string.invalid_details_text)
+//                }
+//            })
+//
+//            connectionState.observe(viewLifecycleOwner){
+//                val msg = it.getContentIfNotHandledOrReturnNull()?:return@observe
+//                shortToast(msg)
+//            }
+//
+//            joinRoomState.observe(viewLifecycleOwner, {
+//                // navigate to streaming room fragment
+//                val roomDetails = it.getContentIfNotHandledOrReturnNull()?:return@observe
+//                val bundle = bundleOf("videoUrl" to roomDetails.room.currentVideoUrl)
+//                findNavController().navigate(R.id.action_homeFragment_to_roomFrament, bundle)
+//            })
+//        }
     }
 
     companion object {

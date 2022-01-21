@@ -1,6 +1,8 @@
 package com.example.theatreapp.ui.composables
 
+import android.media.metrics.Event
 import android.view.View
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -19,9 +21,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.theatreapp.R
 import com.vikash.syncr_core.viewmodels.HomeFragmentViewModel
-
-
-
 
 @Preview
 @Composable
@@ -154,6 +153,31 @@ fun LoginForm(viewModel: HomeFragmentViewModel = HomeFragmentViewModel()){
                     .size(48.dp)
 
             )
+        }
+    }
+
+    val isInvalidInput by viewModel.invalidInput.observeAsState()
+    val message = isInvalidInput?.getContentIfNotHandledOrReturnNull()?:""
+    if(!message.isBlank()){
+        Row(modifier = Modifier.height(24.dp)) {
+            Snackbar(
+                backgroundColor = colorResource(id = R.color.accent_color),
+                modifier = Modifier
+                    .padding(8.dp),
+                elevation = 8.dp,
+                action = {
+                    Text(
+                        color = colorResource(id = R.color.secondary_color),
+                        text = "Dismiss",
+                        modifier = Modifier
+                            .clickable(onClick = {
+                                viewModel.invalidInput.value = com.vikash.syncr_core.utils.Event("")
+                            })
+                    )
+                }
+            ) {
+                Text(text = message, color = colorResource(id = R.color.black))
+            }
         }
     }
 }
