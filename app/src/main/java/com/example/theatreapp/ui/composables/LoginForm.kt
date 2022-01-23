@@ -1,6 +1,5 @@
 package com.example.theatreapp.ui.composables
 
-import android.media.metrics.Event
 import android.view.View
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -67,7 +66,7 @@ fun LoginForm(viewModel: HomeFragmentViewModel = HomeFragmentViewModel()){
                 modifier = Modifier.padding(horizontal = 36.dp, vertical = 48.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                val textFieldStyles = TextFieldDefaults.textFieldColors(
+                val textFieldColors = TextFieldDefaults.textFieldColors(
                     focusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
@@ -76,69 +75,11 @@ fun LoginForm(viewModel: HomeFragmentViewModel = HomeFragmentViewModel()){
                     focusedLabelColor = colorResource(id = R.color.secondary_color)
                 )
 
-//                var userName by remember { mutableStateOf("") }
-                val userName by viewModel.user.observeAsState("")
-                TextField(
-                    value = userName,
-                    onValueChange = {viewModel.user.value = it},
-                    label = {
-                        Text(text = "UserName")
-                    },
-                    shape = RoundedCornerShape(12.dp),
-                    colors = textFieldStyles,
-                    modifier = Modifier.padding(bottom = 24.dp),
-                    trailingIcon = {
-                        painterResource(id = R.drawable.ic_person)
-                    }
-                )
 
-//                var roomName by remember { mutableStateOf("") }
-                val roomName by viewModel.room.observeAsState("")
-                TextField(
-                    value = roomName,
-                    onValueChange = {viewModel.room.value = it},
-                    label = {
-                        Text(text = "RoomName")
-                    },
-                    shape = RoundedCornerShape(12.dp),
-                    colors = textFieldStyles,
-                    modifier = Modifier.padding(bottom = 24.dp)
-                )
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 24.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                )  {
-                    Text(text = "LAN Mode")
-                    var checkedState by remember { mutableStateOf(false)}
-                    Switch(
-                        checked = checkedState,
-                        onCheckedChange = {checkedState = it},
-                        colors = SwitchDefaults.colors(
-                            checkedThumbColor = colorResource(id = R.color.primary_color)
-                        )
-                    )
-                }
-
-                Button(
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = colorResource(id = R.color.primary_color)
-                    ),
-                    onClick = {
-                        viewModel.validateInput()
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .requiredHeight(56.dp),
-                    shape = RoundedCornerShape(12.dp)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.join_room_button),
-                        color = colorResource(id = R.color.white)
-                    )
-                }
+                UserField(viewModel, textFieldColors)
+                RoomField(viewModel, textFieldColors)
+                SwitchGroup(viewModel = viewModel)
+                CustomButton(viewModel = viewModel)
             }
         }
     }
@@ -179,5 +120,81 @@ fun LoginForm(viewModel: HomeFragmentViewModel = HomeFragmentViewModel()){
                 Text(text = message, color = colorResource(id = R.color.black))
             }
         }
+    }
+}
+
+@Composable
+fun RoomField(viewModel: HomeFragmentViewModel, textFieldColors: TextFieldColors){
+    // var roomName by remember { mutableStateOf("") }
+    val roomName by viewModel.room.observeAsState("")
+    TextField(
+        value = roomName,
+        onValueChange = {viewModel.room.value = it},
+        label = {
+            Text(text = "RoomName")
+        },
+        shape = RoundedCornerShape(12.dp),
+        colors = textFieldColors,
+        modifier = Modifier.padding(bottom = 24.dp)
+    )
+}
+
+
+@Composable
+fun UserField(viewModel: HomeFragmentViewModel, textFieldColors: TextFieldColors){
+    //                var userName by remember { mutableStateOf("") }
+    val userName by viewModel.user.observeAsState("")
+    TextField(
+        value = userName,
+        onValueChange = {viewModel.user.value = it},
+        label = {
+            Text(text = "UserName")
+        },
+        shape = RoundedCornerShape(12.dp),
+        colors = textFieldColors,
+        modifier = Modifier.padding(bottom = 24.dp),
+        trailingIcon = {
+            painterResource(id = R.drawable.ic_person)
+        }
+    )
+}
+
+@Composable
+fun SwitchGroup(viewModel: HomeFragmentViewModel){
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .padding(bottom = 24.dp),
+        horizontalArrangement = Arrangement.SpaceBetween)  {
+        Text(text = "LAN Mode")
+        var checkedState by remember { mutableStateOf(false)}
+        Switch(
+            checked = checkedState,
+            onCheckedChange = {checkedState = it},
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = colorResource(id = R.color.primary_color)
+            )
+        )
+    }
+}
+
+
+@Composable
+fun CustomButton(viewModel: HomeFragmentViewModel){
+    Button(
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = colorResource(id = R.color.primary_color)
+        ),
+        onClick = {
+            viewModel.validateInput()
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .requiredHeight(56.dp),
+        shape = RoundedCornerShape(12.dp)
+    ) {
+        Text(
+            text = stringResource(id = R.string.join_room_button),
+            color = colorResource(id = R.color.white)
+        )
     }
 }
