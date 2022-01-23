@@ -14,16 +14,19 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.ViewModel
 import com.example.theatreapp.R
+import com.vikash.syncr_core.data.models.response.joinroomresponse.JoinedRoomResponse
 import com.vikash.syncr_core.viewmodels.HomeFragmentViewModel
 
-@Preview
 @Composable
-fun LoginForm(viewModel: HomeFragmentViewModel = HomeFragmentViewModel()){
+fun LoginForm(
+    viewModel: HomeFragmentViewModel = HomeFragmentViewModel(),
+    navigationController: (roomDetails: JoinedRoomResponse) -> Unit
+){
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -79,47 +82,11 @@ fun LoginForm(viewModel: HomeFragmentViewModel = HomeFragmentViewModel()){
                 UserField(viewModel, textFieldColors)
                 RoomField(viewModel, textFieldColors)
                 SwitchGroup(viewModel = viewModel)
-                CustomButton(viewModel = viewModel)
+                CustomButton(viewModel = viewModel, stringResource(id = R.string.join_room_button))
             }
         }
-    }
 
-    val visibility by viewModel.loading.observeAsState(View.GONE)
-    if(visibility ==  View.VISIBLE){
-        Dialog(onDismissRequest = {}, ) {
-            CircularProgressIndicator(
-                strokeWidth = 4.dp,
-                color = colorResource(id = R.color.primary_color),
-                modifier = Modifier
-                    .size(48.dp)
-
-            )
-        }
-    }
-
-    val isInvalidInput by viewModel.invalidInput.observeAsState()
-    val message = isInvalidInput?.getContentIfNotHandledOrReturnNull()?:""
-    if(!message.isBlank()){
-        Row(modifier = Modifier.height(24.dp)) {
-            Snackbar(
-                backgroundColor = colorResource(id = R.color.accent_color),
-                modifier = Modifier
-                    .padding(8.dp),
-                elevation = 8.dp,
-                action = {
-                    Text(
-                        color = colorResource(id = R.color.secondary_color),
-                        text = "Dismiss",
-                        modifier = Modifier
-                            .clickable(onClick = {
-                                viewModel.invalidInput.value = com.vikash.syncr_core.utils.Event("")
-                            })
-                    )
-                }
-            ) {
-                Text(text = message, color = colorResource(id = R.color.black))
-            }
-        }
+        viewModelObservers(viewModel = viewModel, navigationController)
     }
 }
 
@@ -177,15 +144,52 @@ fun SwitchGroup(viewModel: HomeFragmentViewModel){
     }
 }
 
+@Composable
+fun viewModelObservers(
+    viewModel: HomeFragmentViewModel,
+    navigationController: (roomDetails: JoinedRoomResponse) -> Unit
+){
+    val connectionState by viewModel.connectionState.observeAsState()
+    var message = connectionState?.getContentIfNotHandledOrReturnNull()?:""
+    if(message.isNotBlank()){
+        MessageSnackBar(viewModel = viewModel, message = message)
+    }
+
+    val joinRoomState by viewModel.joinRoomState.observeAsState()
+    val roomDetails = joinRoomState?.getContentIfNotHandledOrReturnNull()
+    if(roomDetails != null){
+        navigationController(roomDetails)
+    }
+
+    val isInvalidInput by viewModel.invalidInput.observeAsState()
+    message = isInvalidInput?.getContentIfNotHandledOrReturnNull()?:""
+    if(!message.isBlank()){
+        MessageSnackBar(viewModel = viewModel, message = message)
+    }
+
+    val visibility by viewModel.loading.observeAsState(View.GONE)
+    if(visibility ==  View.VISIBLE){
+        Dialog(onDismissRequest = {}, ) {
+            CircularProgressIndicator(
+                strokeWidth = 4.dp,
+                color = colorResource(id = R.color.primary_color),
+                modifier = Modifier
+                    .size(48.dp)
+
+            )
+        }
+    }
+}
+
 
 @Composable
-fun CustomButton(viewModel: HomeFragmentViewModel){
+fun CustomButton(viewModel: ViewModel, text : String){
     Button(
         colors = ButtonDefaults.buttonColors(
             backgroundColor = colorResource(id = R.color.primary_color)
         ),
         onClick = {
-            viewModel.validateInput()
+            (viewModel as HomeFragmentViewModel).validateInput()
         },
         modifier = Modifier
             .fillMaxWidth()
@@ -193,8 +197,33 @@ fun CustomButton(viewModel: HomeFragmentViewModel){
         shape = RoundedCornerShape(12.dp)
     ) {
         Text(
-            text = stringResource(id = R.string.join_room_button),
+            text = text,
             color = colorResource(id = R.color.white)
         )
+    }
+}
+
+
+@Composable
+fun MessageSnackBar(viewModel: HomeFragmentViewModel, message : String){
+    Row(modifier = Modifier.height(24.dp)) {
+        Snackbar(
+            backgroundColor = colorResource(id = R.color.accent_color),
+            modifier = Modifier
+                .padding(8.dp),
+            elevation = 8.dp,
+            action = {
+                Text(
+                    color = colorResource(id = R.color.secondary_color),
+                    text = "Dismiss",
+                    modifier = Modifier
+                        .clickable(onClick = {
+                            viewModel.invalidInput.value = com.vikash.syncr_core.utils.Event("")
+                        })
+                )
+            }
+        ) {
+            Text(text = message, color = colorResource(id = R.color.black))
+        }
     }
 }

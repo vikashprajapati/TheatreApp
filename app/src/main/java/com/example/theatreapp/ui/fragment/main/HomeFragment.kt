@@ -8,6 +8,7 @@ import com.example.theatreapp.R
 import com.example.theatreapp.databinding.FragmentHomeBinding
 import com.example.theatreapp.ui.composables.LoginForm
 import com.example.theatreapp.ui.fragment.BaseFragment
+import com.vikash.syncr_core.data.models.response.joinroomresponse.JoinedRoomResponse
 import com.vikash.syncr_core.viewmodels.HomeFragmentViewModel
 
 /**
@@ -22,44 +23,16 @@ class HomeFragment :
     override fun getViewBinding(): FragmentHomeBinding =
         FragmentHomeBinding.inflate(layoutInflater).apply {
             composeContainer.setContent {
-                LoginForm()
+                LoginForm(navigationController = ::navigateToStreamingRoom)
             }
         }
 
     override fun initViewModel(): HomeFragmentViewModel =
         ViewModelProvider(this)[HomeFragmentViewModel::class.java]
 
-    override fun observeData() {
-//        binding?.viewModel!!.apply {
-//            invalidInput.observe(viewLifecycleOwner, { event ->
-//                event?.getContentIfNotHandledOrReturnNull()?.let {
-//                    shortToast(R.string.invalid_details_text)
-//                }
-//            })
-//
-//            connectionState.observe(viewLifecycleOwner){
-//                val msg = it.getContentIfNotHandledOrReturnNull()?:return@observe
-//                shortToast(msg)
-//            }
-//
-//            joinRoomState.observe(viewLifecycleOwner, {
-//                // navigate to streaming room fragment
-//                val roomDetails = it.getContentIfNotHandledOrReturnNull()?:return@observe
-//                val bundle = bundleOf("videoUrl" to roomDetails.room.currentVideoUrl)
-//                findNavController().navigate(R.id.action_homeFragment_to_roomFrament, bundle)
-//            })
-//        }
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @return A new instance of fragment HomeFragment.
-         */
-        @JvmStatic
-        fun newInstance() = HomeFragment()
+    private fun navigateToStreamingRoom(roomDetails: JoinedRoomResponse){
+        val bundle = bundleOf("videoUrl" to roomDetails.room.currentVideoUrl)
+        findNavController().navigate(R.id.action_homeFragment_to_roomFrament, bundle)
     }
 }
 
