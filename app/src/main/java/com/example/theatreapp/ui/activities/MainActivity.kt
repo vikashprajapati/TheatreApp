@@ -7,7 +7,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import com.example.theatreapp.R
 import com.example.theatreapp.databinding.ActivityMainBinding
-import com.example.theatreapp.ui.composables.LoginForm
 
 class MainActivity :
     AppCompatActivity()
@@ -18,9 +17,6 @@ class MainActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-//        setContent {
-//            LoginForm()
-//        }
     }
 
     override fun onSupportNavigateUp(): Boolean = findNavController(R.id.navHostfragment).navigateUp()
