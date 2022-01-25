@@ -18,6 +18,7 @@ import com.example.theatreapp.ui.adapters.YoutubeSearchResultsAdapter
 import com.example.theatreapp.ui.fragment.BaseBottomSheetFragment
 import com.vikash.syncr_core.data.models.response.youtube.searchResults.VideosItem
 import com.vikash.syncr_core.data.models.videoplaybackevents.NewVideoSelected
+import com.vikash.syncr_core.events.VideoUrlExtractedEvent
 import com.vikash.syncr_core.utils.SearchResultAdapterListener
 import com.vikash.syncr_core.viewmodels.SearchFragmentViewModel
 import com.vikash.youtube_extractor.VideoMeta
@@ -46,10 +47,8 @@ class SearchFragment :
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding?.apply {
-            lifecycleOwner = this@SearchFragment
-            this.viewModel = viewModel
-        }
+        binding?.lifecycleOwner = this@SearchFragment
+        binding?.viewModel = viewModel
 
         val statusBarHeight = requireActivity().getStatusHeight
         binding?.root?.layoutParams = ViewGroup.LayoutParams(
@@ -95,7 +94,6 @@ class SearchFragment :
         }
 
     override fun observeData() {
-        super.observeData()
         Log.i(TAG, "observeData: ${requireActivity().screenSizeInDp}")
         binding?.viewModel?.apply {
             invalidInput.observe(viewLifecycleOwner) {
@@ -107,11 +105,6 @@ class SearchFragment :
                 val msg = it.getContentIfNotHandledOrReturnNull()?: return@observe
                 shortToast(msg)
             }
-
-            /*searchResults.observe(viewLifecycleOwner){
-                Log.i(TAG, "observeData: $it")
-                searchResultsAdapter.updateSearchResultList(it)
-            }*/
 
             searchResults.observe(viewLifecycleOwner){
                 Log.i(TAG, "observeData: $it")
@@ -135,37 +128,11 @@ class SearchFragment :
     override fun getViewBinding(): FragmentSearchBinding =
         FragmentSearchBinding.inflate(layoutInflater)
 
-    @SuppressLint("StaticFieldLeak")
     override fun videoSelected(videoItem: VideosItem?) {
         val newVideo = videoItem
         Log.i(MediaPlayerFragment.TAG, "onVideoChangedEvent: ")
-        binding?.progressBar?.visibility = View.VISIBLE
-        object : YouTubeExtractor(context) {
-            override fun onExtractionComplete(ytFiles: SparseArray<YtFile>?, vMeta: VideoMeta?) {
-                if (ytFiles != null) {
-                    var videoUrl = ""
-                    ytFiles.forEach{key, ytFile ->
-                        Log.i(MediaPlayerFragment.TAG, "onExtractionComplete: $key \n $ytFile \n\n")
-                        if(
-                            ytFile.format.ext.equals("mp4")
-                            && ytFile.format.audioBitrate > 0
-                            && ytFile.format.height > 0
-                        ){
-                            videoUrl = ytFile.url
-                        }
-                    }
-
-                    if(videoUrl.isNullOrEmpty()){
-                        requireActivity().runOnUiThread {
-                            shortToast("Can't play video")
-                        }
-                    }else{
-                        binding?.progressBar?.visibility = View.GONE
-                        viewModel.sendNewVideoEvent(NewVideoSelected(videoUrl, newVideo?.title!!))
-                    }
-                }
-            }
-        }.extract(newVideo?.url)
+        val title = videoItem?.title
+        videoItem?.url?.let { viewModel.extractYoutubeUrl(it, title!!, requireContext()) }
     }
 
     companion object {

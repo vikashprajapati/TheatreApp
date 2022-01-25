@@ -1,5 +1,4 @@
 package com.example.theatreapp.ui.fragment.main
-
 import android.view.View
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*

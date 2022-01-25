@@ -1,5 +1,6 @@
 package com.vikash.syncr_core.viewmodels
 
+import android.content.Context
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.LiveData
@@ -11,10 +12,12 @@ import com.vikash.syncr_core.data.models.response.youtube.searchResults.VideosIt
 import com.vikash.syncr_core.data.models.response.youtube.searchResults.YoutubeRefinedSearchResponse
 import com.vikash.syncr_core.data.models.videoplaybackevents.NewVideoSelected
 import com.vikash.syncr_core.data.repository.YoutubeRepository
+import com.vikash.syncr_core.events.VideoUrlExtractedEvent
 import com.vikash.syncr_core.network.NetworkDataSource
 import com.vikash.syncr_core.network.YoutubeApi
 import com.vikash.syncr_core.utils.Event
 import kotlinx.coroutines.*
+import org.greenrobot.eventbus.EventBus
 
 class SearchFragmentViewModel : ViewModel() {
     private final val TAG = SearchFragmentViewModel::class.java.canonicalName
@@ -26,7 +29,8 @@ class SearchFragmentViewModel : ViewModel() {
 
     val searchResults : LiveData<List<VideosItem?>?> get() = _searchResults
     val searchError : LiveData<Event<String>> get() = _searchError
-    val loading = MutableLiveData<Int>()
+    val _loading = MutableLiveData<Int>(View.GONE)
+    val loading : LiveData<Int> get() = _loading
     var searchEditText : MutableLiveData<String>
         get() = _searchEditText
         set(data) {
@@ -34,7 +38,7 @@ class SearchFragmentViewModel : ViewModel() {
         }
 
     init {
-        loading.postValue(View.GONE)
+        _loading.postValue(View.GONE)
     }
 
     val invalidInput : LiveData<Event<String>> get() = _invalidInput
@@ -50,11 +54,11 @@ class SearchFragmentViewModel : ViewModel() {
     }
 
     private fun getSearchResults(){
-        loading.postValue(View.VISIBLE)
+        _loading.postValue(View.VISIBLE)
         viewModelScope.launch(){
             val response = youtubeRepository.search(_searchEditText.value!!)
 
-            loading.postValue(View.GONE)
+            _loading.postValue(View.GONE)
             processSearchResponse(response)
         }
     }
@@ -71,6 +75,17 @@ class SearchFragmentViewModel : ViewModel() {
 
     fun sendNewVideoEvent(videoDetails : NewVideoSelected){
         SocketManager.sendNewVideoSelectedEvent(videoDetails)
+    }
+
+    fun extractYoutubeUrl(videoId : String, videoTitle : String, context : Context){
+        viewModelScope.launch {
+            val videoUrl = youtubeRepository.extractVideoUrl(context, videoId)
+            if(!videoUrl.isEmpty()){
+                withContext(Dispatchers.Main){
+                    EventBus.getDefault().post(VideoUrlExtractedEvent(videoUrl, videoTitle))
+                }
+            }
+        }
     }
 
     override fun onCleared() {

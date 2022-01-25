@@ -11,7 +11,10 @@ import com.vikash.syncr_core.data.models.videoplaybackevents.NewVideoSelected
 import com.vikash.syncr_core.data.models.videoplaybackevents.VideoChanged
 import com.vikash.syncr_core.data.models.videoplaybackevents.VideoPlayback
 import com.vikash.syncr_core.data.models.videoplaybackevents.VideoSynced
+import com.vikash.syncr_core.events.VideoUrlExtractedEvent
 import com.vikash.syncr_core.utils.Event
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 class StreamingRoomFragmentViewModel : ViewModel() {
     // temporarily we are keeping only video url, later we will be needing more video details
@@ -110,6 +113,9 @@ class StreamingRoomFragmentViewModel : ViewModel() {
         SocketManager.participantLeft.observeForever(participantLeftObserver)
         SocketManager.onNewVideo.observeForever(newVideoSelectedObserver)
         SocketManager.bufferingStatus.observeForever(bufferingStatusObserver)
+
+        if(!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this)
     }
 
     override fun onCleared() {
@@ -121,6 +127,9 @@ class StreamingRoomFragmentViewModel : ViewModel() {
         SocketManager.participantLeft.removeObserver(participantLeftObserver)
         SocketManager.participantJoined.removeObserver(participantJoinedObserver)
         SocketManager.bufferingStatus.removeObserver(bufferingStatusObserver)
+
+        if(EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().unregister(this)
     }
 
     fun sendVideoPlaybackEvent(playbackStatus: String) {
@@ -141,5 +150,12 @@ class StreamingRoomFragmentViewModel : ViewModel() {
 
     fun leaveRoom() {
         SocketManager.stopListeningToServer()
+    }
+
+    @Subscribe fun videoUrlExtracted(videoUrlExtractedEvent: VideoUrlExtractedEvent){
+        _newVideo.postValue(Event(NewVideoSelected(
+            videoUrlExtractedEvent.videoUrl,
+            videoUrlExtractedEvent.videoTitle
+        )))
     }
 }
