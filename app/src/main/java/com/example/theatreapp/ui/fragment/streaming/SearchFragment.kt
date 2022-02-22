@@ -46,10 +46,8 @@ class SearchFragment :
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding?.apply {
-            lifecycleOwner = this@SearchFragment
-            this.viewModel = viewModel
-        }
+        binding?.lifecycleOwner = this@SearchFragment
+        binding?.viewModel = viewModel
 
         val statusBarHeight = requireActivity().getStatusHeight
         binding?.root?.layoutParams = ViewGroup.LayoutParams(

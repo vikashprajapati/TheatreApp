@@ -18,33 +18,33 @@ import com.vikash.syncr_core.utils.Event
 import com.vikash.syncr_core.utils.Helpers
 
 object SocketManager : SocketService.SocketEventsListener {
-    // Too much responsibility, class needs to be refactored
-    private val socketService = SocketService()
-    private var _playbackVideo = MutableLiveData<Event<VideoPlayback>>()
-    private var _changedVideo = MutableLiveData<Event<VideoChanged>>()
-    private var _syncedVideo = MutableLiveData<Event<VideoSynced>>()
-    private var _connectionStatus = MutableLiveData<String>()
     private var _joinedRoomStatus = MutableLiveData<Event<JoinedRoomResponse>>()
     private var _participantJoined = MutableLiveData<Event<ParticipantsItem>>()
     private var _participantLeft = MutableLiveData<Event<ParticipantsItem>>()
-    private var _onMessage = MutableLiveData<Event<Message>>()
+    private var _playbackVideo = MutableLiveData<Event<VideoPlayback>>()
     private var _onNewVideo = MutableLiveData<Event<NewVideoSelected>>()
+    private var _changedVideo = MutableLiveData<Event<VideoChanged>>()
+    private var _syncedVideo = MutableLiveData<Event<VideoSynced>>()
+    private var _onMessage = MutableLiveData<Event<Message>>()
+    private var _connectionStatus = MutableLiveData<String>()
+    // Too much responsibility, class needs to be refactored
+    private val socketService = SocketService()
     private var _bufferingStatus = MutableLiveData<Boolean>()
 
-    val connectionStatus : LiveData<String> get() = _connectionStatus
     val joinedRoomStatus : LiveData<Event<JoinedRoomResponse>> get() = _joinedRoomStatus
     val participantJoined : LiveData<Event<ParticipantsItem>> get() = _participantJoined
     val participantLeft : LiveData<Event<ParticipantsItem>> get() = _participantLeft
     val playbackVideo : LiveData<Event<VideoPlayback>> get() = _playbackVideo
+    val onNewVideo : LiveData<Event<NewVideoSelected>> get() = _onNewVideo
     val changedVideo : LiveData<Event<VideoChanged>> get() = _changedVideo
     val syncedVideo : LiveData<Event<VideoSynced>> get() = _syncedVideo
-    val onMessage : LiveData<Event<Message>> get() = _onMessage
-    val onNewVideo : LiveData<Event<NewVideoSelected>> get() = _onNewVideo
+    val connectionStatus : LiveData<String> get() = _connectionStatus
     val bufferingStatus : LiveData<Boolean> get() = _bufferingStatus
+    val onMessage : LiveData<Event<Message>> get() = _onMessage
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Outgoing Socket Events                                                                                                           //
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    // Outgoing Socket Events                                                                    //
+    ///////////////////////////////////////////////////////////////////////////////////////////////
 
     fun startListeningToServer(){
         socketService.registerListener(this)
@@ -52,7 +52,7 @@ object SocketManager : SocketService.SocketEventsListener {
     }
 
     fun stopListeningToServer(){
-        socketService.unRegisterListener(this)
+        socketService.unRegisterListener()
         sendLeaveRoom()
     }
 
@@ -99,9 +99,9 @@ object SocketManager : SocketService.SocketEventsListener {
         socketService.send(OutgoingEvents.sendBufferingStatus, isBuffering)
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Helper methods                                                                                                                   //
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    // Helper methods                                                                            //
+    ///////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -109,9 +109,9 @@ object SocketManager : SocketService.SocketEventsListener {
 
 
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Incoming Socket Events                                                                                                           //
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    // Incoming Socket Events                                                                    //
+    ///////////////////////////////////////////////////////////////////////////////////////////////
 
     override fun playbackEvent(videoPlayback: VideoPlayback) {
         _playbackVideo.postValue(Event(videoPlayback))

@@ -29,10 +29,8 @@ class HomeFragment :
         ViewModelProvider(this)[HomeFragmentViewModel::class.java]
 
     override fun setUpViews() {
-        binding?.apply{
-            viewModel = viewModel
-            lifecycleOwner = this@HomeFragment
-        }
+        binding?.viewModel = viewModel
+        binding?.lifecycleOwner = this@HomeFragment
     }
 
     override fun observeData() {
