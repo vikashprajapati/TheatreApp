@@ -6,6 +6,8 @@
         <entry key="..\:/Users/paliy/OfficeProjects/TheatreApp/app/src/main/res/layout/fragment_home.xml" value="0.1" />
         <entry key="..\:/Users/paliy/OfficeProjects/TheatreApp/app/src/main/res/layout/fragment_streaming_room.xml" value="0.1" />
         <entry key="..\:/Users/vikash/.gradle/caches/transforms-3/b0e32d9c7da6315f09b2fd9efdcb8596/transformed/jetified-exoplayer-ui-2.16.1/res/layout/exo_player_control_view.xml" value="0.1" />
+        <entry key="..\:/Users/vikash/Documents/projects/TheatreApp/app/src/main/res/drawable/edittext_background.xml" value="0.18518518518518517" />
+        <entry key="..\:/Users/vikash/Documents/projects/TheatreApp/app/src/main/res/drawable/ic_dash.xml" value="0.1" />
         <entry key="..\:/Users/vikash/Documents/projects/TheatreApp/app/src/main/res/layout-land/fragment_streaming_room.xml" value="0.37125" />
         <entry key="..\:/Users/vikash/Documents/projects/TheatreApp/app/src/main/res/layout-w600dp/fragment_streaming_room.xml" value="0.16041666666666668" />
         <entry key="..\:/Users/vikash/Documents/projects/TheatreApp/app/src/main/res/layout/activity_main.xml" value="0.14540059347181009" />
@@ -26,6 +28,7 @@
         <entry key="..\:/Users/vikash/Documents/projects/TheatreApp/tv_theatre_app/src/main/res/drawable/default_background.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/vikash/Documents/projects/TheatreApp/tv_theatre_app/src/main/res/layout/activity_details.xml" value="0.17552083333333332" />
         <entry key="..\:/Users/vikash/Documents/projects/TheatreApp/tv_theatre_app/src/main/res/layout/activity_main.xml" value="0.17552083333333332" />
+        <entry key="..\:/Users/vikash/Documents/projects/TheatreApp/tv_theatre_app/src/main/res/layout/custom_exoplayer_controls_ui.xml" value="0.1" />
         <entry key="..\:/Users/vikash/Documents/projects/TheatreApp/tv_theatre_app/src/main/res/layout/fragment_home.xml" value="0.16666666666666666" />
       </map>
     </option>

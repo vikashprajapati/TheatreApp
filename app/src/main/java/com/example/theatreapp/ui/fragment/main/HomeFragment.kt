@@ -1,6 +1,5 @@
 package com.example.theatreapp.ui.fragment.main
 import android.view.View
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -17,24 +16,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.theatreapp.R
 import com.example.theatreapp.databinding.FragmentHomeBinding
 import com.example.theatreapp.ui.fragment.BaseFragment
 import com.vikash.syncr_core.data.models.response.joinroomresponse.JoinedRoomResponse
-import com.vikash.syncr_core.utils.Event
 import com.vikash.syncr_core.viewmodels.HomeFragmentViewModel
 
-/**
- * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class HomeFragment :
     BaseFragment<FragmentHomeBinding, HomeFragmentViewModel>(){
-    private val TAG = HomeFragment::class.java.canonicalName
 
     override fun getViewBinding(): FragmentHomeBinding =
         FragmentHomeBinding.inflate(layoutInflater).apply {
@@ -46,9 +37,14 @@ class HomeFragment :
     override fun initViewModel(): HomeFragmentViewModel =
         ViewModelProvider(this)[HomeFragmentViewModel::class.java]
 
-    private fun navigateToStreamingRoom(roomDetails: JoinedRoomResponse){
+
+    private fun navigateToStreamingRoom(roomDetails: JoinedRoomResponse) {
         val bundle = bundleOf("videoUrl" to roomDetails.room.currentVideoUrl)
         findNavController().navigate(R.id.action_homeFragment_to_roomFrament, bundle)
+    }
+
+    override fun setUpViews() {
+        binding?.lifecycleOwner = this@HomeFragment
     }
 
     @Composable
@@ -110,7 +106,7 @@ class HomeFragment :
                 }
             }
 
-            viewModelObservers()
+            ViewModelObservers()
         }
     }
 
@@ -169,7 +165,7 @@ class HomeFragment :
     }
 
     @Composable
-    fun viewModelObservers(){
+    fun ViewModelObservers(){
         val connectionState by viewModel.connectionState.observeAsState()
         var message = connectionState?.getContentIfNotHandledOrReturnNull()?:""
         if(message.isNotBlank()){
@@ -187,14 +183,13 @@ class HomeFragment :
 
         val isInvalidInput by viewModel.invalidInput.observeAsState()
         message = isInvalidInput?.getContentIfNotHandledOrReturnNull()?:""
-        if(!message.isBlank()){
+        if(message.isNotBlank()){
             shortToast(message)
-//            MessageSnackBar(message = message)
         }
 
         val visibility by viewModel.loading.observeAsState(View.GONE)
         if(visibility ==  View.VISIBLE){
-            Dialog(onDismissRequest = {}, ) {
+            Dialog(onDismissRequest = {}) {
                 CircularProgressIndicator(
                     strokeWidth = 4.dp,
                     color = colorResource(id = R.color.primary_color),
@@ -225,31 +220,6 @@ class HomeFragment :
                 text = text,
                 color = colorResource(id = R.color.white)
             )
-        }
-    }
-
-
-    @Composable
-    fun MessageSnackBar(message : String){
-        Row(modifier = Modifier.height(24.dp)) {
-            Snackbar(
-                backgroundColor = colorResource(id = R.color.accent_color),
-                modifier = Modifier
-                    .padding(8.dp),
-                elevation = 8.dp,
-                action = {
-                    Text(
-                        color = colorResource(id = R.color.secondary_color),
-                        text = "Dismiss",
-                        modifier = Modifier
-                            .clickable(onClick = {
-                                viewModel.invalidInput.value = Event("")
-                            })
-                    )
-                }
-            ) {
-                Text(text = message, color = colorResource(id = R.color.black))
-            }
         }
     }
 }

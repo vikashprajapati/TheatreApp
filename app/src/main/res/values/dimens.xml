@@ -6,6 +6,7 @@
     <dimen name="app_toolbar_text_size">12sp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="card_corner_radius">12dp</dimen>
+    <dimen name="button_corner_radius">12dp</dimen>
     <dimen name="card_padding">16dp</dimen>
     <dimen name="recycler_view_item_padding">4dp</dimen>
     <dimen name="icon_button_left_margin">8dp</dimen>

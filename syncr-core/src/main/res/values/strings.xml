@@ -1,20 +1,3 @@
 <resources>
-    <string name="app_name">TheatreApp</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="pull_to_refresh_text">Slide Down To Refresh</string>
-    <string name="room_name_hint_text"><b>Enter room name</b></string>
-    <string name="user_name_hint_text"><b>Enter user name</b></string>
-    <string name="join_room_button"><b>Join Room</b></string>
-    <string name="search_videos_hint_text">Search videos</string>
-    <string name="invalid_details_text">Please enter required details</string>
-    <string name="join_room_error">Failed to join room</string>
-    <string name="participant_joined">Joined</string>
-    <string name="search_invalid_input">Search field is empty</string>
-    <string name="enter_message_hint">Type your message here…</string>
-    <string name="socket_disconnected">Connection error</string>
-    <string name="room_name_label">Room Name</string>
-    <string name="host_name_label">Room Host</string>
-    <string name="participant_count_label">Participant Count</string>
-    <string name="exo_controls_video_sync_description">Video Sync</string>
 </resources>
