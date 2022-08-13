@@ -1,15 +1,14 @@
 package com.example.theatreapp.ui.fragment.streaming
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
-import android.util.SparseArray
-import android.view.*
-import androidx.core.util.forEach
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.theatreapp.R
@@ -17,13 +16,8 @@ import com.example.theatreapp.databinding.FragmentSearchBinding
 import com.example.theatreapp.ui.adapters.YoutubeSearchResultsAdapter
 import com.example.theatreapp.ui.fragment.BaseBottomSheetFragment
 import com.vikash.syncr_core.data.models.response.youtube.searchResults.VideosItem
-import com.vikash.syncr_core.data.models.videoplaybackevents.NewVideoSelected
-import com.vikash.syncr_core.events.VideoUrlExtractedEvent
 import com.vikash.syncr_core.utils.SearchResultAdapterListener
 import com.vikash.syncr_core.viewmodels.SearchFragmentViewModel
-import com.vikash.youtube_extractor.VideoMeta
-import com.vikash.youtube_extractor.YouTubeExtractor
-import com.vikash.youtube_extractor.YtFile
 import kotlin.math.roundToInt
 
 
