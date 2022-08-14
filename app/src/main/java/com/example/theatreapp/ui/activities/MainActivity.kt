@@ -7,7 +7,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import com.example.theatreapp.R
 import com.example.theatreapp.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity :
     AppCompatActivity()
 {

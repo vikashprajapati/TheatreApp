@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.theatreapp.R
 import com.example.theatreapp.databinding.FragmentSearchBinding
@@ -18,6 +19,7 @@ import com.example.theatreapp.ui.fragment.BaseBottomSheetFragment
 import com.vikash.syncr_core.data.models.response.youtube.searchResults.VideosItem
 import com.vikash.syncr_core.utils.SearchResultAdapterListener
 import com.vikash.syncr_core.viewmodels.SearchFragmentViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.roundToInt
 
 
@@ -26,11 +28,15 @@ import kotlin.math.roundToInt
  * Use the [SearchFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+@AndroidEntryPoint
 class SearchFragment :
     BaseBottomSheetFragment<FragmentSearchBinding, SearchFragmentViewModel>(),
     SearchResultAdapterListener {
+    private val searchViewModel : SearchFragmentViewModel by viewModels()
+
     private val searchResultsAdapter = YoutubeSearchResultsAdapter(arrayListOf(), this)
     private var playerHeight: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         playerHeight = arguments?.getInt("height", 0)!!
@@ -116,8 +122,7 @@ class SearchFragment :
         }
     }
 
-    override fun initViewModel(): SearchFragmentViewModel =
-        ViewModelProvider(this).get(SearchFragmentViewModel::class.java)
+    override fun initViewModel(): SearchFragmentViewModel = searchViewModel
 
     override fun getViewBinding(): FragmentSearchBinding =
         FragmentSearchBinding.inflate(layoutInflater)

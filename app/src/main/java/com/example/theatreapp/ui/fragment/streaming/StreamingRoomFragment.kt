@@ -10,6 +10,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.theatreapp.R
@@ -19,6 +20,7 @@ import com.example.theatreapp.ui.fragment.BaseFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.vikash.syncr_core.utils.UpdateVideoTitleEvent
 import com.vikash.syncr_core.viewmodels.StreamingRoomFragmentViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import io.socket.client.Socket.EVENT_CONNECT_ERROR
 import io.socket.client.Socket.EVENT_DISCONNECT
 import org.greenrobot.eventbus.EventBus
@@ -30,10 +32,16 @@ import org.greenrobot.eventbus.ThreadMode
  * Use the [StreamingRoomFrament.newInstance] factory method to
  * create an instance of this fragment.
  */
+@AndroidEntryPoint
 class StreamingRoomFragment :
 	BaseFragment<FragmentStreamingRoomBinding, StreamingRoomFragmentViewModel>() {
+
+	private val streamingRoomViewModel : StreamingRoomFragmentViewModel by viewModels(
+		ownerProducer = {requireActivity()}
+	)
 	private var mediaPlayerFragment: MediaPlayerFragment? = null
 	private lateinit var viewPagerAdapter: StreamingViewPagerAdapter
+
 	private val backPressedCallback = object : OnBackPressedCallback(true) {
 		override fun handleOnBackPressed() {
 			isEnabled = false
@@ -49,7 +57,9 @@ class StreamingRoomFragment :
 		savedInstanceState: Bundle?
 	): View? {
 		super.onCreateView(inflater, container, savedInstanceState)
-		viewModel.activeVideoUrl.value = arguments?.getString("videoUrl")
+		val videoUrl = arguments?.getString("videoUrl")
+		viewModel.extractYoutubeUrl(videoUrl!!)
+
 		binding?.let{
 			it.viewModel = viewModel
 			it.lifecycleOwner = this@StreamingRoomFragment
@@ -57,8 +67,7 @@ class StreamingRoomFragment :
 		return binding?.root
 	}
 
-	override fun initViewModel(): StreamingRoomFragmentViewModel =
-		ViewModelProvider(requireActivity()).get(StreamingRoomFragmentViewModel::class.java)
+	override fun initViewModel(): StreamingRoomFragmentViewModel = streamingRoomViewModel
 
 	override fun getViewBinding(): FragmentStreamingRoomBinding =
 		FragmentStreamingRoomBinding.inflate(layoutInflater)

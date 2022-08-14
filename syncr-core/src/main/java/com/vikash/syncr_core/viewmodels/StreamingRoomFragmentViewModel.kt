@@ -23,13 +23,7 @@ import javax.inject.Inject
 class StreamingRoomFragmentViewModel @Inject constructor (private val youtubeRepository: YoutubeRepository) : ViewModel() {
 
     private val _activeVideoUrl = MutableLiveData<String>()
-    var activeVideoUrl : MutableLiveData<String>
-        get() = _activeVideoUrl
-        set(url) {
-            _activeVideoUrl.postValue(url.value)
-            // call youtube video url extraction
-            extractYoutubeUrl(url.value!!)
-        }
+    var activeVideoUrl : MutableLiveData<String> = _activeVideoUrl
 
     private val _participants = MutableLiveData<MutableList<ParticipantsItem>>()
     var participants: LiveData<List<ParticipantsItem>> = _participants as LiveData<List<ParticipantsItem>>
@@ -133,7 +127,8 @@ class StreamingRoomFragmentViewModel @Inject constructor (private val youtubeRep
             EventBus.getDefault().register(this)
     }
 
-    private fun extractYoutubeUrl(youtubeUrl : String) = viewModelScope.launch{
+    fun extractYoutubeUrl(youtubeUrl : String) = viewModelScope.launch{
+        _activeVideoUrl.value = youtubeUrl
         val youtubePlaybackUrl = youtubeRepository.extractVideoUrl(youtubeUrl)
         if(youtubePlaybackUrl.isNotEmpty()){
             withContext(Dispatchers.Main){

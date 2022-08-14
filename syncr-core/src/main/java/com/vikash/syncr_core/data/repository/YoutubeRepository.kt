@@ -11,6 +11,8 @@ import com.vikash.syncr_core.network.NetworkDataSource
 import com.vikash.youtube_extractor.VideoMeta
 import com.vikash.youtube_extractor.YouTubeExtractor
 import com.vikash.youtube_extractor.YtFile
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class YoutubeRepository(
     private val networkDataSource: NetworkDataSource,
@@ -23,8 +25,7 @@ class YoutubeRepository(
     }
 
     @SuppressLint("StaticFieldLeak")
-    suspend fun extractVideoUrl(urlToParse : String) : String{
-        var videoUrl = ""
+    suspend fun extractVideoUrl(urlToParse : String) : String = suspendCoroutine{
         // context passed is used as a weak reference in YouTubeExtractor
         val youtubeExtractor = object : YouTubeExtractor(context) {
             override fun onExtractionComplete(ytFiles: SparseArray<YtFile>?, vMeta: VideoMeta?) {
@@ -41,6 +42,8 @@ class YoutubeRepository(
                         }
                     }
 
+                    it.resume(videoUrl)
+
                     /*if(videoUrl.isNullOrEmpty()){
                         requireActivity().runOnUiThread {
                             shortToast("Can't play video")
@@ -56,6 +59,5 @@ class YoutubeRepository(
             }
         }
         youtubeExtractor.extract(urlToParse)
-        return videoUrl
     }
 }
