@@ -12,15 +12,15 @@
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_homeFragment_to_roomFrament"
-            app:destination="@id/roomFrament"
+            android:id="@+id/action_homeFragment_to_streamingRoomFrament"
+            app:destination="@id/streamingRoomFragment"
             app:enterAnim="@anim/enter_from_right"
             app:exitAnim="@anim/exit_to_left"
             app:popEnterAnim="@anim/enter_from_left"
             app:popExitAnim="@anim/exit_to_right" />
     </fragment>
     <fragment
-        android:id="@+id/roomFrament"
+        android:id="@+id/streamingRoomFragment"
         android:name="com.example.theatreapp.ui.fragment.streaming.StreamingRoomFragment"
         android:label="fragment_room_frament"
         tools:layout="@layout/fragment_streaming_room" >

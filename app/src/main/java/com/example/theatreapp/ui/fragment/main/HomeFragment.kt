@@ -40,7 +40,7 @@ class HomeFragment :
 
     private fun navigateToStreamingRoom(roomDetails: JoinedRoomResponse) {
         val bundle = bundleOf("videoUrl" to roomDetails.room.currentVideoUrl)
-        findNavController().navigate(R.id.action_homeFragment_to_roomFrament, bundle)
+        findNavController().navigate(R.id.action_homeFragment_to_streamingRoomFrament, bundle)
     }
 
     override fun setUpViews() {

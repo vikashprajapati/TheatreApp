@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.util.Log
 import com.vikash.syncr_core.data.connections.SocketManager
 import com.google.gson.Gson
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class App : Application(), Application.ActivityLifecycleCallbacks {
 
     private val TAG = App::class.java.canonicalName

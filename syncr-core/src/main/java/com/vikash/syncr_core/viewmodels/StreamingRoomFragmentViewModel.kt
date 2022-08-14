@@ -1,9 +1,6 @@
 package com.vikash.syncr_core.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.vikash.syncr_core.data.connections.SocketManager
 import com.vikash.syncr_core.data.models.response.joinroomresponse.ParticipantsItem
 import com.vikash.syncr_core.data.SessionData
@@ -11,47 +8,65 @@ import com.vikash.syncr_core.data.models.videoplaybackevents.NewVideoSelected
 import com.vikash.syncr_core.data.models.videoplaybackevents.VideoChanged
 import com.vikash.syncr_core.data.models.videoplaybackevents.VideoPlayback
 import com.vikash.syncr_core.data.models.videoplaybackevents.VideoSynced
+import com.vikash.syncr_core.data.repository.YoutubeRepository
 import com.vikash.syncr_core.events.VideoUrlExtractedEvent
 import com.vikash.syncr_core.utils.Event
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import javax.inject.Inject
 
-class StreamingRoomFragmentViewModel : ViewModel() {
-    // temporarily we are keeping only video url, later we will be needing more video details
+@HiltViewModel
+class StreamingRoomFragmentViewModel @Inject constructor (private val youtubeRepository: YoutubeRepository) : ViewModel() {
+
     private val _activeVideoUrl = MutableLiveData<String>()
-    private var _connectionState = MutableLiveData<String>()
-    private val _participants = MutableLiveData<MutableList<ParticipantsItem>>()
-    private val _videoPlayback = MutableLiveData<Event<VideoPlayback>>()
-    private val _videoChanged = MutableLiveData<Event<VideoChanged>>()
-    private val _videoSynced = MutableLiveData<Event<VideoSynced>>()
-    private val _participantLeft = MutableLiveData<Event<ParticipantsItem>>()
-    private val _participantJoined = MutableLiveData<Event<ParticipantsItem>>()
-    private val _participantArrived = MutableLiveData<Event<ParticipantsItem>>()
-    private val _fullScreenLayout = MutableLiveData<Boolean>()
-    private var _newVideo = MutableLiveData<Event<NewVideoSelected>>()
-    private val _bufferingStatus = MutableLiveData<Boolean>()
-
-    private var _mediaPlayerFragmentViewHeight = MutableLiveData<Int>()
-    // participants to be changed to livedata of list<participantItem>
     var activeVideoUrl : MutableLiveData<String>
         get() = _activeVideoUrl
         set(url) {
             _activeVideoUrl.postValue(url.value)
+            // call youtube video url extraction
+            extractYoutubeUrl(url.value!!)
         }
-    var participants: LiveData<List<ParticipantsItem>> =
-        _participants as LiveData<List<ParticipantsItem>>
+
+    private val _participants = MutableLiveData<MutableList<ParticipantsItem>>()
+    var participants: LiveData<List<ParticipantsItem>> = _participants as LiveData<List<ParticipantsItem>>
+
+    private val _videoPlayback = MutableLiveData<Event<VideoPlayback>>()
     var videoPlayback: LiveData<Event<VideoPlayback>> = _videoPlayback
-    var videoChanged: LiveData<Event<VideoChanged>> = _videoChanged
+
+    private val _videoSynced = MutableLiveData<Event<VideoSynced>>()
     var videoSynced: LiveData<Event<VideoSynced>> = _videoSynced
+
+    private val _videoChanged = MutableLiveData<Event<VideoChanged>>()
+    var videoChanged: LiveData<Event<VideoChanged>> = _videoChanged
+
+    private var _connectionState = MutableLiveData<String>()
     var connectionState: LiveData<String> = _connectionState
+
+    private val _participantLeft = MutableLiveData<Event<ParticipantsItem>>()
     var participantLeft: LiveData<Event<ParticipantsItem>> = _participantLeft
+
+    private val _participantJoined = MutableLiveData<Event<ParticipantsItem>>()
     var participantJoined: LiveData<Event<ParticipantsItem>> = _participantJoined
+
+    private val _fullScreenLayout = MutableLiveData<Boolean>()
     var fullScreenLayout: MutableLiveData<Boolean> = _fullScreenLayout
+
+    private val _participantArrived = MutableLiveData<Event<ParticipantsItem>>()
     var participantArrived: LiveData<Event<ParticipantsItem>> = _participantArrived
+
+    private var _newVideo = MutableLiveData<Event<NewVideoSelected>>()
     var newVideoSelected: LiveData<Event<NewVideoSelected>> = _newVideo
+
+    private val _bufferingStatus = MutableLiveData<Boolean>()
     var bufferingStatus : LiveData<Boolean> = _bufferingStatus
+
     var videoSyncSlider = MutableLiveData<Float>(0.0F)
 
+    private var _mediaPlayerFragmentViewHeight = MutableLiveData<Int>()
     var mediaPlayerFragmentViewHeight: MutableLiveData<Int>
         get() = _mediaPlayerFragmentViewHeight
         set(value) {
@@ -116,6 +131,15 @@ class StreamingRoomFragmentViewModel : ViewModel() {
 
         if(!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this)
+    }
+
+    private fun extractYoutubeUrl(youtubeUrl : String) = viewModelScope.launch{
+        val youtubePlaybackUrl = youtubeRepository.extractVideoUrl(youtubeUrl)
+        if(youtubePlaybackUrl.isNotEmpty()){
+            withContext(Dispatchers.Main){
+                EventBus.getDefault().post(VideoUrlExtractedEvent(youtubePlaybackUrl, ""))
+            }
+        }
     }
 
     override fun onCleared() {

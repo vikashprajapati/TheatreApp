@@ -27,6 +27,7 @@ class RoomFragment : BaseFragment<FragmentRoomBinding, StreamingRoomFragmentView
 		binding?.lifecycleOwner = this@RoomFragment
 		return binding?.root
 	}
+
 	override fun setUpViews() {
 		super.setUpViews()
 		binding?.apply {

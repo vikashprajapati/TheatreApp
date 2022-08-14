@@ -40,7 +40,7 @@ import com.vikash.youtube_extractor.YtFile
  * Use the [MediaPlayerFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class MediaPlayerFragment :
+class MediaPlayerFragment() :
 	BaseFragment<FragmentMediaPlayerBinding, StreamingRoomFragmentViewModel>(),
 	View.OnClickListener {
 	private lateinit var exoplayer : ExoPlayer
@@ -105,7 +105,6 @@ class MediaPlayerFragment :
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		setupMediaPlayer()
-		loadVideoUrl()
 	}
 
 	override fun initViewModel():
@@ -118,38 +117,6 @@ class MediaPlayerFragment :
 		super.onStart()
 		exoplayer.play()
 		setupPlayerControlButtonsListener()
-	}
-
-	private fun loadVideoUrl() {
-		object : YouTubeExtractor(context) {
-			override fun onExtractionComplete(ytFiles: SparseArray<YtFile>?, vMeta: VideoMeta?) {
-				if (ytFiles != null) {
-					var videoUrl = ""
-					ytFiles.forEach{key, ytFile ->
-						Log.i(MediaPlayerFragment.TAG, "onExtractionComplete: $key \n $ytFile \n\n")
-						if(
-							ytFile.format.ext.equals("mp4")
-							&& ytFile.format.audioBitrate > 0
-							&& ytFile.format.height > 0
-						){
-							videoUrl = ytFile.url
-						}
-					}
-
-					if(videoUrl.isNullOrEmpty()){
-						requireActivity().runOnUiThread {
-							shortToast("Can't play video")
-						}
-					}else{
-						exoplayer.prepare(
-							ProgressiveMediaSource
-								.Factory(dataSourceFactory)
-								.createMediaSource(Uri.parse(getProxyUrl(videoUrl)))
-						)
-					}
-				}
-			}
-		}.extract(viewModel.activeVideoUrl.value)
 	}
 
 	private fun setupPlayerControlButtonsListener() {
@@ -270,6 +237,19 @@ class MediaPlayerFragment :
 		viewModel.videoSyncSlider.observe(viewLifecycleOwner){
 			exoplayer.seekTo((exoplayer.currentPosition + it).toLong())
 		}
+
+		//
+		/*if(videoUrl.isNullOrEmpty()){
+			requireActivity().runOnUiThread {
+				shortToast("Can't play video")
+			}
+		}else{
+			exoplayer.prepare(
+				ProgressiveMediaSource
+					.Factory(dataSourceFactory)
+					.createMediaSource(Uri.parse(getProxyUrl(videoUrl)))
+			)
+		}*/
 	}
 
 	private fun getProxyUrl(videoUrl: String): String? {

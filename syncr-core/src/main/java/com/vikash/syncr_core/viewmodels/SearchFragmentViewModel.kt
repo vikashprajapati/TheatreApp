@@ -1,6 +1,5 @@
 package com.vikash.syncr_core.viewmodels
 
-import android.content.Context
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.LiveData
@@ -13,24 +12,31 @@ import com.vikash.syncr_core.data.models.response.youtube.searchResults.YoutubeR
 import com.vikash.syncr_core.data.models.videoplaybackevents.NewVideoSelected
 import com.vikash.syncr_core.data.repository.YoutubeRepository
 import com.vikash.syncr_core.events.VideoUrlExtractedEvent
-import com.vikash.syncr_core.network.NetworkDataSource
-import com.vikash.syncr_core.network.YoutubeApi
 import com.vikash.syncr_core.utils.Event
-import kotlinx.coroutines.*
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.greenrobot.eventbus.EventBus
+import javax.inject.Inject
 
-class SearchFragmentViewModel : ViewModel() {
+@HiltViewModel
+class SearchFragmentViewModel @Inject constructor(private val youtubeRepository: YoutubeRepository) : ViewModel() {
     private final val TAG = SearchFragmentViewModel::class.java.canonicalName
     private val _searchEditText = MutableLiveData<String>()
-    private val _invalidInput = MutableLiveData<Event<String>>()
-    private val _searchResults = MutableLiveData<List<VideosItem?>?>()
-    private val _searchError = MutableLiveData<Event<String>>()
-    private val youtubeRepository = YoutubeRepository(NetworkDataSource(YoutubeApi()))
 
+    private val _invalidInput = MutableLiveData<Event<String>>()
+
+    private val _searchResults = MutableLiveData<List<VideosItem?>?>()
     val searchResults : LiveData<List<VideosItem?>?> get() = _searchResults
+
+    private val _searchError = MutableLiveData<Event<String>>()
     val searchError : LiveData<Event<String>> get() = _searchError
-    val _loading = MutableLiveData<Int>(View.GONE)
+
+    private val _loading = MutableLiveData<Int>(View.GONE)
     val loading : LiveData<Int> get() = _loading
+
     var searchEditText : MutableLiveData<String>
         get() = _searchEditText
         set(data) {
@@ -77,10 +83,10 @@ class SearchFragmentViewModel : ViewModel() {
         SocketManager.sendNewVideoSelectedEvent(videoDetails)
     }
 
-    fun extractYoutubeUrl(videoId : String, videoTitle : String, context : Context){
+    fun extractYoutubeUrl(videoId : String, videoTitle : String){
         viewModelScope.launch {
-            val videoUrl = youtubeRepository.extractVideoUrl(context, videoId)
-            if(!videoUrl.isEmpty()){
+            val videoUrl = youtubeRepository.extractVideoUrl(videoId)
+            if(videoUrl.isNotEmpty()){
                 withContext(Dispatchers.Main){
                     EventBus.getDefault().post(VideoUrlExtractedEvent(videoUrl, videoTitle))
                 }

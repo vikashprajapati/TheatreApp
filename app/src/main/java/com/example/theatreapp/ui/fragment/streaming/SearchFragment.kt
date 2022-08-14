@@ -126,7 +126,7 @@ class SearchFragment :
         val newVideo = videoItem
         Log.i(MediaPlayerFragment.TAG, "onVideoChangedEvent: ")
         val title = videoItem?.title
-        videoItem?.url?.let { viewModel.extractYoutubeUrl(it, title!!, requireContext()) }
+        videoItem?.url?.let { viewModel.extractYoutubeUrl(it, title!!) }
     }
 
     companion object {

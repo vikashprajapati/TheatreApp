@@ -63,7 +63,6 @@ class StreamingRoomFragment :
 	override fun getViewBinding(): FragmentStreamingRoomBinding =
 		FragmentStreamingRoomBinding.inflate(layoutInflater)
 
-
 	override fun setUpViews() {
 		super.setUpViews()
 		addMediaPlayerFragment()
