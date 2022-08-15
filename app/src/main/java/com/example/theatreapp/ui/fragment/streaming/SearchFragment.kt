@@ -17,6 +17,7 @@ import com.example.theatreapp.databinding.FragmentSearchBinding
 import com.example.theatreapp.ui.adapters.YoutubeSearchResultsAdapter
 import com.example.theatreapp.ui.fragment.BaseBottomSheetFragment
 import com.vikash.syncr_core.data.models.response.youtube.searchResults.VideosItem
+import com.vikash.syncr_core.data.models.videoplaybackevents.NewVideoSelected
 import com.vikash.syncr_core.utils.SearchResultAdapterListener
 import com.vikash.syncr_core.viewmodels.SearchFragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -131,7 +132,9 @@ class SearchFragment :
         val newVideo = videoItem
         Log.i(MediaPlayerFragment.TAG, "onVideoChangedEvent: ")
         val title = videoItem?.title
-        videoItem?.url?.let { viewModel.extractYoutubeUrl(it, title!!) }
+        videoItem?.url?.let {
+            viewModel.sendNewVideoEvent(NewVideoSelected( it, title!!))
+        }
     }
 
     companion object {

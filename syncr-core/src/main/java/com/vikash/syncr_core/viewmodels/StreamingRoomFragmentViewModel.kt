@@ -71,6 +71,7 @@ class StreamingRoomFragmentViewModel @Inject constructor (private val youtubeRep
         val videoDetails = it.getContentIfNotHandledOrReturnNull()?:return@Observer
         _newVideo.postValue(Event(videoDetails))
         _activeVideoUrl.postValue(videoDetails.videoUrl)
+        extractYoutubeUrl(videoDetails.videoUrl)
     }
 
     private var participantJoinedObserver = Observer<Event<ParticipantsItem>> {

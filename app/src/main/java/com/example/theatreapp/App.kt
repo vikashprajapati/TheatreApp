@@ -25,7 +25,6 @@ class App : Application(), Application.ActivityLifecycleCallbacks {
     }
 
 
-
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
         Log.i(TAG, "onActivityCreated: $activityCount")
         activityCount++
