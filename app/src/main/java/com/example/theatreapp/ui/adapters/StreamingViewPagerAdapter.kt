@@ -3,7 +3,7 @@ package com.example.theatreapp.ui.adapters
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.example.theatreapp.ui.fragment.streaming.viewpager.ChatFragment
+import com.example.chat.ChatFragment
 import com.example.theatreapp.ui.fragment.streaming.viewpager.ParticipantsFragment
 import com.example.theatreapp.ui.fragment.streaming.viewpager.RoomFragment
 
@@ -12,7 +12,7 @@ class StreamingViewPagerAdapter(fragmentManager: FragmentManager) :
 	private val titles = listOf<String>("Room", "Chats", "Participants")
 	private val fragmentList = listOf(
         RoomFragment.newInstance(),
-        ChatFragment.newInstance(),
+        com.example.chat.ChatFragment.newInstance(),
         ParticipantsFragment.newInstance(1)
     )
 

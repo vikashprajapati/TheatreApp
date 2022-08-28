@@ -3,7 +3,7 @@ package com.vikash.syncr_core.data.connections
 import android.util.Log
 import com.vikash.syncr_core.SyncrApplication
 import com.vikash.syncr_core.constants.SocketConstants.IncomingEvents
-import com.vikash.syncr_core.data.models.Message
+import com.example.chat.Message
 import com.vikash.syncr_core.data.models.response.joinroomresponse.JoinedRoomResponse
 import com.vikash.syncr_core.data.models.response.joinroomresponse.ParticipantsItem
 import com.vikash.syncr_core.data.models.videoplaybackevents.NewVideoSelected
@@ -75,7 +75,7 @@ class SocketService {
         }.on(IncomingEvents.onMessage) {
             val message = SyncrApplication.gson.fromJson(
                 it[0] as String,
-                Message::class.java
+                com.example.chat.Message::class.java
             )
             listener?.onMessage(message)
         }.on(IncomingEvents.onNewVideoSelected) {
@@ -119,7 +119,7 @@ class SocketService {
         fun connectionStatus(eventConnect: String)
         fun joinRoomResponse(joinedRoomResponse: JoinedRoomResponse)
         fun userLeft(participantsItem: ParticipantsItem)
-        fun onMessage(message: Message)
+        fun onMessage(message: com.example.chat.Message)
     }
 
     companion object {

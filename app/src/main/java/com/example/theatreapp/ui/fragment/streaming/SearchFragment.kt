@@ -11,11 +11,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import com.example.theatreapp.R
 import com.example.theatreapp.databinding.FragmentSearchBinding
 import com.example.theatreapp.ui.adapters.YoutubeSearchResultsAdapter
-import com.example.theatreapp.ui.fragment.BaseBottomSheetFragment
+import com.vikash.syncr_core.ui.BaseBottomSheetFragment
 import com.vikash.syncr_core.data.models.response.youtube.searchResults.VideosItem
 import com.vikash.syncr_core.data.models.videoplaybackevents.NewVideoSelected
 import com.vikash.syncr_core.utils.SearchResultAdapterListener

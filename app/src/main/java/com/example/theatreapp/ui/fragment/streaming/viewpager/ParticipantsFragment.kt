@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.theatreapp.ui.adapters.ParticipantsRecyclerViewAdapter
 import com.example.theatreapp.databinding.FragmentParticipantsListBinding
 import com.vikash.syncr_core.data.models.response.joinroomresponse.ParticipantsItem
-import com.example.theatreapp.ui.fragment.BaseFragment
+import com.vikash.syncr_core.ui.BaseFragment
 import com.vikash.syncr_core.viewmodels.StreamingRoomFragmentViewModel
 
 /**

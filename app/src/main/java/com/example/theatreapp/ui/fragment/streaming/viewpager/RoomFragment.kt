@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.vikash.syncr_core.data.SessionData
 import com.example.theatreapp.databinding.FragmentRoomBinding
-import com.example.theatreapp.ui.fragment.BaseFragment
+import com.vikash.syncr_core.ui.BaseFragment
 import com.google.android.material.slider.Slider
 import com.vikash.syncr_core.viewmodels.StreamingRoomFragmentViewModel
 

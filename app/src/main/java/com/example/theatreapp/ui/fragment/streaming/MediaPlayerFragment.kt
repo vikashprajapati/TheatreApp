@@ -3,20 +3,16 @@ package com.example.theatreapp.ui.fragment.streaming
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import android.util.SparseArray
 import android.view.*
 import android.widget.ImageButton
 import androidx.activity.OnBackPressedCallback
-import androidx.core.util.forEach
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.theatreapp.R
 import com.example.theatreapp.databinding.FragmentMediaPlayerBinding
-import com.example.theatreapp.ui.fragment.BaseFragment
+import com.vikash.syncr_core.ui.BaseFragment
 import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
 import com.vikash.syncr_core.constants.VideoPlaybackConstants.Companion.forwardVideo
 import com.vikash.syncr_core.constants.VideoPlaybackConstants.Companion.rewindVideo
 import com.vikash.syncr_core.constants.VideoPlaybackConstants.Companion.videoPaused
@@ -30,9 +26,6 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.vikash.syncr_core.utils.UpdateVideoTitleEvent
-import com.vikash.youtube_extractor.VideoMeta
-import com.vikash.youtube_extractor.YouTubeExtractor
-import com.vikash.youtube_extractor.YtFile
 
 
 /**

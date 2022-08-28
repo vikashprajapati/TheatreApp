@@ -2,3 +2,4 @@ rootProject.name = "TheatreApp"
 include ':app'
 include ':syncr-core'
 include ':youtube-extractor'
+include ':Chat'
