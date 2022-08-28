@@ -22,4 +22,5 @@
     <string name="exo_controls_video_sync_description">Video Sync</string>
     <string name="exo_controls_video_fullscreen_description">Fullscreen Video</string>
     <string name="exo_controls_video_smallscreen_description">Squeeze Video</string>
+    <string name="no_search_results_found">No Search Results Found</string>
 </resources>

@@ -104,10 +104,18 @@ class SearchFragment :
             searchError.observe(viewLifecycleOwner){
                 val msg = it.getContentIfNotHandledOrReturnNull()?: return@observe
                 shortToast(msg)
+                binding?.let {fsb ->
+                    fsb.recyclerView.visibility = View.GONE
+                    fsb.searchErrorContainer.visibility = View.VISIBLE
+                }
             }
 
             searchResults.observe(viewLifecycleOwner){
                 Log.i(TAG, "observeData: $it")
+                binding?.let {fsb ->
+                    fsb.recyclerView.visibility = View.VISIBLE
+                    fsb.searchErrorContainer.visibility = View.GONE
+                }
                 searchResultsAdapter.updateSearchResultList(it)
             }
         }

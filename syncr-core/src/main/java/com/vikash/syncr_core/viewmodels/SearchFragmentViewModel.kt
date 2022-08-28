@@ -72,8 +72,7 @@ class SearchFragmentViewModel @Inject constructor(private val youtubeRepository:
     private fun processSearchResponse(searchResponse: Result<YoutubeRefinedSearchResponse>){
         Log.i(TAG, "processSearchResponse: $searchResponse")
         if(searchResponse.isSuccess){
-            _searchResults
-                .postValue(searchResponse?.getOrNull()?.items!!)
+            _searchResults.postValue(searchResponse.getOrNull()?.items)
         }else{
             _searchError.postValue(Event("Unable to retrieve search results"))
         }
