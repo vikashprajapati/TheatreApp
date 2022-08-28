@@ -32,15 +32,6 @@ class RoomFragment : BaseFragment<FragmentRoomBinding, StreamingRoomFragmentView
 		super.setUpViews()
 		binding?.apply {
 			room = SessionData.currentRoom
-			synchronizationSlider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
-				override fun onStartTrackingTouch(slider: Slider) {
-					// Responds to when slider's touch event is being started
-				}
-
-				override fun onStopTrackingTouch(slider: Slider) {
-					viewModel.videoSyncSlider.postValue(slider.value)
-				}
-			})
 		}
 	}
 

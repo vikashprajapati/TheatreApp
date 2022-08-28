@@ -15,28 +15,6 @@
         android:background="@color/off_white"
         tools:context=".ui.fragment.streaming.viewpager.RoomFragment">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:gravity="start"
-                android:text="@string/sync_slider_label"
-                />
-            <com.google.android.material.slider.Slider
-                android:id="@+id/synchronization_slider"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/SliderStyle"
-                app:trackColor="@color/secondary_color"
-                app:haloColor="@color/tertiary_color"
-                app:thumbColor="@color/primary_color"
-                app:tickColor="@color/tertiary_color"
-                />
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
 
         <LinearLayout
             android:layout_width="match_parent"

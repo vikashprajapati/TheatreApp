@@ -80,6 +80,7 @@ dependencies {
     // glide
     implementation "com.github.bumptech.glide:glide:$glide_version"
     implementation project(path: ':Chat')
+    implementation project(path: ':design')
     annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
 
     // greenrobot event bus
