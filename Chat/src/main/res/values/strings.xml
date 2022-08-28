@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">TheatreApp</string>
+    <string name="enter_message_hint">Type your message here...</string>
+</resources>
