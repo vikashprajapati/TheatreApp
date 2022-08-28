@@ -25,8 +25,8 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>() {
         super.onCreateView(inflater, container, savedInstanceState)
         binding?.apply {
             lifecycleOwner = this@ChatFragment
-            this.viewModel = viewModel
         }
+        binding?.viewModel = viewModel
         return binding?.root
     }
 

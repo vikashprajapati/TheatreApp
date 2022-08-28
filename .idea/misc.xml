@@ -34,8 +34,10 @@
         <entry key="..\:/Users/vikash/Documents/projects/TheatreApp/tv_theatre_app/src/main/res/layout/activity_main.xml" value="0.17552083333333332" />
         <entry key="..\:/Users/vikash/Documents/projects/TheatreApp/tv_theatre_app/src/main/res/layout/custom_exoplayer_controls_ui.xml" value="0.1" />
         <entry key="..\:/Users/vikash/Documents/projects/TheatreApp/tv_theatre_app/src/main/res/layout/fragment_home.xml" value="0.16666666666666666" />
+        <entry key="Chat/src/main/res/drawable/ic_send.xml" value="0.147" />
         <entry key="Chat/src/main/res/layout/chat_item.xml" value="0.22708333333333333" />
         <entry key="Chat/src/main/res/layout/fragment_chat.xml" value="0.22708333333333333" />
+        <entry key="app/src/main/res/layout/fragment_room.xml" value="0.22708333333333333" />
         <entry key="design/src/main/res/drawable/button_background.xml" value="0.147" />
         <entry key="tv_theatre_app/src/main/res/layout/custom_exoplayer_controls_ui.xml" value="0.22708333333333333" />
       </map>
