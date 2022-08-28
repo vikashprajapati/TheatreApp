@@ -55,7 +55,7 @@ class StreamingRoomFragment :
 	): View? {
 		super.onCreateView(inflater, container, savedInstanceState)
 		val videoUrl = arguments?.getString("videoUrl")
-		viewModel.extractYoutubeUrl(videoUrl!!)
+		viewModel.extractYoutubeUrl(videoUrl!!, "")
 
 		binding?.let{
 			it.viewModel = viewModel

@@ -71,7 +71,7 @@ class StreamingRoomFragmentViewModel @Inject constructor (private val youtubeRep
         val videoDetails = it.getContentIfNotHandledOrReturnNull()?:return@Observer
         _newVideo.postValue(Event(videoDetails))
         _activeVideoUrl.postValue(videoDetails.videoUrl)
-        extractYoutubeUrl(videoDetails.videoUrl)
+        extractYoutubeUrl(videoDetails.videoUrl, videoDetails.videoTitle)
     }
 
     private var participantJoinedObserver = Observer<Event<ParticipantsItem>> {
@@ -128,12 +128,12 @@ class StreamingRoomFragmentViewModel @Inject constructor (private val youtubeRep
             EventBus.getDefault().register(this)
     }
 
-    fun extractYoutubeUrl(youtubeUrl : String) = viewModelScope.launch{
+    fun extractYoutubeUrl(youtubeUrl : String, videoTitle : String) = viewModelScope.launch{
         _activeVideoUrl.value = youtubeUrl
         val youtubePlaybackUrl = youtubeRepository.extractVideoUrl(youtubeUrl)
         if(youtubePlaybackUrl.isNotEmpty()){
             withContext(Dispatchers.Main){
-                EventBus.getDefault().post(VideoUrlExtractedEvent(youtubePlaybackUrl, ""))
+                EventBus.getDefault().post(VideoUrlExtractedEvent(youtubePlaybackUrl, videoTitle))
             }
         }
     }
