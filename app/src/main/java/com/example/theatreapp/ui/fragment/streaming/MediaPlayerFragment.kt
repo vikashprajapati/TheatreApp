@@ -21,6 +21,7 @@ import com.vikash.syncr_core.data.SessionData
 import com.vikash.syncr_core.viewmodels.StreamingRoomFragmentViewModel
 import org.greenrobot.eventbus.EventBus
 import com.danikula.videocache.HttpProxyCacheServer
+import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
@@ -207,7 +208,7 @@ class MediaPlayerFragment() :
 					ProgressiveMediaSource
 						.Factory(dataSourceFactory)
 						.createMediaSource(
-							Uri.parse(getProxyUrl(videoDetails.videoUrl))
+							MediaItem.fromUri(getProxyUrl(videoDetails.videoUrl)?:"")
 						)
 				)
 				play()

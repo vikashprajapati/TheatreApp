@@ -20,8 +20,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.theatreapp.R
 import com.example.theatreapp.databinding.FragmentHomeBinding
-import com.vikash.syncr_core.ui.BaseFragment
 import com.vikash.syncr_core.data.models.response.joinroomresponse.JoinedRoomResponse
+import com.vikash.syncr_core.ui.BaseFragment
 import com.vikash.syncr_core.viewmodels.HomeFragmentViewModel
 
 class HomeFragment :

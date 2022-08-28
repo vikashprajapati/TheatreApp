@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.vikash.syncr_core.constants.SocketConstants.OutgoingEvents
 import com.vikash.syncr_core.data.SessionData
-import com.example.chat.Message
 import com.vikash.syncr_core.data.models.requests.JoinRoomRequest
 import com.vikash.syncr_core.data.models.requests.Room
 import com.vikash.syncr_core.data.models.requests.User
@@ -15,7 +14,6 @@ import com.vikash.syncr_core.data.models.videoplaybackevents.VideoChanged
 import com.vikash.syncr_core.data.models.videoplaybackevents.VideoPlayback
 import com.vikash.syncr_core.data.models.videoplaybackevents.VideoSynced
 import com.vikash.syncr_core.utils.Event
-import com.vikash.syncr_core.utils.Helpers
 
 object SocketManager : SocketService.SocketEventsListener {
     private var _joinedRoomStatus = MutableLiveData<Event<JoinedRoomResponse>>()
@@ -25,7 +23,7 @@ object SocketManager : SocketService.SocketEventsListener {
     private var _onNewVideo = MutableLiveData<Event<NewVideoSelected>>()
     private var _changedVideo = MutableLiveData<Event<VideoChanged>>()
     private var _syncedVideo = MutableLiveData<Event<VideoSynced>>()
-    private var _onMessage = MutableLiveData<Event<com.example.chat.Message>>()
+    private var _onMessage = MutableLiveData<Event<String>>()
     private var _connectionStatus = MutableLiveData<String>()
     // Too much responsibility, class needs to be refactored
     private val socketService = SocketService()
@@ -40,7 +38,7 @@ object SocketManager : SocketService.SocketEventsListener {
     val syncedVideo : LiveData<Event<VideoSynced>> get() = _syncedVideo
     val connectionStatus : LiveData<String> get() = _connectionStatus
     val bufferingStatus : LiveData<Boolean> get() = _bufferingStatus
-    val onMessage : LiveData<Event<com.example.chat.Message>> get() = _onMessage
+    val onMessage : LiveData<Event<String>> get() = _onMessage
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     // Outgoing Socket Events                                                                    //
@@ -70,9 +68,7 @@ object SocketManager : SocketService.SocketEventsListener {
     }
 
     fun sendChatMessage(msg : String){
-        val message =
-            com.example.chat.Message(from = "", message = msg, timeStamp = Helpers.getCurrentTime())
-        socketService.send(OutgoingEvents.sendMessage, message)
+        socketService.send(OutgoingEvents.sendMessage, msg)
     }
 
     fun sendVideoStartedEvent(playbackStatus: String) {
@@ -144,7 +140,7 @@ object SocketManager : SocketService.SocketEventsListener {
         _participantLeft.postValue(Event(participantsItem))
     }
 
-    override fun onMessage(message: com.example.chat.Message) {
+    override fun onMessage(message: String) {
         _onMessage.postValue(Event(message))
     }
 
